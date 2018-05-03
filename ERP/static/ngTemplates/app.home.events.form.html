@@ -1,0 +1,147 @@
+<div class="container-fluid" ng-controller="admin.events.form" style="margin-top:20px;">
+  <div class="row" style="margin-top:20px;padding:0px 10px">
+    <div class="col-md-6">
+      <div class="row text-center">
+        <h3> Create New Event </h3>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" ng-model="eventForm.name" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Venue</label>
+          <input type="text" class="form-control" ng-model="eventForm.venue" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Venue Google Map Link</label>
+          <input type="tel" class="form-control" ng-model="eventForm.venueGMapUrl" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Entry Fee</label>
+          <input type="tel" class="form-control" ng-model="eventForm.entryFee" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+            <textarea ui-tinymce="tinymceOptions" ng-model="editor.description"></textarea>
+        </div>
+        <div class="form-group">
+          <div class="col-md-3">
+            <label class="control-label pull-right" style="margin-top:35px;">Event Starts On</label>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group" style="margin-top:35px;">
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_On" is-open="status.opened" />
+              <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row container-fluid">
+              <uib-timepicker ng-model="eventForm.event_On" hour-step="1" minute-step="30" show-meridian="true"></uib-timepicker>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-3">
+            <label class="control-label pull-right" style="margin-top:35px;">Event Ends On</label>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group" style="margin-top:35px;">
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_ends_On" is-open="status.opened" />
+              <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row container-fluid">
+              <uib-timepicker ng-model="eventForm.event_ends_On" hour-step="1" minute-step="30" show-meridian="true"></uib-timepicker>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-3">
+            <label class="control-label pull-right" style="margin-top:35px;">Registration Ends On</label>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group" style="margin-top:35px;">
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.regEndsOn" is-open="status.opened" />
+              <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row container-fluid">
+              <uib-timepicker ng-model="eventForm.regEndsOn" hour-step="1" minute-step="30" show-meridian="true"></uib-timepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:25px;margin-bottom:35px">
+        <div class="col-md-5 col-md-offset-5">
+          <button ng-click="saveProfile()" type="button" class="btn btn-primary">
+            Save Event
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6" nf-if="eventForm.pk != null">
+      <div class="row text-center">
+        <h3> Please Fill Event Item Details </h3>
+      </div>
+      <div class="row" style="padding-left:25px">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select class="form-control" ng-model="data.level">
+            <option value="KeyNote">KeyNote</option>
+            <option value="Session">Session</option>
+            <option value="WorkShop">WorkShop</option>
+            <option value="Tea">Tea</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Network">Network</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Entry Fee</label>
+          <input type="tel" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Moderator</label>
+          <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Day</label>
+          <input type="number" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Picture</label>
+          <input type="file" name="DP" file-model="profileForm.displayPicture">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+            <textarea ui-tinymce="tinymceOptions" ng-model="editor.source"></textarea>
+        </div>
+
+      </div>
+      <div class="row" style="margin-top:25px;margin-bottom:25px">
+        <div class="col-md-5 col-md-offset-5">
+          <button ng-click="saveProfile()" type="button" class="btn btn-primary">
+            Save Event Details
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

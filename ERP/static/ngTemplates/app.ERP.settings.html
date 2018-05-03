@@ -1,0 +1,31 @@
+<div class="shaddowed card bg-white " style="position:relative;min-height:93vh;">
+  <div class="container-fluid " style="padding:0px;">
+    <breadcrumb></breadcrumb>
+    <h3 style="margin-left:20px;" class="text-muted">Global Settings</h3>
+    <div class="row" ng-repeat="s in settings" style="padding:10px;">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-5 col-md-offset-3">
+            <div class="form-group">
+              <label>{{s.name | humanize}}</label>
+              <input type="checkbox" ng-if="s.fieldType == 'flag'" ng-model="s.flag">
+              <input type="text" ng-if="s.fieldType == 'value'" ng-model="s.value">
+              <p class="help-block">{{s.description}}.</p>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="btn btn-default" ng-click="save($index)">
+              Save
+            </button>
+          </div>
+        </div>
+        <hr ng-if="!$last">
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+</div>

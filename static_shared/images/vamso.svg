@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   width="200"
+   height="60"
+   viewBox="0 0 200 60"
+   sodipodi:docname="vamlogo_200x200.svg">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1173"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="2.2148047"
+     inkscape:cx="-1.4775519"
+     inkscape:cy="25.630702"
+     inkscape:window-x="0"
+     inkscape:window-y="48"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     style="fill:#00913e;fill-opacity:1;fill-rule:evenodd;stroke:#00913e;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 22.477346,51.836704 c -0.243265,-0.62282 -0.425991,-12.01528 -4.078433,-14.29917 -7.522525,-4.70387 -4.291684,-8.83492 -3.160549,-10.15891 -0.497686,-0.2133 5.193768,-2.80518 6.095345,-6.09535 0.912653,-3.33059 0.225754,-18.0602798 0.225754,-18.0602798 0,0 -0.451507,5.86959 -5.869592,11.2876698 -5.418085,5.41809 -7.860291,8.04732 -6.50577,13.23965 1.354521,5.19233 2.442403,7.7552 5.602756,10.46448 3.160599,2.70949 -6.035524,-3.49349 -6.253803,-5.458 -0.662036,-0.90682 -0.754726,-1.96859 -1.461726,-4.69034 -0.85137,-3.27753 -1.088859,-7.00893 -1.088859,-7.00893 0,0 -2.2575357,19.18905 1.354521,22.12384 3.612057,2.9348 10.610416,3.83781 11.739184,5.41809 1.128768,1.58027 2.483289,15.12548 3.386303,3.16054"
+     id="path4138"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cscscssscscssc" />
+  <path
+     style="fill:#00913e;fill-opacity:1;fill-rule:evenodd;stroke:#00913e;stroke-width:0.97012389px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 24.453452,51.663684 c 0.229339,-0.62176 0.401605,-11.99471 3.84496,-14.27469 7.091891,-4.69583 4.046002,-8.81981 2.97962,-10.14152 0.469196,-0.21294 -4.896446,-2.80038 -5.746411,-6.08492 -0.860407,-3.32489 -0.21283,-18.0293598 -0.21283,-18.0293598 0,0 0.425659,5.85953 5.533581,11.2683398 5.107922,5.40881 7.410321,8.03355 6.133341,13.21699 -1.27698,5.18344 -2.302585,7.74193 -5.28202,10.44657 -2.979669,2.70485 5.690014,-3.48751 5.895797,-5.44866 0.624138,-0.90527 0.711522,-1.96522 1.378048,-4.68232 0.802633,-3.27191 1.026527,-6.99693 1.026527,-6.99693 0,0 2.1283,19.15621 -1.27698,22.08598 -3.405282,2.92977 -10.003014,3.83123 -11.067164,5.40881 -1.06415,1.57757 -2.34113,15.09959 -3.192451,3.15513"
+     id="path4138-8"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cscscssscscssc" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:46.8146019px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e67816;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="46.659554"
+     y="46.839142"
+     id="text4155"
+     sodipodi:linespacing="125%"
+     transform="scale(0.97737886,1.0231447)"><tspan
+       sodipodi:role="line"
+       id="tspan4157"
+       x="46.659554"
+       y="46.839142"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';fill:#e67816;fill-opacity:1">Vamso</tspan></text>
+</svg>

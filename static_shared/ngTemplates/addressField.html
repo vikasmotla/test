@@ -1,0 +1,33 @@
+<div class="form-group">
+  <label>{{label}} <span class="text-danger">Please click the save button on the right side after filling the address</span>  </label>
+  <div class="row">
+    <div class="col-md-11">
+      <input ng-disabled="disable" placeholder="Street" type="text " class="form-control" ng-model="address.street">
+      <div class="row" style="margin-top:5px;">
+        <div class=" col-md-6">
+          <input ng-disabled="disable" placeholder="City" type="text " class="form-control" ng-model="address.city">
+        </div>
+        <div class="col-md-6">
+          <input ng-disabled="disable" type="text" ng-model="address.state" uib-typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control" placeholder="State">
+        </div>
+
+      </div>
+      <div class="row" style="margin-top:5px;">
+        <div class=" col-md-6">
+          <input ng-disabled="disable" placeholder="Pincode" type="text " class="form-control" ng-model="address.pincode">
+        </div>
+        <div class="col-md-6">
+          <input ng-disabled="true" placeholder="Country" type="text " class="form-control" ng-model="address.country">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 btn-group-vertical" style="padding-left:0px;">
+      <!-- <button type="button" class="btn btn-default">
+        <i class="fa fa-map-marker fa-2x"></i>
+      </button> -->
+      <button type="button" class="btn btn-primary" ng-click="save()">
+        <i class="fa fa-save"></i>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+<div class="container-fluid" style="margin-top:30px;" ng-controller="admin.manageUsers.editOffice">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="row pull-right">
+        <i class="fa fa-sitemap" style="color:#eeeeee;font-size:120px;"></i>
+      </div>
+    </div>
+    <div class="col-md-7 col-md-offset-1">
+      <h2 ng-if="officeForm.mode == 'new'"> Create New Office </h2>
+      <h2 ng-if="officeForm.mode == 'edit'"> Edit Office - {{officeForm.name}}</h2>
+    </div>
+  </div>
+  <div class="row" style="margin-top:30px;">
+    <!-- <div class="col-md-2 text-center">
+      <i class="fa fa-sitemap" style="color:#eeeeee;font-size:150px;"></i>
+    </div> -->
+    <div class="col-md-5 col-md-offset-1">
+
+
+      <div class="form-group">
+        <label>Name</label>
+        <input ng-model="officeForm.name" type="text" class="form-control" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label>contact Name</label>
+        <input ng-model="officeForm.contactName" type="text" class="form-control" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label>Contact Number</label>
+        <input ng-model="officeForm.contactNumber" type="text" class="form-control" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label>GSTIN</label>
+        <input ng-model="officeForm.gstIn" type="text" class="form-control" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label>Street</label>
+        <input ng-model="officeForm.street" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>City</label>
+          <input ng-model="officeForm.city" type="text" class="form-control" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input ng-model="officeForm.state" type="text" class="form-control" placeholder="">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>PIN Code</label>
+          <input ng-model="officeForm.pincode" type="tel" class="form-control" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input ng-model="officeForm.country" type="text" class="form-control" placeholder="">
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" ng-click="saveOffice()">
+        <i class="fa fa-save"> Save</i>
+      </button>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      <div class="row" ng-if="offices.length > 0">
+        <div class="row text-center">
+          <strong> Offices List </strong>
+        </div>
+        <hr>
+        <div class="row" ng-repeat="o in offices">
+          <div class="container-fluid card zoomOnHover" style="margin-bottom:15px;margin-right:20px;cursor:pointer" ng-click="editForm($index)">
+            <div class="row container-fluid" style="padding-top:20px;">
+              <label> Name :</label> {{o.name}}<br>
+              <label> Contact Name :</label> {{o.contactName}}<br>
+              <label> Contact Number :</label> {{o.contactNumber}}<br>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row text-center">
+        <h3>Selling</h3>
+      </div>
+      <div class="form-group">
+        <label>Product</label>
+        <div class="input-group">
+          <input type="text" class="form-control"  ng-model="producrForm.selling" uib-typeahead="product as product.txt for product in productSearch($viewValue)"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" ng-click="saveSellingProduct()">{{producrForm.selling.pk == null ? 'New':'Add'}}</button>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6" ng-repeat="sp in sellingProducts">
+          <div class="container-fluid card">
+            <i class="fa fa-times fa-lg pull-right" style="padding-top:10px;cursor:pointer" ng-click="closeSellingProduct($index)"></i>
+            <div class="row container-fluid" style="padding-top:10px;">
+              <h4><b>{{sp.txt}}<b></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row text-center">
+        <h3>Buying</h3>
+      </div>
+      <div class="form-group">
+        <label>Product</label>
+        <div class="input-group">
+          <input type="text" class="form-control"  ng-model="producrForm.buying" uib-typeahead="product as product.txt for product in productSearch($viewValue)"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" ng-click="saveBuyingProduct()">{{producrForm.buying.pk == null ? 'New':'Add'}}</button>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6" ng-repeat="bp in buyingProducts">
+          <div class="container-fluid card">
+            <i class="fa fa-times fa-lg pull-right" style="padding-top:10px;cursor:pointer" ng-click="closeBuyingProduct($index)"></i>
+            <div class="row container-fluid" style="padding-top:10px;">
+              <h4><b>{{bp.txt}}<b></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center" style="margin-bottom:50px;margin-top:30px">
+    <button type="button" class="btn btn-primary" ng-click="saveProfileProducts()">
+      <i class="fa fa-save"> Save</i>
+    </button>
+  </div>
+</div>

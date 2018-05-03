@@ -1,0 +1,341 @@
+<div class="shaddowed card bg-white" style="min-height:93vh;position:relative;">
+  <breadcrumb></breadcrumb>
+
+  <div class="container-fluid" ng-controller="controller.home.profile">
+    <div class="col-md-6" ng-if="editProfile">
+      <div class="form-group">
+        <label for="empID">Employee ID :</label>
+        <span style="font-size:20px;">{{me.pk | getID}}</span>
+      </div>
+      <div class="form-group">
+        <label style="margin-right:20px;">Prefix*</label>
+        <label class="radio-inline"><input type="radio" name="prefix{{pk}}" ng-model="profile.prefix" ng-value="'Smt'">Miss.</label>
+        <label class="radio-inline"><input type="radio" name="prefix{{pk}}" ng-model="profile.prefix" ng-value="'Shri'">Mr.</label>
+        <label class="radio-inline"><input type="radio" name="prefix{{pk}}" ng-model="profile.prefix" ng-value="'Dr'">Dr</label>
+      </div>
+      <div class="form-group">
+        <label style="margin-right:20px;">Married* ?</label>
+        <label class="radio-inline"><input type="radio" name="married{{pk}}" ng-model="profile.married" ng-value="false">Single</label>
+        <label class="radio-inline"><input type="radio" name="married{{pk}}" ng-model="profile.married" ng-value="true">Married</label>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Date of Birth*</label>
+            <div class="input-group" >
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MM-yyyy" ng-model="profile.dateOfBirth" is-open="status.DOBOpened"  />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="status.DOBOpened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+            <p class="help-text">
+              <span class="text-danger">Please enter date by selecting it from the calender Icon or enter in <strong>DD-MM-YYYY</strong> format  </span>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6" ng-if="profile.married">
+          <div class="form-group">
+            <label>Anniversary*</label>
+            <div class="input-group" >
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MM-yyyy" ng-model="profile.anivarsary" is-open="status.aniversaryOpened"  />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="status.aniversaryOpened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <address-Field label="'Dispatch Address*'" address="profile.localAddress"></address-Field>
+      <label ng-if="profile.sameAsLocal">Permanent Address</label> <br>
+      <input ng-model="profile.sameAsLocal" type="checkbox" name="" value=""> Same as dispatch address
+      <address-Field ng-if="!profile.sameAsLocal" label="'Permanent Address*'" disable="profile.sameAsLocal" style="margin-top:20px;" address="profile.permanentAddress"></address-Field>
+
+      <div class="form-group">
+        <label style="margin-top:20px;">Gender*</label>
+
+        <div class="row">
+          <div class="col-md-6 text-center">
+            <img src="/static/images/img_avatar_card.png" style="height:50px;height:50px;" class="img img-circle">
+            <br>
+            Male
+            <br>
+            <input ng-model="profile.gender" name="gender{{pk}}" type="radio" name="" ng-value="'M'">
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="/static/images/img_avatar_card2.png" style="height:50px;height:50px;" class="img img-circle">
+            <br>
+            Female
+            <br>
+            <input ng-model="profile.gender" name="gender{{pk}}" type="radio" name="" ng-value="'F'">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Email*</label>
+            <input class="form-control" type="email" ng-model = "profile.email">
+          </div>
+
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Mobile*</label>
+            <input type="text" class="form-control" ng-model="profile.mobile" placeholder="Personal mobile">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Emergency Contact Name*</label>
+            <input type="text" class="form-control" ng-model="profile.emergencyName">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Emergency Contact Number*</label>
+            <input type="text" class="form-control" ng-model="profile.emergencyNumber" placeholder="Emergency contact number">
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="profile.married">
+        <div class="form-group">
+          <label ng-if="profile.gender == 'M'">Wife's Name*</label>
+          <label ng-if="profile.gender == 'F'">Husbands's Name*</label>
+          <input type="text" class="form-control" ng-model="profile.wifesName" placeholder="">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Father's Name*</label>
+        <input type="text" class="form-control" ng-model="profile.fathersName" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>Mother's Name*</label>
+        <input type="text" class="form-control" ng-model="profile.mothersName" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label>Display Picture</label>
+        <input type="file" file-model="form.dp">
+        <p class="help-block">Please select a profile picture.</p>
+      </div>
+
+
+      <button type="button" class="btn btn-primary" ng-click="save()">
+        Save
+      </button>
+
+
+    </div>
+
+    <div class="container-fluid" ng-if="!editProfile">
+      <h3 class="text-muted">My Profile</h3>
+
+      <div class="col-md-3" style="border-right:solid 2px #eeeeee;min-height:70vh;">
+        <div class="row">
+          <div class="container-fluid text-center">
+            <img ng-src="{{profile.pk | getDP}}" class="img img-circle" style="height:100px;width:100px;margin-bottom:20px;"> <br>
+
+            <span class="text-muted" style="font-size:18px;">{{profile.pk | getName}}</span> <br><br>
+            {{designation.rank.title}}<br>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+
+          <div class="row">
+            <div class="col-md-5 text-right">
+              <label># Employee ID : </label> <br>
+            </div>
+            <div class="col-md-7">
+              {{profile.pk | getID}} <br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5 text-right">
+              <label><i class="fa fa-envelope-o"></i> Official : </label> <br>
+            </div>
+            <div class="col-md-7">
+              {{me.email}} <br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5 text-right">
+              <label><i class="fa fa-envelope-o"></i> Personal : </label><br>
+            </div>
+            <div class="col-md-7">
+              {{profile.email}} <br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5 text-right">
+              <label><i class="fa fa-envelope-o"></i> Mobile : </label><br>
+            </div>
+            <div class="col-md-7">
+              {{profile.mobile}} <br>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+          <label>Reporting Manager</label> <br>
+          <div class="container-fluid ">
+            <div class="col-md-3">
+              <img ng-src="{{designation.reportingTo | getDP}}" class="img img-circle pull-right" style="height:50px;width:50px;"> <br>
+            </div>
+            <div class="col-md-9">
+              {{designation.reportingTo | getName}} <br>
+              <span class="text-muted">#{{designation.reportingTo | getID}}</span> <br>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+          <label>Secondary Manager</label> <br>
+          <div class="container-fluid ">
+            <div class="col-md-3">
+              <img ng-src="{{designation.secondaryApprover | getDP}}" class="img img-circle pull-right" style="height:50px;width:50px;"> <br>
+            </div>
+            <div class="col-md-9">
+              {{designation.secondaryApprover | getName}} <br>
+              <span class="text-muted">#{{designation.secondaryApprover | getID}}</span> <br>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row" style="padding:20px;margin-top:30px;">
+          <div class="row">
+            <div class="col-md-3 text-right">
+              <label>Dispatch Address :</label> <br>
+              <i class="fa fa-map-marker fa-3x pull-right" style="color:#eeeeee;"></i>
+            </div>
+            <div class="col-md-9">
+              {{profile.localAddress.street}}<br>
+              {{profile.localAddress.city}}<br>
+              {{profile.localAddress.state}}({{profile.localAddress.pincode}})<br>
+              {{profile.localAddress.country}}<br>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="padding:20px;">
+          <div class="row">
+            <div class="col-md-3 text-right">
+              <label>Permanent Address :</label> <br>
+              <i class="fa fa-map-marker fa-3x" style="color:#eeeeee;"></i>
+            </div>
+            <div class="col-md-9">
+              {{profile.permanentAddress.street}}<br>
+              {{profile.permanentAddress.city}}<br>
+              {{profile.permanentAddress.state}}({{profile.permanentAddress.pincode}})<br>
+              {{profile.permanentAddress.country}}<br>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-9" ng-controller="controller.home.profile.search">
+
+          <div class="row text-center">
+            <h3 class="text-muted" style="margin-top:-30px;">Explore team</h3>
+            <div class="col-md-6 col-md-offset-3">
+              <user-field url="/api/HR/users/" user="form.user" label = "" ></user-field>
+            </div>
+          </div>
+
+          <div class="row" ng-if="friend">
+            <div class="container-fluid">
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="container-fluid text-center">
+                    <img ng-src="{{friend.pk | getDP}}" class="img img-circle" style="height:100px;width:100px;margin-bottom:20px;"> <br>
+
+                    <span class="text-muted" style="font-size:18px;">{{friend.pk | getName}}</span> <br><br>
+                    {{friendDesignation.rank.title}}<br>
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+
+                  <div class="row">
+                    <div class="col-md-5 text-right">
+                      <label># Employee ID : </label> <br>
+                    </div>
+                    <div class="col-md-7">
+                      {{friend.pk | getID}} <br>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 text-right">
+                      <label><i class="fa fa-envelope-o"></i> Official : </label> <br>
+                    </div>
+                    <div class="col-md-7">
+                      {{friend.email}} <br>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 text-right">
+                      <label><i class="fa fa-envelope-o"></i> Personal : </label><br>
+                    </div>
+                    <div class="col-md-7">
+                      {{friendProfile.email}} <br>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 text-right">
+                      <label><i class="fa fa-envelope-o"></i> Mobile : </label><br>
+                    </div>
+                    <div class="col-md-7">
+                      {{friendProfile.mobile}} <br>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div class="col-md-4" style="padding-top:180px;">
+                <div class="row" style="margin-top:20px;">
+                  <label>Reporting Manager</label> <br>
+                  <div class="container-fluid ">
+                    <div class="col-md-3">
+                      <img ng-src="{{friendDesignation.reportingTo | getDP}}" class="img img-circle pull-right" style="height:50px;width:50px;"> <br>
+                    </div>
+                    <div class="col-md-9">
+                      {{friendDesignation.reportingTo | getName}} <br>
+                      <span class="text-muted">#{{friendDesignation.reportingTo | getID}}</span> <br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+                  <label>Secondary Manager</label> <br>
+                  <div class="container-fluid ">
+                    <div class="col-md-3">
+                      <img ng-src="{{friendDesignation.secondaryApprover | getDP}}" class="img img-circle pull-right" style="height:50px;width:50px;"> <br>
+                    </div>
+                    <div class="col-md-9">
+                      {{friendDesignation.secondaryApprover | getName}} <br>
+                      <span class="text-muted">#{{friendDesignation.secondaryApprover | getID}}</span> <br>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-4">
+
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>

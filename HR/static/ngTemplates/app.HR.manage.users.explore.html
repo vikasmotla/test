@@ -1,0 +1,146 @@
+<div class="container-fluid" style="padding:20px;" ng-controller="admin.manageUsers.explore">
+  <div class="col-md-3" style="border-right:solid 2px #eeeeee;min-height:70vh;">
+    <div class="row">
+      <div class="container-fluid text-center">
+        <img ng-src="{{profile.pk | getDP}}" class="img img-circle" style="height:100px;width:100px;margin-bottom:20px;"> <br>
+
+        <span class="text-muted" style="font-size:18px;">{{profile.pk | getName}}</span> <br><br>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:20px;">
+
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label><i class="fa fa-envelope-o"></i> Email :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.email}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label><i class="fa fa-mobile"></i> Mobile :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.mobile}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> Website :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.website}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> CIN :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.cin}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> Year Established :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.year_established}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> Street :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.street}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> City :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.city}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> Pincode :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.pincode}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> State :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.state}} <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 text-right">
+          <label> Country :</label><br>
+        </div>
+        <div class="col-md-7">
+          {{profile.profile.country}} <br>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+  <div class="col-md-9">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="row text-center">
+            <h4> Offices </h4>
+          </div>
+          <hr>
+          <div class="row" ng-repeat="o in officesData">
+            <div class="container-fluid card" style="margin-bottom:15px;margin-right:20px;">
+              <div class="row container-fluid" style="padding-top:20px;">
+                <label> Name :</label> {{o.name}}<br>
+                <label> Contact Name :</label> {{o.contactName}}<br>
+                <label> Contact Number :</label> {{o.contactNumber}}<br>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row text-center">
+            <h4> Selling </h4>
+          </div>
+          <hr>
+          <div class="row" ng-repeat="sp in profile.profile.sellingProduct">
+            <div class="container-fluid card" style="margin-bottom:15px;margin-right:20px;">
+              <div class="row container-fluid" style="padding-top:20px;">
+                <h4><b>{{sp.txt}}</b></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row text-center">
+            <h4> Buying </h4>
+          </div>
+          <hr>
+          <div class="row" ng-repeat="bp in profile.profile.buyingProduct">
+            <div class="container-fluid card" style="margin-bottom:15px;margin-right:20px;">
+              <div class="row container-fluid" style="padding-top:20px;">
+                <h4><b>{{bp.txt}}</b></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

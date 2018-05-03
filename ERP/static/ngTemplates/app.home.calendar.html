@@ -1,0 +1,29 @@
+<div class="shaddowed card bg-white" style="min-height:93vh;position:relative;">
+
+  <breadcrumb></breadcrumb>
+  <div class="col-md-9">
+    <generic-Calendar date="date" day-Items="data.items" item-Templates="{{templates}}" day-Clicked="showDay" item-Clicked="showPerticular"></generic-Calendar>
+  </div>
+  <div class="col-md-3" style="position:absolute; height:100%;top:0px;right:0px;background-color:var(--themeMain);color:white;">
+    <div class="row" style="background-color:var(--themeMain);color:white;">
+
+      <div class="dayDetails">
+        <div class="sideBarDate"><i class="fa fa-calendar fa-2x pull-left"></i>{{date | date : 'dd MMM yyyy'}} </div>
+        {{date | date :'EEEE'}}
+        <span style="position:absolute;top:10px;right:10px"><i class="fa fa-plus noselect" ng-click="openForm()"></i></span>
+      </div>
+
+    </div>
+    <div class="row bg-purple dayInfoBox" style="max-height:350px;overflow:auto;">
+      <ul class="nav">
+        <li ng-repeat="td in itemsToShow" class="noselect" ng-if="td.type=='ToDo'">
+          <span style="padding:10px 15px;;display:block;" class="inlistForm">
+            <input  type="checkbox" ng-model="td.data.completed" ng-click="toggleToDo($index)">
+            <span style="{{td.data.status == 'complete' ? 'text-decoration:line-through;' : ''}}">{{td.data.description}}</span>
+          <i class="glyphicon glyphicon-trash pull-right" ng-click="deleteToDo($index)"></i>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
