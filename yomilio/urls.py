@@ -5,9 +5,13 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from HR.views import loginView , logoutView , home , registerView , tokenAuthentication , root, generateOTP
 from homepage.views import *
+from social.views import *
 
 urlpatterns = [
     url(r'^$', index , name ='root'),
+    url(r'social$', socialIndex , name ='social'),
+    url(r'social/messages', socialMessage , name ='message'),
+    url(r'social/profile/(?P<profName>[\w|\W]+)', profileDetails , name ='profileDetails'),
     url(r'^ERP/', home , name ='ERP'),
     url(r'^api/', include('API.urls')),
     url(r'^admin/', include(admin.site.urls)),

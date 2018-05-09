@@ -23,9 +23,22 @@ from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail, EmailMessage
 from .models import *
 from .serializers import *
+from HR.models import profile
 
 # Create your views here.
 
+def socialIndex(request):
+    return render(request, 'app.social.index.html', {"home": True , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+def socialMessage(request):
+    return render(request, 'app.social.messages.html', {"home": True , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+def profileDetails(request,profName):
+    print 'proffffffffffffffffffffff',profName
+    userObj = User.objects.get(username=profName)
+    profileObj = profile.objects.get(user = userObj.pk)
+    print profileObj,profileObj.mobile
+    return render(request, 'app.social.profile.html', {"home": True ,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 class ProductTagViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
