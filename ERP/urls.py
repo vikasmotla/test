@@ -18,4 +18,5 @@ router.register(r'eventRegistration' , EventRegistrationViewSet , base_name = 'e
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'sendSMS/$' , SendSMSApi.as_view()),
+    url(r'eventRegDetails/$' , eventRegDetailsApi.as_view()),
 ]

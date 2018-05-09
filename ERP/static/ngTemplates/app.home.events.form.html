@@ -1,8 +1,8 @@
 <div class="container-fluid" ng-controller="admin.events.form" style="margin-top:20px;">
-  <div class="row" style="margin-top:20px;padding:0px 10px">
-    <div class="col-md-6">
+  <div class="row" style="margin-top:20px;padding:0px 10px" ng-if="formTyp == 'form'">
+    <div class="col-md-10 col-md-offset-1">
       <div class="row text-center">
-        <h3> Create New Event </h3>
+        <h3> {{mode == 'new'?'Create New' : 'Edit The'}} Event</h3>
       </div>
       <div class="row">
         <div class="form-group">
@@ -19,11 +19,11 @@
         </div>
         <div class="form-group">
           <label>Entry Fee</label>
-          <input type="tel" class="form-control" ng-model="eventForm.entryFee" placeholder="">
+          <input type="number" class="form-control" ng-model="eventForm.entryFee" placeholder="">
         </div>
         <div class="form-group">
           <label>Description</label>
-            <textarea ui-tinymce="tinymceOptions" ng-model="editor.description"></textarea>
+            <textarea ui-tinymce="tinymceOptions" ng-model="eventForm.description"></textarea>
         </div>
         <div class="form-group">
           <div class="col-md-3">
@@ -31,9 +31,9 @@
           </div>
           <div class="col-md-6">
             <div class="input-group" style="margin-top:35px;">
-              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_On" is-open="status.opened" />
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_On" is-open="status.openedStartsOn" />
               <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button type="button" class="btn btn-default" ng-click="status.openedStartsOn = true;"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
             </div>
           </div>
@@ -49,9 +49,9 @@
           </div>
           <div class="col-md-6">
             <div class="input-group" style="margin-top:35px;">
-              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_ends_On" is-open="status.opened" />
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.event_ends_On" is-open="status.openedEndsOn" />
               <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button type="button" class="btn btn-default" ng-click="status.openedEndsOn = true;"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
             </div>
           </div>
@@ -67,9 +67,9 @@
           </div>
           <div class="col-md-6">
             <div class="input-group" style="margin-top:35px;">
-              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.regEndsOn" is-open="status.opened" />
+              <input type="text" class="form-control" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="eventForm.regEndsOn" is-open="status.openedRegEnds" />
               <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="status.opened = true;"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button type="button" class="btn btn-default" ng-click="status.openedRegEnds = true;"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
             </div>
           </div>
@@ -79,10 +79,14 @@
             </div>
           </div>
         </div>
+        <div class="form-group text-center" style="font-size:25px">
+          <label >Promoted</label>&nbsp;&nbsp;
+          <input type="checkbox" ng-model="eventForm.promoted" style="height:30px;width:30px;">
+        </div>
       </div>
-      <div class="row" style="margin-top:25px;margin-bottom:35px">
+      <div class="row" style="margin-top:20px;margin-bottom:35px">
         <div class="col-md-5 col-md-offset-5">
-          <button ng-click="saveProfile()" type="button" class="btn btn-primary">
+          <button ng-click="saveEvent()" type="button" class="btn btn-primary">
             Save Event
           </button>
         </div>
@@ -90,58 +94,148 @@
 
     </div>
 
-    <div class="col-md-6" nf-if="eventForm.pk != null">
+  </div>
+  <div class="row" style="margin-top:20px;padding:0px 10px" ng-if="formTyp == 'view'">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="row text-center">
+          <h3>{{eventForm.name}}</h3>
+        </div>
+        <div class="row" style="padding-left:10px;padding-right:10px">
+          <label>Venue : </label> {{eventForm.venue}} <br>
+          <label>Entry Fee : </label> {{eventForm.entryFee}} <br>
+          <label>Starting Date : </label> {{eventForm.event_On | date : 'dd MMM yyyy'}} <br>
+          <label>Ending Date : </label> {{eventForm.event_ends_On | date : 'dd MMM yyyy'}} <br>
+          <label>Registration Ending Date : </label> {{eventForm.regEndsOn | date : 'dd MMM yyyy'}} <br>
+          <label>Venue Address Link : </label> <a target='_blank' href="{{eventForm.venueGMapUrl}}" >{{eventForm.venueGMapUrl}}</a> <br>
+        </div>
+        <div class="row">
+          <div class="row text-center">
+            <h3>About</h3>
+          </div>
+          <div class="row" style="padding:15px 20px">
+            <div ng-bind-html="eventForm.description">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
       <div class="row text-center">
         <h3> Please Fill Event Item Details </h3>
       </div>
       <div class="row" style="padding-left:25px">
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="form-control" ng-model="eventItemForm.title" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Type</label>
+              <select class="form-control" ng-model="eventItemForm.typ">
+                <option value="KeyNote">KeyNote</option>
+                <option value="Session">Session</option>
+                <option value="WorkShop">WorkShop</option>
+                <option value="Tea">Tea</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Network">Network</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Type</label>
-          <select class="form-control" ng-model="data.level">
-            <option value="KeyNote">KeyNote</option>
-            <option value="Session">Session</option>
-            <option value="WorkShop">WorkShop</option>
-            <option value="Tea">Tea</option>
-            <option value="Lunch">Lunch</option>
-            <option value="Dinner">Dinner</option>
-            <option value="Network">Network</option>
-          </select>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Entry Fee</label>
+              <input type="number" class="form-control" ng-model="eventItemForm.entryFee" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Moderator</label>
+              <input type="text" class="form-control" ng-model="eventItemForm.moderator" placeholder="">
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Entry Fee</label>
-          <input type="tel" class="form-control" ng-model="profileForm.mobile" placeholder="">
-        </div>
-        <div class="form-group">
-          <label>Moderator</label>
-          <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
-        </div>
-        <div class="form-group">
-          <label>Day</label>
-          <input type="number" class="form-control" ng-model="profileForm.mobile" placeholder="">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Day</label>
+              <input type="number" class="form-control" ng-model="eventItemForm.dayNumber" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Event Time</label>
+              <select class="form-control" ng-model="eventItemForm.eventTime">
+                <option value="8:00 AM">8:00 AM</option>
+                <option value="8:30 AM">8:30 AM</option>
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="9:30 AM">9:30 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="10:30 AM">10:30 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="11:30 AM">11:30 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="12:30 PM">12:30 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+                <option value="1:30 PM">1:30 PM</option>
+                <option value="2:00 PM">2:00 PM</option>
+                <option value="2:30 PM">2:30 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="3:30 PM">3:30 PM</option>
+                <option value="4:00 PM">4:00 PM</option>
+                <option value="4:30 PM">4:30 PM</option>
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="5:30 PM">5:30 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+
+              </select>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label>Picture</label>
-          <input type="file" name="DP" file-model="profileForm.displayPicture">
+          <input type="file" name="DP" file-model="eventItemForm.pic">
         </div>
         <div class="form-group">
           <label>Description</label>
-            <textarea ui-tinymce="tinymceOptions" ng-model="editor.source"></textarea>
+            <textarea ui-tinymce="tinymceOptions" ng-model="eventItemForm.description"></textarea>
         </div>
 
       </div>
       <div class="row" style="margin-top:25px;margin-bottom:25px">
         <div class="col-md-5 col-md-offset-5">
-          <button ng-click="saveProfile()" type="button" class="btn btn-primary">
+          <button ng-click="saveEventItem()" type="button" class="btn btn-primary">
             Save Event Details
           </button>
         </div>
       </div>
+      <hr>
+      <div class="row" ng-repeat="ei in eventItems" style="padding-left:25px">
+        <div class="container-fluid card" style="margin-bottom:15px;margin-right:20px;">
+          <div class="row container-fluid" style="padding-top:10px;">
+            <div class="row text-center">
+              <h3>{{ei.title}}</h3>
+            </div>
+            <div class="row" style="padding-left:10px;padding-right:10px">
+              <label>Event Type : </label> {{ei.typ}} <br>
+              <label>Entry Fee : </label> {{ei.entryFee}} <br>
+              <label>Event Time : </label> {{ei.eventTime}} <br>
+            </div>
+            <i class="fa fa-pencil fa-lg pull-right" style="cursor:pointer;padding-bottom:15px" ng-click="editEventItem($index)"></i>
+          </div>
+        </div>
+      </div>
     </div>
-
   </div>
 
 </div>

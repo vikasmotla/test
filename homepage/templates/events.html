@@ -44,7 +44,7 @@
     <div class="container" style="padding-left:0px;padding-right:0px;box-shadow: 0px 30px 50px 12px #d0d5dd;">
       {% if dataLen == 0 %}
         <div class="row text-center">
-          <h3>No blog posts , Please visit again.</h3>
+          <h3>No Events , Please visit again.</h3>
         </div>
       {% endif %}
 
@@ -55,9 +55,10 @@
 
           <div class="row">
             <div class="col-md-12 text-left" style="margin-left: 40px;margin-right: 10px">
-              <h2 style="font-size:19px;" class="text-primary"> <a href = "/{{a.url}}/ ">  {{a.title}} </a></h2>
-              By {{a.user}} <span style="margin-left: 10px;"> | </span> <span style="margin-left: 10px;">{{a.date}}</span>
+              <h2 style="font-size:19px;" class="text-primary"> <a href = "{{a.url}}/ ">  {{a.title}} </a></h2>
+              Start : {{a.as_on}} <span style="margin-left: 10px;"> | </span> <span style="margin-left: 10px;">End : {{a.ends_on}}</span>
             </div>
+            
           </div>
           <div class="container-fluid" style="margin-left:40px;margin-right: 10px;padding:0px;margin-top:15px;">
             {{a.header | safe}}
@@ -65,17 +66,17 @@
         </section>
       </div>
       {% endfor %}
-
+      <br><br>
       <div class='pages' style='text-align:center'>
         <div class='pagesbtn'>
         {% if pages.currentpage != pages.first %}
-          <a href="/blog/" style="text-decoration: none;">
-            <div class="btn btn-primary" style="text-decoration: none;">First</div><a>
-          <a href="/blog/?page={{ pages.prev }}">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Prev</div><a>
+          <a href="/events/" style="text-decoration: none;">
+            <div class="btn btn-primary">First</div><a>
+          <a href="/events/?page={{ pages.prev }}" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Prev</div><a>
         {% endif %}
         {% if pages.currentpage != pages.last and pages.last > pages.first %}
-          <a href="/blog/?page={{ pages.next }}" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Next</div><a>
-          <a href="/blog/?page={{ pages.last }}" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Last</div><a>
+          <a href="/events/?page={{ pages.next }}" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Next</div><a>
+          <a href="/events/?page={{ pages.last }}" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;<div class="btn btn-primary">Last</div><a>
         {% endif %}
 
         </div>

@@ -14,7 +14,7 @@ from rest_framework.exceptions import *
 from url_filter.integrations.drf import DjangoFilterBackend
 from .serializers import *
 from API.permissions import *
-from ERP.models import application
+from ERP.models import *
 from ERP.views import getApps
 from django.db.models import Q
 from django.http import JsonResponse
@@ -117,6 +117,77 @@ def blog(request):
     data = data[(page-1)*pagesize:(page*pagesize)]
 
     return render(request,"blog.html" , {"home" : False ,'data' : data, 'dataLen' : len(data) ,'pages':pages , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+def events(request):
+    print 'cameeeeeeeeeeeeeeeeeeeee'
+    eventObj = Events.objects.all().order_by('-event_On')
+    pagesize = 2
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError as error:
+        page = 1
+    print '*****************',eventObj
+    total = eventObj.count()
+    last = total/pagesize + (1 if total%pagesize !=0 else 0)
+    # data = blogObj[(page-1)*pagesize:(page*pagesize)]
+    pages = {'first':1,
+			'prev':(page-1) if page >1 else 1,
+			'next':(page+1) if page !=last else last,
+			'last':last,
+			'currentpage':page}
+    data = [ ]
+    for i in eventObj:
+        print i.name
+        title = i.name
+        header = i.description
+        eventId = i.pk
+        as_on = i.event_On
+        ends_on = i.event_ends_On
+        shortUrl = i.name.replace(' ','_') + '_' + str(i.pk)
+        data.append({'header' : header , 'title' : title , 'as_on' : as_on ,'ends_on':ends_on, 'eventId' : eventId , 'url' : shortUrl })
+    data = data[(page-1)*pagesize:(page*pagesize)]
+    return render(request,"events.html" , {"home" : False ,'data' : data, 'dataLen' : len(data) ,'pages':pages , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+def eventDetails(request, eventName):
+    print '*****************@@@@@@@@@@@@@@@',eventName,type(eventName),request.method
+    eventPk = eventName.split('_')[-1]
+    print eventPk,type(eventPk)
+    eventobj = Events.objects.get(id=int(eventPk))
+    print 'events Item'
+    eventItemObj = EventItem.objects.filter(event = eventobj.pk)
+    eventDays = []
+    eventItemData = []
+    for i in  eventItemObj:
+        if i.dayNumber in eventDays:
+            eventItemData[eventDays.index(i.dayNumber)][str(i.dayNumber)].append(i)
+        else:
+            eventDays.append(i.dayNumber)
+            eventItemData.append({str(i.dayNumber):[]})
+            eventItemData[eventDays.index(i.dayNumber)][str(i.dayNumber)].append(i)
+    print eventItemData
+
+    if request.method == 'POST':
+        eventCheck = EventRegistration.objects.filter(event = eventobj.pk)
+        print request.POST['name'],request.POST['email'],request.POST['phone'],
+        print len(request.POST['name']),len(request.POST['email']),len(request.POST['phone']),
+        for i in eventCheck:
+            if request.POST['email'] == i.email:
+                print 'thereeeeeeeeeeeeeeeeee'
+                messages.error(request, "Sorry This email has already registered for this event")
+                return render(request, 'eventdetails.html', {"home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+        print 'not thereeeeeeeeeeeeeeee'
+        data = {
+        'name' : request.POST['name'],
+        'email' : request.POST['email'],
+        'phoneNumber' : request.POST['phone'],
+        'event' : eventobj
+        }
+        print 'dddddddddddddddddd',data
+        EventRegistration.objects.create(**data)
+        messages.success(request, "You have successfully Registered")
+        return render(request, 'eventdetails.html', {"home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+    else:
+        return render(request, 'eventdetails.html', {"home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 def news(request):
     return render(request,"newssection.html" , {"home" : False , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})

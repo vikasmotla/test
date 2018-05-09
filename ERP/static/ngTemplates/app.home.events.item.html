@@ -1,0 +1,71 @@
+<!-- <div class="col-md-3 ">
+  <div class="container-fluid card" style="padding:15px;margin-bottom:15px;">
+    <div class="row text-center">
+      <h3>{{data.name}}</h3>
+    </div>
+    <div class="row" style="padding-left:10px;padding-right:10px">
+      <label>Venue : </label> {{data.venue}} <br>
+      <label>Entry Fee : </label> {{data.entryFee}} <br>
+      <label>Date : </label> {{data.event_On | date : 'dd MMM yyyy'}} <br> <br>
+    </div>
+    <i class="fa fa-pencil fa-lg" style="cursor:pointer;" ng-click="rowActionClicked('edit')"></i>
+    <i class="fa fa-info pull-right fa-lg" style="cursor:pointer;" ng-click="rowActionClicked('details')"></i>
+  </div>
+</div> -->
+
+
+<div class="col-md-4">
+<div class="container-fluid" style="margin-bottom:20px;">
+  <div class="row" >
+    <div class="container-fluid card" style="padding-bottom:10px;">
+      <div class="row" style="background: #41aa87;color:white;">
+        <div class="col-md-10" style="position:relative;display:block;">
+          <div class="row" style="padding-left:10px;padding-right:10px;">
+            <h3>{{data.name}}</h3>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2" style="padding:10px;">
+          <i class="fa fa-microphone fa-3x"></i>
+        </div>
+      </div>
+      <div class="row container-fluid" style="padding-top:10px;padding-bottom:5px;">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3" style="text-align:right">
+              <label>Venue :</label>
+            </div>
+            <div class="col-md-9" style="padding-left:0px">
+              {{data.venue}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="text-align:right">
+              <label>Entry Fee :</label>
+            </div>
+            <div class="col-md-9" style="padding-left:0px">
+              {{data.entryFee}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="text-align:right">
+              <label>Date :</label>
+            </div>
+            <div class="col-md-9" style="padding-left:0px">
+              {{data.event_On | date : 'dd MMM yyyy'}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-md-6" style="background: #b98d53;color:white;padding:10px;cursor:pointer;" ng-click="rowActionClicked('edit')">
+         Edit Event &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-pencil fa-lg"></i>
+    </div>
+    <div class="col-md-6 bg-default" style="background: #ad516a;color:white;padding:10px;cursor:pointer;" ng-click = "rowActionClicked('details')" >
+         View Event Details &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-info fa-lg"></i>
+    </div>
+  </div>
+</div>
+</div>

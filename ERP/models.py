@@ -87,6 +87,8 @@ class address(models.Model):
         return '< street :%s>,<city :%s>,<state :%s>' %(self.street ,self.city, self.state)
 
 class Events(models.Model):
+    created = models.DateTimeField(auto_now_add=True,null=True)
+    updated = models.DateTimeField(auto_now=True,null=True)
     name = models.CharField(max_length = 200 , null = True )
     event_On = models.DateTimeField(null = True)
     event_ends_On = models.DateTimeField(null = True)
@@ -95,6 +97,7 @@ class Events(models.Model):
     entryFee = models.FloatField(null=True)
     description = models.CharField(max_length = 30000 , null = True )
     venueGMapUrl = models.CharField(max_length = 1000 , null = True )
+    promoted = models.BooleanField(default = False)
 
 EVENTITEM_TYPE_CHOICES = (
     ('KeyNote' , 'KeyNote'),
@@ -107,6 +110,7 @@ EVENTITEM_TYPE_CHOICES = (
 )
 
 class EventItem(models.Model):
+    event = models.ForeignKey(Events, related_name='eventItemParent' , null=True)
     title = models.CharField(max_length = 300 , null = True )
     typ = models.CharField(choices = EVENTITEM_TYPE_CHOICES , max_length = 20 ,null = True)
     description = models.CharField(max_length = 10000 , null = True )
@@ -114,8 +118,10 @@ class EventItem(models.Model):
     entryFee = models.FloatField(null=True)
     moderator = models.CharField(max_length = 200 , null = True )
     dayNumber = models.PositiveIntegerField(null = True)
+    eventTime = models.CharField(max_length = 15 , null = True )
 
 class EventRegistration(models.Model):
+    event = models.ForeignKey(Events, related_name='registrations' , null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length = 100 , null = True )

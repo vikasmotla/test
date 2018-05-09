@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^contacts', contacts , name ='contacts'),
     url(r'^team', team , name ='team'),
     url(r'^blog/$', blog , name ='blog'),
+    url(r'^events/$', events , name ='events'),
+    url(r'^events/(?P<eventName>[\w|\W]+)/', eventDetails , name ='eventDetails'),
 ]
 
 if settings.DEBUG:
@@ -31,3 +33,4 @@ if settings.DEBUG:
     urlpatterns +=static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)
 
 urlpatterns.append(url(r'^(?P<blogname>[\w|\W]+)/', blogDetails , name ='blogDetails'))
+# urlpatterns.append(url(r'^events/(?P<eventName>[\w|\W]+)/', eventDetails , name ='eventDetails'))

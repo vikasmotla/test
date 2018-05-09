@@ -85,12 +85,19 @@ class RecursiveField(serializers.Serializer):
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Events
-        fields = ('pk' , 'name', 'event_On', 'event_ends_On', 'regEndsOn', 'venue', 'entryFee', 'description', 'venueGMapUrl')
+        fields = ('pk' , 'name', 'promoted','event_On', 'event_ends_On', 'regEndsOn', 'venue', 'entryFee', 'description', 'venueGMapUrl')
 
 class EventItemSerializer(serializers.ModelSerializer):
+    event = EventsSerializer(read_only = True, many = False)
     class Meta:
         model = EventItem
-        fields = ('pk' , 'title', 'typ', 'description', 'pic', 'entryFee', 'moderator', 'dayNumber')
+        fields = ('pk' , 'event', 'title', 'typ', 'description', 'pic', 'entryFee', 'moderator', 'eventTime' ,'dayNumber')
+    def create(self , validated_data):
+        print "came to create"
+        e = EventItem(**validated_data)
+        e.event=Events.objects.get(pk=self.context['request'].data['event'])
+        e.save()
+        return e
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
     class Meta:

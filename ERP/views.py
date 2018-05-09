@@ -16,6 +16,11 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 import requests
 from allauth.account.adapter import DefaultAccountAdapter
+from excel_response import ExcelResponse
+from django.http import JsonResponse
+from django.core import serializers
+from django.http import HttpResponse
+
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -133,8 +138,31 @@ class EventItemViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = EventItemSerializer
     queryset = EventItem.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['event',]
 
 class EventRegistrationViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = EventRegistrationSerializer
     queryset = EventRegistration.objects.all()
+
+class eventRegDetailsApi(APIView):
+    renderer_classes = (JSONRenderer,)
+    permission_classes = (permissions.IsAuthenticated ,)
+    def get(self , request , format = None):
+        print "came",request.GET
+        if 'mode' in request.GET:
+            regData = EventRegistration.objects.filter(event = request.GET['event'])
+            if request.GET['mode'] == 'all':
+                print 'alllllll'
+                regData_json = serializers.serialize('json', regData)
+                return HttpResponse(regData_json)
+            elif request.GET['mode'] == 'download':
+                print 'downloaddddddddddd'
+                da = []
+                for i in regData:
+                    da.append({'name':i.name,'email':i.email,'phoneNumber':i.phoneNumber})
+                print da
+                return ExcelResponse(da)
+        else:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
