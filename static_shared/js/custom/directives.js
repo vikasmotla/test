@@ -1,3 +1,64 @@
+app.directive('commentEdit', function () {
+  return {
+    templateUrl: '/static/ngTemplates/directive.commentEdit.html',
+    restrict: 'E',
+    replace: true,
+    scope: {
+      comment :'=',
+      send : '=',
+    },
+    controller : function($scope , $state , $stateParams , $http , Flash){
+
+      //fetch the comment with $scope.pk
+
+      console.log('in diireeee',$scope.text, $scope.fileObj);
+
+
+      // $scope.comment = {txt : ''};
+      // $scope.filename = {name : emptyFile};
+
+      $scope.$watch('comment.txt' , function(newValue , oldValue){
+        if (newValue==undefined) {
+          return;
+        }
+        if (newValue=='') {
+          $("#cmt").css('height', '');
+        }else {
+          $("#cmt").css('height', '8em');
+        }
+      });
+
+      $scope.checkFile = function() {
+        if ($scope.fileSize == 0) {
+          $scope.attachInComments();
+        } else {
+          $scope.removeFile();
+        }
+      }
+
+      $scope.attachInComments = function() {
+        $('#filePicker').click();
+      }
+
+      $scope.$watch('comment.file' , function(newValue , oldValue){
+        if (newValue==undefined) {
+          return;
+        }
+        if (typeof newValue.name!='undefined') {
+          $scope.fileSize = newValue.size ;
+          $scope.fileName = newValue.name;
+        }
+      });
+
+      $scope.removeFile = function() {
+        $scope.fileSize = 0;
+      }
+
+    },
+  };
+});
+
+
 app.directive('addressField', function () {
   return {
     templateUrl: '/static/ngTemplates/addressField.html',

@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{{BRAND_NAME}} - ERP Messages</title>
+  <title>{{BRAND_NAME}} - Profile</title>
   <meta name="viewport" content="initial-scale=1">
   <!-- stock css libraries -->
 
@@ -122,12 +122,17 @@
     .chatBox:hover {
       background-color: #e0e0e0;
     }
+
+    textarea:focus {
+      height: 8em;
+    }
+
   </style>
 
 
 </head>
 
-<body style="background:#ffffff;">
+<body style="background:#f2efef;">
 
   <div flash-message="4000" style="position:fixed;top:70px;right:10px;z-index:9999;min-width:300px;"></div>
   <!-- all the new content here -->
@@ -264,62 +269,66 @@
   <div class="container-fluid">
     <div class="row" style=" padding-top:50px;">
       <div class="col-md-offset-1 col-md-10" style="background:#ffffff; padding: 0px;">
-        <div class="row text-center" style="position:relative;" >
+        <div class="row text-center" style="position:relative;">
           <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">
           <img src="{{profileObj.displayPicture.url}}" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; ">
           <strong style="position:absolute; bottom:-40px; left:160px; font-size:20px;">{{profileObj.user.first_name}} {{profileObj.user.last_name}}</strong>
         </div>
       </div>
     </div>
-    <div class="row" >
-      <div class="col-md-offset-1 col-md-10" >
+    <div class="row">
+      <div class="col-xs-offset-1 col-xs-10">
         <div class="row">
-          <div class=" col-md-4 card" style="margin-left:-10px; padding-top:70px; margin-left:-10px; position:sticky; top:40px; ">
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-envelope" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.email}}
-                </div>
+          <div class=" col-xs-4 card hidden-sm hidden-xs" style="margin-left:-10px; padding-top:70px; margin-left:-10px; position:sticky; top:40px; background:#ffffff; z-index:-1;">
+            <div class="row">
+              <div class="col-xs-1" style="text-align:right;">
+                <label><i class="fa fa-envelope" > </i></label>
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-mobile fa-lg" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.mobile}}
-                </div>
+              <div class="col-xs-11" style="margin-left:-10px;">
+                {{profileObj.email}}
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-globe" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.website}}
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-1" style="text-align:right;">
+                <label><i class="fa fa-mobile fa-lg" > </i></label>
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-calendar" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.year_established}}
-                </div>
+              <div class="col-xs-11" style="margin-left:-10px;">
+                {{profileObj.mobile}}
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-map-marker" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.street}}, <br> {{profileObj.city}}, {{profileObj.state}} - {{profileObj.pincode}} <br>{{profileObj.country}}
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-1" style="text-align:right;">
+                <label><i class="fa fa-globe" > </i></label>
               </div>
+              <div class="col-xs-11" style="margin-left:-10px;">
+                <a href="{{profileObj.website}}" target="_blank" > {{profileObj.website}}</a>
+                <!-- {{profileObj.website}} -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-1" style="text-align:right;">
+                <label><i class="fa fa-calendar" > </i></label>
+              </div>
+              <div class="col-xs-11" style="margin-left:-10px;">
+                {{profileObj.year_established}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-1" style="text-align:right;">
+                <label><i class="fa fa-map-marker" > </i></label>
+              </div>
+              <div class="col-xs-11" style="margin-left:-10px;">
+                {{profileObj.street}}, <br> {{profileObj.city}}, {{profileObj.state}} - {{profileObj.pincode}} <br>{{profileObj.country}}
+              </div>
+            </div>
 
           </div>
-          <div class="col-md-8" style="padding-left:50px; padding-right:0px;">
-            <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="item in [1,2,3,4,5]">
-              <div class="row" style="border-bottom:solid 2px #eeeeee; margin:0px;">
+
+          {% verbatim %}
+          <div class="col-xs-8" style="padding-left:50px; padding-right:0px;">
+            <div class="row  " style=" background:#ffffff; border:solid 2px #eeeeee; margin-top:20px;border-bottom: solid 4px #fc5900;" ng-repeat="post in [1,2,3,4,5]">
+
+              <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
                 <div class="col-xs-2" style="padding:0px;">
                   <img src="/static/images/img_avatar.png" width="50" height="50" alt="">
                 </div>
@@ -331,7 +340,6 @@
                   <span class="text-muted pull-right" style="font-size:11px;">21 mins</span>
                 </div>
               </div>
-
               <div class="row">
                 <div class="container-fluid" style="padding:20px;">
                   <span style="font-size:20px;">I want to sell abc s Lorem ipsum dolor sit amet, consectetur adipisicing elit,
@@ -342,17 +350,18 @@
                   </span>
                 </div>
               </div>
-              <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee">
+              <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
 
                 <div class="col-xs-6" style="padding-top:10px;">
                   <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i> </span>
+                    <span style="color:#43627d; cursor:pointer;" ng-click="allComments();"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
                   </div>
                   <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
+                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:10px;"></i> </span>
                   </div>
-                  <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true"></i> </span>
+                  <div class="col-xs-4">
+                    <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true" style="margin-right:10px;"></i>3 Likes </span>
+
                   </div>
                 </div>
 
@@ -365,75 +374,124 @@
                 </div>
               </div>
 
+              <div ng-if="showComments" class="row" style="padding:30px; padding-bottom:0px;">
+                <!-- <social-Comment ng-repeat="c in post.comments" pk="c"></social-Comment> -->
+
+
+                <div class="media" ng-repeat="comments in [1,2]">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Andrew Singh</strong></h5>
+                    <span style="font-size:15px;"> Cras sit amet nibh libero, in gravida nulla.Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+
+                  </div>
+                </div>
+
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"></a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
+                    <!-- <span style="font-size:15px;"> <img ng-click="expandImage(me.profile.displayPicture)" class="img img-rounded" ng-src="{{me.profile.displayPicture}}" alt="" width="300px;"> </span> -->
+                    <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+                  </div>
+                </div>
+
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+                  </div>
+                  <div class="media-body" >
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Sachin Bansal</strong></h5>
+                    <span style="font-size:15px;"> <i class="fa {{ '/some.pdf' | fileTypeIcon }} fa-3x"></i>  <a href="/some.pdf">some.pdf</a> </span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+                  </div>
+                </div>
+
+
+                <div class="row" style="margin-top:20px; ">
+                  <comment-Edit  comment="commenEdit" send="addComment"></comment-Edit>
+                </div>
+
+
+                </div>
+
+              </div>
             </div>
+            {% endverbatim %}
           </div>
         </div>
+      </div>
+
     </div>
-    </div>
-
-  </div>
 
 
 
 
-  <!-- all the new content here -->
-  {% if useCDN %}
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.9/angular-sanitize.min.js"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script> -->
-  <!-- <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.4/tinymce.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-audio/1.7.2/angular.audio.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.4.0/rzslider.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
-  {% else %}
-  <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-  <script src="{% static 'js/jquery.cookie-1.4.1.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/angular.min.js' %}"></script>
-  <script src="{% static 'js/angular-ui-router.min.js' %}"></script>
-  <script src="{% static 'js/angular-sanitize.min.js' %}"></script>
+    <!-- all the new content here -->
+    {% if useCDN %}
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.9/angular-sanitize.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script> -->
+    <!-- <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.4/tinymce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-audio/1.7.2/angular.audio.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.4.0/rzslider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
+    {% else %}
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.cookie-1.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/angular-ui-router.min.js' %}"></script>
+    <script src="{% static 'js/angular-sanitize.min.js' %}"></script>
 
 
 
-  <script src="{% static 'js/tinymce.min.js' %}"></script>
+    <script src="{% static 'js/tinymce.min.js' %}"></script>
 
 
-  <script src="{% static 'js/angular.audio.min.js' %}"></script>
-  <script src="{% static 'js/rzslider.min.js' %}"></script>
-  <script src="{% static 'js/lodash.js' %}"></script>
-  {% endif %}
+    <script src="{% static 'js/angular.audio.min.js' %}"></script>
+    <script src="{% static 'js/rzslider.min.js' %}"></script>
+    <script src="{% static 'js/lodash.js' %}"></script>
+    {% endif %}
 
-  <!-- <script src="{% static 'js/angular-google-maps.min.js' %}"></script> -->
-  <script src="{% static 'js/autobahn.min.js' %}"></script>
-  <script src="{% static 'js/ui-bootstrap-tpls-0.14.3.min.js' %}"></script>
-  <script src="{% static 'js/angular-bootstrap-confirm.min.js' %}"></script>
-  <script src="{% static 'js/ng-tinymce.js' %}"></script>
-  <script src="{% static 'js/ng-tags-input.min.js' %}"></script>
-  <script src="{% static 'js/angular-simple-logger.min.js' %}"></script>
-  <script src="{% static 'js/angular-flash.js' %}"></script>
-  <script src="{% static 'js/ngDraggable.js' %}"></script>
-  <script src="{% static 'js/angular-aside.min.js' %}"></script>
-  <script src="{% static 'js/angular-ui-switch.min.js' %}"></script>
-  <!-- Custom JS files -->
-  <script type="text/javascript">
-    var wampServer = '{{wampServer}}';
-    var wampBindName = "{{user.username}}";
-    var BRAND_LOGO = "{{BRAND_LOGO}}";
-  </script>
-  <script src="{% static 'js/custom/wampProcessors.js' %}"></script>
-  <script src="{% static 'js/custom/nativeJS.js' %}"></script>
-  <script src="{% static 'js/custom/directives.js' %}"></script>
-  <script src="{% static 'js/custom/directives.native.js' %}"></script>
-  <script src="{% static 'js/custom/filters.js' %}"></script>
-  <script src="{% static 'js/app.social.profile.js' %}"></script>
+    <!-- <script src="{% static 'js/angular-google-maps.min.js' %}"></script> -->
+    <script src="{% static 'js/autobahn.min.js' %}"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-0.14.3.min.js' %}"></script>
+    <script src="{% static 'js/angular-bootstrap-confirm.min.js' %}"></script>
+    <script src="{% static 'js/ng-tinymce.js' %}"></script>
+    <script src="{% static 'js/ng-tags-input.min.js' %}"></script>
+    <script src="{% static 'js/angular-simple-logger.min.js' %}"></script>
+    <script src="{% static 'js/angular-flash.js' %}"></script>
+    <script src="{% static 'js/ngDraggable.js' %}"></script>
+    <script src="{% static 'js/angular-aside.min.js' %}"></script>
+    <script src="{% static 'js/angular-ui-switch.min.js' %}"></script>
+    <!-- Custom JS files -->
+    <script type="text/javascript">
+      var wampServer = '{{wampServer}}';
+      var wampBindName = "{{user.username}}";
+      var BRAND_LOGO = "{{BRAND_LOGO}}";
+    </script>
+    <script src="{% static 'js/app.social.profile.js' %}"></script>
+    <script src="{% static 'js/custom/wampProcessors.js' %}"></script>
+    <script src="{% static 'js/custom/nativeJS.js' %}"></script>
+    <script src="{% static 'js/custom/directives.js' %}"></script>
+    <script src="{% static 'js/custom/directives.native.js' %}"></script>
+    <script src="{% static 'js/custom/filters.js' %}"></script>
 
-  <script src="{% static 'js/custom/services.js' %}"></script>
+
+    <script src="{% static 'js/custom/services.js' %}"></script>
 
 
 </body>

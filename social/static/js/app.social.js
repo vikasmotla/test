@@ -17,5 +17,10 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
 }]);
 
 app.controller("main", function($scope , $state) {
+  $scope.commenEdit = {txt : '' , file : emptyFile}
+
+  $scope.addComment = function() {
+    console.log("outside the directive");
+  }
 
 })
