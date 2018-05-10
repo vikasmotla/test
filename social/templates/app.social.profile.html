@@ -131,190 +131,74 @@
 
   <div flash-message="4000" style="position:fixed;top:70px;right:10px;z-index:9999;min-width:300px;"></div>
   <!-- all the new content here -->
-  <div class="row" style="background-color:rgb(67, 98, 125);padding:10px;padding-left:30px;padding-right:30px; position:fixed; width:100%; margin-left:0px; z-index:1000">
-    <div class="col-md-3">
-      <!-- <span style="color:white;font-size:20px;">Yomillio</span> -->
-      <a href="#"><img src="/static/images/yomillio.png" width="150px;" alt="" ></a>
-    </div>
-    <div class="col-md-4 ">
-      <input type="text" class="form-control" placeholder="Search ...">
-    </div>
 
-    <div class="col-md-5 navbarControls">
-      <div class="text-center">
-        <div class="row">
-          <div class="col-xs-2">
-            <div class="dropdown hidden-xs hidden-sm">
-              <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="2 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
-              <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                <li>
-                  <!-- inner menu: contains the actual data -->
-                  <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                      <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                        <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                        <!-- end ngIf: !checkable -->
-                        <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                          <span class="text-muted ng-binding">Admin CIOC</span><small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                          <br><span class="text-muted" style="font-size:11px;">Marketing Manager</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i>See All Requests</a>
-              </ul>
-            </div>
-            <div class="visible-sm visible-xs" style="padding-top:10px;">
-              <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="2 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
-            </div>
-          </div>
-
-          <div class="col-xs-2">
-            <div class="dropdown hidden-xs hidden-sm">
-              <i class="fa fa-comments-o fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="3 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">3</span>
-              <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                <li>
-                  <!-- inner menu: contains the actual data -->
-                  <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                      <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                        <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                        <!-- end ngIf: !checkable -->
-                        <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                          <span class="text-muted ng-binding">Admin CIOC</span> (1)<small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                          <br>asdbjkk
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i> See All Messages</a>
-              </ul>
-            </div>
-            <div class="visible-sm visible-xs" style="padding-top:10px;">
-              <i class="fa fa-comments-o fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="3 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">3</span>
-            </div>
-          </div>
-          <div class="col-xs-2">
-            <div class="dropdown hidden-xs hidden-sm">
-              <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="1 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
-              <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                <li>
-                  <!-- inner menu: contains the actual data -->
-                  <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                      <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                        <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                        <!-- end ngIf: !checkable -->
-                        <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                          <span class="text-muted ng-binding">Admin CIOC</span> (1)<small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                          <br>asdbjkk
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i> See All Notifications</a>
-              </ul>
-
-            </div>
-
-            <div class="visible-sm visible-xs" style="padding-top:10px;">
-              <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="1 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
-            </div>
-
-          </div>
-
-
-          <div class="col-md-offset-3 col-md-3 col-xs-offset-2 col-xs-2 ">
-            <div class="dropdown navbarControls hidden-sm hidden-xs">
-              <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
-              <ul class="dropdown-menu " style="margin-right:0px;padding-top:0px;left:-100px;">
-                <li> <img src="/static/images/img_avatar.png" style="width: 170px;" alt=""> </li>
-                <li><a href="#">Logout</a></li>
-                <li><a href="#">Account</a></li>
-              </ul>
-            </div>
-            <div class="visible-sm visible-xs" style="padding-top:10px;">
-              <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
-            </div>
-          </div>
-
-          <div class="col-xs-2 visible-xs visible-sm " style="padding-top:10px; cursor:pointer;">
-            <div class="bar" ng-repeat="bar in [1,2,3]">
-              <!-- 3 lines on top right for mobile view -->
-            </div>
-          </div>
-
-        </div>
-
-
-      </div>
-    </div>
-
-  </div>
-
+  {% include 'app.social.header.html' %}
   <div class="container-fluid">
     <div class="row" style=" padding-top:50px;">
       <div class="col-md-offset-1 col-md-10" style="background:#ffffff; padding: 0px;">
-        <div class="row text-center" style="position:relative;" >
+        <div class="row text-center" style="position:relative;">
+          {% if profileObj.coverPicture %}
           <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">
+          {% else %}
+          <img src="/static/images/yomilio_profile_coverpic.jpeg" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">
+          {% endif %}
+          {% if profileObj.displayPicture %}
           <img src="{{profileObj.displayPicture.url}}" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; ">
+          {% else %}
+          <img src="/static/images/img_avatar.png" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; ">
+          {% endif %}
           <strong style="position:absolute; bottom:-40px; left:160px; font-size:20px;">{{profileObj.user.first_name}} {{profileObj.user.last_name}}</strong>
         </div>
       </div>
     </div>
-    <div class="row" >
-      <div class="col-md-offset-1 col-md-10" >
+    <div class="row">
+      <div class="col-md-offset-1 col-md-10">
         <div class="row">
-          <div class=" col-md-4 card" style="margin-left:-10px; padding-top:70px; margin-left:-10px; position:sticky; top:40px; ">
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-envelope" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.email}}
-                </div>
+          <div class=" col-md-4 card" style="margin-left:-10px; padding-top:70px; margin-left:-10px; position:sticky; top:40px;z-index:-1 ">
+            <div class="row">
+              <div class="col-md-1" style="text-align:right;">
+                <label><i class="fa fa-envelope" > </i></label>
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-mobile fa-lg" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.mobile}}
-                </div>
+              <div class="col-md-11" style="margin-left:-10px;">
+                {{profileObj.email}}
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-globe" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.website}}
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1" style="text-align:right;">
+                <label><i class="fa fa-mobile fa-lg" > </i></label>
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-calendar" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.year_established}}
-                </div>
+              <div class="col-md-11" style="margin-left:-10px;">
+                {{profileObj.mobile}}
               </div>
-              <div class="row">
-                <div class="col-md-1" style="text-align:right;">
-                  <label><i class="fa fa-map-marker" > </i></label>
-                </div>
-                <div class="col-md-11" style="margin-left:-10px;">
-                  {{profileObj.street}}, <br> {{profileObj.city}}, {{profileObj.state}} - {{profileObj.pincode}} <br>{{profileObj.country}}
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1" style="text-align:right;">
+                <label><i class="fa fa-globe" > </i></label>
               </div>
+              <div class="col-md-11" style="margin-left:-10px;">
+                {% if profileObj.website %}
+                <a href="{{profileObj.website}}" target="_blank">{{profileObj.website}}</a>
+                {% else %}
+                {{profileObj.website}}
+                {% endif %}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1" style="text-align:right;">
+                <label><i class="fa fa-calendar" > </i></label>
+              </div>
+              <div class="col-md-11" style="margin-left:-10px;">
+                {{profileObj.year_established}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1" style="text-align:right;">
+                <label><i class="fa fa-map-marker" > </i></label>
+              </div>
+              <div class="col-md-11" style="margin-left:-10px;">
+                {{profileObj.street}}, <br> {{profileObj.city}}, {{profileObj.state}} - {{profileObj.pincode}} <br>{{profileObj.country}}
+              </div>
+            </div>
 
           </div>
           <div class="col-md-8" style="padding-left:50px; padding-right:0px;">
@@ -368,13 +252,15 @@
             </div>
           </div>
         </div>
-    </div>
+      </div>
     </div>
 
   </div>
 
 
-
+periodic notifications
+newsletter
+promotional
 
   <!-- all the new content here -->
   {% if useCDN %}

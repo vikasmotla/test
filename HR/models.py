@@ -49,6 +49,11 @@ class profile(models.Model):
     lon = models.CharField(max_length=15 ,null = True)
     sellingProduct = models.ManyToManyField(ProductTag , related_name = 'productSale' , blank = True)
     buyingProduct = models.ManyToManyField(ProductTag , related_name = 'productBuy' , blank = True)
+    messageAlert = models.BooleanField(default = True)
+    requestAlert = models.BooleanField(default = True)
+    periodicNotification = models.BooleanField(default = True)
+    newsletter = models.BooleanField(default = True)
+    promotional = models.BooleanField(default = True)
 
 User.profile = property(lambda u : profile.objects.get_or_create(user = u)[0])
 

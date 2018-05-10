@@ -32,13 +32,13 @@ class userProfileAdminModeSerializer(serializers.ModelSerializer):
     """ Only admin """
     class Meta:
         model = profile
-        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon',)
+        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional',)
 
 class UserProfileSelfModeSerializer(serializers.ModelSerializer):
     """ Only users """
     class Meta:
         model = profile
-        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon',)
+        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional',)
         read_only_fields = ('displayPicture',)
     def update(self , instance , validated_data):
         if self.context['request'].user != instance.user:
@@ -64,12 +64,12 @@ class userProfileSerializer(serializers.ModelSerializer):
     buyingProduct = ProductTagSerializer(many=True , read_only=True)
     class Meta:
         model = profile
-        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon',)
+        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional',)
     def update(self, instance, validated_data):
         print '@@@@@@@@@@@@@@@@@@@@@@22'
         print self.context['request'].data
         print validated_data
-        for key in ['displayPicture', 'coverPicture', 'email','mobile','website','cin','year_established','street','city','state','pincode','country']:
+        for key in ['displayPicture', 'coverPicture', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','messageAlert','requestAlert','periodicNotification','newsletter','promotional',]:
             try:
                 setattr(instance , key , validated_data[key])
             except:

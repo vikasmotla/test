@@ -130,140 +130,10 @@
 <body style="background:#ffffff;">
 
   <div flash-message="4000" style="position:fixed;top:70px;right:10px;z-index:9999;min-width:300px;"></div>
-  {% verbatim %}
+  {% include 'app.social.header.html' %} {% verbatim %}
   <!-- all the new content here -->
-    <div class="row" style="background-color:rgb(67, 98, 125);padding:10px;padding-left:30px;padding-right:30px; position:fixed; width:100%; margin-left:0px; z-index:1000">
-      <div class="col-md-3">
-        <!-- <span style="color:white;font-size:20px;">Yomillio</span> -->
-        <a href="#"><img src="/static/images/yomillio.png" width="150px;" alt="" ></a>
-      </div>
-      <div class="col-md-4 ">
-        <input type="text" class="form-control" placeholder="Search ...">
-      </div>
 
-      <div class="col-md-5 navbarControls">
-        <div class="text-center">
-          <div class="row">
-            <div class="col-xs-2">
-              <div class="dropdown hidden-xs hidden-sm">
-                <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="2 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
-                <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul style="position:relative; top:-5px; padding:0px !important;">
-                      <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                        <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                          <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                          <!-- end ngIf: !checkable -->
-                          <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                            <span class="text-muted ng-binding">Admin CIOC</span><small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                            <br><span class="text-muted" style="font-size:11px;">Marketing Manager</span>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i>See All Requests</a>
-                </ul>
-              </div>
-              <div class="visible-sm visible-xs" style="padding-top:10px;">
-                <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="2 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
-              </div>
-            </div>
-
-            <div class="col-xs-2">
-              <div class="dropdown hidden-xs hidden-sm">
-                <i class="fa fa-comments-o fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="3 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">3</span>
-                <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul style="position:relative; top:-5px; padding:0px !important;">
-                      <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                        <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                          <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                          <!-- end ngIf: !checkable -->
-                          <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                            <span class="text-muted ng-binding">Admin CIOC</span> (1)<small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                            <br>asdbjkk
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i> See All Messages</a>
-                </ul>
-              </div>
-              <div class="visible-sm visible-xs" style="padding-top:10px;">
-                <i class="fa fa-comments-o fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="3 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">3</span>
-              </div>
-            </div>
-            <div class="col-xs-2">
-              <div class="dropdown hidden-xs hidden-sm">
-                <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="1 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
-                <ul class="dropdown-menu navDropDownList" style="left:-150px">
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul style="position:relative; top:-5px; padding:0px !important;">
-                      <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                        <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                          <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                          <!-- end ngIf: !checkable -->
-                          <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                            <span class="text-muted ng-binding">Admin CIOC</span> (1)<small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                            <br>asdbjkk
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i> See All Notifications</a>
-                </ul>
-
-              </div>
-
-              <div class="visible-sm visible-xs" style="padding-top:10px;">
-                <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-                <span ng-if="1 > 0" class="label label-success ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
-              </div>
-
-            </div>
-
-
-            <div class="col-md-offset-3 col-md-3 col-xs-offset-2 col-xs-2 ">
-              <div class="dropdown navbarControls hidden-sm hidden-xs">
-                <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
-                <ul class="dropdown-menu " style="margin-right:0px;padding-top:0px;left:-100px;">
-                  <li> <img src="/static/images/img_avatar.png" style="width: 170px;" alt=""> </li>
-                  <li><a href="#">Logout</a></li>
-                  <li><a href="#">Account</a></li>
-                </ul>
-              </div>
-              <div class="visible-sm visible-xs" style="padding-top:10px;">
-                <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
-              </div>
-            </div>
-
-            <div class="col-xs-2 visible-xs visible-sm " style="padding-top:10px; cursor:pointer;">
-              <div class="bar" ng-repeat="bar in [1,2,3]">
-                <!-- 3 lines on top right for mobile view -->
-              </div>
-            </div>
-
-          </div>
-
-
-        </div>
-      </div>
-
-    </div>
-
-
-    <div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12 col-md-3 col-md-offset-1 col-sm-12">
         <div class="row topSpace" style=" border-bottom:1px solid #e0e0e0;">
@@ -271,24 +141,24 @@
             <span style="font-size:20px;">Messages</span>
           </div>
           <div class="col-xs-2">
-            <i class="fa fa-pencil-square-o fa-2x " aria-hidden="true" ng-click="edit();"  ></i>
+            <i class="fa fa-pencil-square-o fa-2x " aria-hidden="true" ng-click="edit();"></i>
           </div>
         </div>
-          <div class="row" style="height:85vh; overflow-y:auto; overflow-x:hidden;">
-            <div class="row chatBox" ng-repeat="people in peoples" ng-click="setInView($index)" style="padding-bottom:5px; padding-top:5px; padding-left:15px;">
-              <div class="col-xs-2" style="padding:0px;">
-                <img src="/static/images/img_avatar.png" class="img-circle" width="50" height="50" alt="">
-              </div>
-              <div class="col-xs-8 " style="padding-top:10px;">
-                <span>{{people.name}}</span> <br>
-                <span ng-if="people.messages.slice(-1)[0].msg" class="text-muted" style="font-size:11px;"> {{people.messages.slice(-1)[0].msg}}</span>
-                <span ng-if="people.messages.slice(-1)[0].img" class="text-muted" style="font-size:11px;">Image</span>
-              </div>
-              <div class="col-xs-2 " style="padding:20px; padding-bottom:0px;">
-                <span class="text-muted pull-right" style="font-size:10px;">21 mins</span>
-              </div>
+        <div class="row" style="height:85vh; overflow-y:auto; overflow-x:hidden;">
+          <div class="row chatBox" ng-repeat="people in peoples" ng-click="setInView($index)" style="padding-bottom:5px; padding-top:5px; padding-left:15px;">
+            <div class="col-xs-2" style="padding:0px;">
+              <img src="/static/images/img_avatar.png" class="img-circle" width="50" height="50" alt="">
+            </div>
+            <div class="col-xs-8 " style="padding-top:10px;">
+              <span>{{people.name}}</span> <br>
+              <span ng-if="people.messages.slice(-1)[0].msg" class="text-muted" style="font-size:11px;"> {{people.messages.slice(-1)[0].msg}}</span>
+              <span ng-if="people.messages.slice(-1)[0].img" class="text-muted" style="font-size:11px;">Image</span>
+            </div>
+            <div class="col-xs-2 " style="padding:20px; padding-bottom:0px;">
+              <span class="text-muted pull-right" style="font-size:10px;">21 mins</span>
             </div>
           </div>
+        </div>
 
       </div>
       <div class="col-md-7 hidden-xs hidden-sm" style="border-left:2px solid #e0e0e0;">
@@ -296,10 +166,10 @@
           <span style="font-size:20px;">{{peoples[peopleInView].name}}</span>
         </div>
         <div style="height:81vh; overflow-y:auto; overflow-x:hidden;">
-          <div class="row" ng-repeat = "message in peoples[peopleInView].messages">
+          <div class="row" ng-repeat="message in peoples[peopleInView].messages">
             <div class="container-fluid pull-right" ng-if="message.msg">
               <div class="container-fluid text-right" style="border:solid 1px #e0e0e0;padding:10px;">
-                <span >{{message.msg}}</span>
+                <span>{{message.msg}}</span>
               </div>
               <div class="container-fluid text-right" style="color:#c7c7c7;font-size:10px;">
                 0 min ago

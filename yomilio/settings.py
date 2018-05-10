@@ -45,7 +45,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['cioc.co.in', 'localhost', '127.0.0.1']
 
 
-LOGIN_REDIRECT = 'ERP' # the url to which the user will be redirected once successfully loggedin
+LOGIN_REDIRECT = 'social' # the url to which the user will be redirected once successfully loggedin
 # Options are : ERP , ecommerce , blogs , corporate
 
 LOGOUT_REDIRECT = 'root' # similarly the url to which the user will be directed one logged out

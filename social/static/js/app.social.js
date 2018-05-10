@@ -2,7 +2,6 @@ var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'ngA
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $provide) {
 
-  $urlRouterProvider.otherwise('/home');
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
   $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
   $httpProvider.defaults.withCredentials = true;

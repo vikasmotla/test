@@ -26,19 +26,29 @@ from .serializers import *
 from HR.models import profile
 
 # Create your views here.
-
+@login_required
 def socialIndex(request):
-    return render(request, 'app.social.index.html', {"home": True , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+    print request.user
+    print request.user.email
+    profileObj = profile.objects.get(user = request.user.pk)
+    return render(request, 'app.social.index.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
+@login_required
 def socialMessage(request):
-    return render(request, 'app.social.messages.html', {"home": True , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+    profileObj = profile.objects.get(user = request.user.pk)
+    return render(request, 'app.social.messages.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+@login_required
+def socialAccount(request):
+    profileObj = profile.objects.get(user = request.user.pk)
+    return render(request, 'app.social.account.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 def profileDetails(request,profName):
     print 'proffffffffffffffffffffff',profName
     userObj = User.objects.get(username=profName)
     profileObj = profile.objects.get(user = userObj.pk)
     print profileObj,profileObj.mobile
-    return render(request, 'app.social.profile.html', {"home": True ,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+    return render(request, 'app.social.profile.html', {"home": True ,'userObj':userObj,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 class ProductTagViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
