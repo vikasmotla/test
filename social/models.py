@@ -14,6 +14,9 @@ from django.contrib import admin
 def getPostMediaAttachment(instance , filename):
     return 'social/postMedia/%s_%s' % (str(time()).replace('.', '_'), filename)
 
+def getPostCommentMediaAttachment(instance , filename):
+    return 'social/postCommentMedia/%s_%s' % (str(time()).replace('.', '_'), filename)
+
 
 class ProductTag(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -62,6 +65,7 @@ class PostComment(models.Model):
     txt = models.CharField(null = True , max_length = 1000)
     mention = models.ManyToManyField(User , related_name = 'mentionedUser' , blank = True)
     replyTo = models.ForeignKey('self' , related_name='replies' , null = True)
+    fil = models.FileField(upload_to = getPostCommentMediaAttachment ,  null = True)
 
 class PostResponse(models.Model):
     created = models.DateTimeField(auto_now_add=True)

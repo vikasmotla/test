@@ -16,13 +16,13 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("app.social.socialMessages", function($scope, $state, $rootScope) {
+app.controller("app.social.socialMessages", function($scope, $state, $rootScope, $uibModal) {
   console.log('coming in ctrl');
-
+  $scope.mode = 'list';
   $scope.peopleInView = 0;
   $scope.textReply = '';
   $scope.peoples = [
-    {name : 'Vikas Motla', profileImage:"abc.jpg", id:123 , messages : [{msg : "hi"},{img: "/static/images/screenshot.png"}]},
+    {name : 'Vikas Motla', profileImage:"abc.jpg", id:123 , messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
     {name : 'Ashish Shah', profileImage:"abc.jpg", id:234 , messages : [{msg : "dfg"}]},
     {name : 'Sai Kiran', profileImage:"abc.jpg", id:345, messages : [{msg : "sai hi"}]},
     {name : 'Ankita Sharma', profileImage:"abc.jpg", id:456, messages : [{msg : "ank hi"}]},
@@ -42,6 +42,14 @@ app.controller("app.social.socialMessages", function($scope, $state, $rootScope)
   // $scope.peoples[0].messages.push({img : "/static/images/screenshot.png"})
   // console.log('herer',$scope.peoples[0].messages);
 
+  $scope.search =function() {
+    $scope.mode = 'search';
+  }
+
+  $scope.closeSearch =function() {
+    $scope.mode = 'list';
+  }
+
 
   $scope.addFile = function() {
     console.log("will add file");
@@ -60,6 +68,32 @@ app.controller("app.social.socialMessages", function($scope, $state, $rootScope)
       console.log('herer',$scope.peoples[0].messages);
     }
     reader.readAsDataURL(e.target.files[0]);
-    }
+  }
 
+  $scope.expandImage = function(imageUrl) {
+    console.log('dddddddddddddd',imageUrl);
+    $uibModal.open({
+      templateUrl: '/static/ngTemplates/app.social.expandImage.html',
+      size: 'lg',
+      backdrop: true,
+      resolve: {
+        data: function() {
+          return imageUrl;
+        }
+      },
+      controller: "app.social.expandImage",
+
+    }).result.then(function() {
+      console.log('here...');
+    }, function() {
+
+    });
+  }
+
+
+
+});
+app.controller("app.social.expandImage", function($scope, $rootScope, data, $state, $uibModal, $uibModalInstance) {
+  console.log('modal img ctrl');
+  $scope.imageUrl = data;
 });

@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{{BRAND_NAME}} - ERP Messages</title>
+  <title>{{BRAND_NAME}} - Profile</title>
   <meta name="viewport" content="initial-scale=1">
   <!-- stock css libraries -->
 
@@ -122,12 +122,16 @@
     .chatBox:hover {
       background-color: #e0e0e0;
     }
+
+    textarea:focus {
+      height: 8em;
+    }
   </style>
 
 
 </head>
 
-<body style="background:#ffffff;">
+<body style="background:#f2efef;">
 
   <div flash-message="4000" style="position:fixed;top:70px;right:10px;z-index:9999;min-width:300px;"></div>
   <!-- all the new content here -->
@@ -138,15 +142,11 @@
       <div class="col-md-offset-1 col-md-10" style="background:#ffffff; padding: 0px;">
         <div class="row text-center" style="position:relative;">
           {% if profileObj.coverPicture %}
-          <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">
-          {% else %}
-          <img src="/static/images/yomilio_profile_coverpic.jpeg" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">
-          {% endif %}
-          {% if profileObj.displayPicture %}
-          <img src="{{profileObj.displayPicture.url}}" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; ">
-          {% else %}
-          <img src="/static/images/img_avatar.png" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; ">
-          {% endif %}
+
+          <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;"> {% else %}
+          <img src="/static/images/yomilio_profile_coverpic.jpeg" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;"> {% endif %} {% if profileObj.displayPicture %}
+          <img src="{{profileObj.displayPicture.url}}" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; "> {% else %}
+          <img src="/static/images/img_avatar.png" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; "> {% endif %}
           <strong style="position:absolute; bottom:-40px; left:160px; font-size:20px;">{{profileObj.user.first_name}} {{profileObj.user.last_name}}</strong>
         </div>
       </div>
@@ -160,6 +160,7 @@
                 <label><i class="fa fa-envelope" > </i></label>
               </div>
               <div class="col-md-11" style="margin-left:-10px;">
+
                 {{profileObj.email}}
               </div>
             </div>
@@ -168,6 +169,7 @@
                 <label><i class="fa fa-mobile fa-lg" > </i></label>
               </div>
               <div class="col-md-11" style="margin-left:-10px;">
+
                 {{profileObj.mobile}}
               </div>
             </div>
@@ -177,10 +179,7 @@
               </div>
               <div class="col-md-11" style="margin-left:-10px;">
                 {% if profileObj.website %}
-                <a href="{{profileObj.website}}" target="_blank">{{profileObj.website}}</a>
-                {% else %}
-                {{profileObj.website}}
-                {% endif %}
+                <a href="{{profileObj.website}}" target="_blank">{{profileObj.website}}</a> {% else %} {{profileObj.website}} {% endif %}
               </div>
             </div>
             <div class="row">
@@ -188,6 +187,7 @@
                 <label><i class="fa fa-calendar" > </i></label>
               </div>
               <div class="col-md-11" style="margin-left:-10px;">
+
                 {{profileObj.year_established}}
               </div>
             </div>
@@ -196,14 +196,18 @@
                 <label><i class="fa fa-map-marker" > </i></label>
               </div>
               <div class="col-md-11" style="margin-left:-10px;">
+
                 {{profileObj.street}}, <br> {{profileObj.city}}, {{profileObj.state}} - {{profileObj.pincode}} <br>{{profileObj.country}}
               </div>
             </div>
 
           </div>
-          <div class="col-md-8" style="padding-left:50px; padding-right:0px;">
-            <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="item in [1,2,3,4,5]">
-              <div class="row" style="border-bottom:solid 2px #eeeeee; margin:0px;">
+
+          {% verbatim %}
+          <div class="col-xs-8" style="padding-left:50px; padding-right:0px;">
+            <div class="row  " style=" background:#ffffff; border:solid 2px #eeeeee; margin-top:20px;border-bottom: solid 4px #fc5900;" ng-repeat="post in [1,2,3,4,5]">
+
+              <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
                 <div class="col-xs-2" style="padding:0px;">
                   <img src="/static/images/img_avatar.png" width="50" height="50" alt="">
                 </div>
@@ -215,7 +219,6 @@
                   <span class="text-muted pull-right" style="font-size:11px;">21 mins</span>
                 </div>
               </div>
-
               <div class="row">
                 <div class="container-fluid" style="padding:20px;">
                   <span style="font-size:20px;">I want to sell abc s Lorem ipsum dolor sit amet, consectetur adipisicing elit,
@@ -226,17 +229,18 @@
                   </span>
                 </div>
               </div>
-              <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee">
+              <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
 
                 <div class="col-xs-6" style="padding-top:10px;">
                   <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i> </span>
+                    <span style="color:#43627d; cursor:pointer;" ng-click="allComments();"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
                   </div>
                   <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
+                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:10px;"></i> </span>
                   </div>
-                  <div class="col-xs-1">
-                    <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true"></i> </span>
+                  <div class="col-xs-4">
+                    <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true" style="margin-right:10px;"></i>3 Likes </span>
+
                   </div>
                 </div>
 
@@ -249,18 +253,61 @@
                 </div>
               </div>
 
+              <div ng-if="showComments" class="row" style="padding:30px; padding-bottom:0px;">
+                <!-- <social-Comment ng-repeat="c in post.comments" pk="c"></social-Comment> -->
+
+
+                <div class="media" ng-repeat="comments in [1,2]">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Andrew Singh</strong></h5>
+                    <span style="font-size:15px;"> Cras sit amet nibh libero, in gravida nulla.Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+
+                  </div>
+                </div>
+
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"></a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
+                    <!-- <span style="font-size:15px;"> <img ng-click="expandImage(me.profile.displayPicture)" class="img img-rounded" ng-src="{{me.profile.displayPicture}}" alt="" width="300px;"> </span> -->
+                    <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+                  </div>
+                </div>
+
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading" style="cursor:pointer;"><strong>Sachin Bansal</strong></h5>
+                    <span style="font-size:15px;"> <i class="fa {{ '/some.pdf' | fileTypeIcon }} fa-3x"></i>  <a href="/some.pdf">some.pdf</a> </span>
+                    <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+                  </div>
+                </div>
+
+
+                <div class="row" style="margin-top:20px; ">
+                  <comment-Edit comment="commenEdit" send="addComment"></comment-Edit>
+                </div>
+
+
+              </div>
+
             </div>
           </div>
+          {% endverbatim %}
         </div>
       </div>
     </div>
-
   </div>
 
-
-periodic notifications
-newsletter
-promotional
 
   <!-- all the new content here -->
   {% if useCDN %}
@@ -312,12 +359,13 @@ promotional
     var wampBindName = "{{user.username}}";
     var BRAND_LOGO = "{{BRAND_LOGO}}";
   </script>
+  <script src="{% static 'js/app.social.profile.js' %}"></script>
   <script src="{% static 'js/custom/wampProcessors.js' %}"></script>
   <script src="{% static 'js/custom/nativeJS.js' %}"></script>
   <script src="{% static 'js/custom/directives.js' %}"></script>
   <script src="{% static 'js/custom/directives.native.js' %}"></script>
   <script src="{% static 'js/custom/filters.js' %}"></script>
-  <script src="{% static 'js/app.social.profile.js' %}"></script>
+
 
   <script src="{% static 'js/custom/services.js' %}"></script>
 
