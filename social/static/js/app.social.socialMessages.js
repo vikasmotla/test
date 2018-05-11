@@ -16,7 +16,7 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("app.social.socialMessages", function($scope, $state, $rootScope, $uibModal) {
+app.controller("main", function($scope, $state, $rootScope, $uibModal) {
   console.log('coming in ctrl');
   $scope.mode = 'list';
   $scope.peopleInView = 0;

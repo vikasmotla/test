@@ -15,7 +15,7 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("app.social.profile", function($scope, $state, $rootScope, $uibModal, $users) {
+app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
   $scope.me = $users.get('mySelf');
   // console.log($scope.me);
   $scope.fileName;

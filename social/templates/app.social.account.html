@@ -1,446 +1,257 @@
+{% extends 'app.socialBase.html' %}
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html ng-app="app" ng-controller="app.social.account" id="main">
+{% block contentBody %}
 
-<head>
-  <meta charset="utf-8">
-  <title>{{BRAND_NAME}} - ERP Messages</title>
-  <meta name="viewport" content="initial-scale=1">
-  <!-- stock css libraries -->
+{% verbatim %}
 
-  {% if useCDN %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" charset="utf-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" charset="utf-8">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/animatecss/3.5.1/animate.min.css" charset="utf-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.4.0/rzslider.min.css" charset="utf-8">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css"> -->
-  {% else %}
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/animate.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/rzslider.min.css' %}" charset="utf-8"> {% endif %}
-  <link rel="stylesheet" href="{% static 'css/angular-aside.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/ng-tags-input.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/octicons.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/angular-ui-switch.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/ripple.min.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/foundation-icons.css' %}" charset="utf-8">
+<!-- all the
+ new content here -->
+<div class="col-md-2" style="padding-top:80px;background: -moz-linear-gradient(bottom,rgba(255,0,0,0),rgba(212, 212, 212, 1));min-height:800px;padding-left:0px;padding-right:0px">
+  <ul class="nav nav-sidebar" style="width:100%;">
+    <li class=text-center><i class="fa fa-cogs fa-4x"></i></li><br>
+    <li ng-click="tabChange('password')"><a href="">Password <i class="fa fa-lock fa-lg pull-right"></i></a></li>
+    <li ng-click="tabChange('organization')"><a href="">Organization <i class="fa fa-building-o fa-lg pull-right"></i></a></li>
+    <li ng-click="tabChange('office')"><a href="">Offices / Branches <i class="fa fa-sitemap fa-lg pull-right"></i></a></li>
+    <li ng-click="tabChange('notification')"><a href="">Notification <i class="fa fa-bell-o fa-lg pull-right"></i></a></li>
+  </ul>
+</div>
 
-  <!-- custom css -->
-  <link rel="stylesheet" href="{% static 'css/custom/base.css' %}" charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/custom/navbarControls.css' %}" charset="utf-8">
+<div class="col-md-10">
 
-
-
-
-  <style media="screen">
-    @media only screen and (max-width: 670px) {
-
-      .navbarControls .dropdown {
-        margin-top: 10px !important;
-      }
-      .newsFeed {
-        padding-top: 150px;
-      }
-      .messageBox {
-        padding-top: 150px;
-      }
-      .maxChatHeight {
-        height: 72vh;
-      }
-
-      .topSpace {
-        padding-top: 150px;
-        height: 190px;
-      }
-    }
-
-
-    @media only screen and (min-width: 670px) {
-
-      .newsFeed {
-        padding-top: 70px;
-      }
-      .messageBox {
-        padding-top: 70px;
-      }
-      .maxChatHeight {
-        height: 85vh;
-      }
-      .topSpace {
-        padding-top: 60px;
-        height: 100px;
-      }
-    }
-
-    .navDropDownList>li>ul {
-      height: 400px;
-      width: 400px;
-      overflow: auto;
-      list-style: outside none none;
-      box-sizing: border-box;
-      display: block;
-    }
-
-    .navDropDownList>a {
-      position: relative;
-      left: 10px;
-      text-decoration: none;
-    }
-
-    .navBarInfoList:hover,
-    .navBarInfoList:focus {
-      border-left-color: #ffb206;
-      cursor: pointer;
-      background: #f5f5f5;
-    }
-
-    .navBarInfoList {
-      border-left-style: solid;
-      border-left-width: 6px;
-      border-left-color: #ffffff;
-      box-sizing: border-box;
-      display: block;
-      height: 60px;
-      border-bottom-color: #ebe7e7;
-      border-bottom-style: solid;
-      border-bottom-width: thin;
-    }
-
-    .navBarInfoList>a {
-      color: #1266b4;
-    }
-
-    .bar {
-      width: 20px;
-      height: 3px;
-      background-color: #ffffff;
-      margin: 6px 0;
-    }
-
-    .chatBox:hover {
-      background-color: #e0e0e0;
-    }
-  </style>
-
-
-</head>
-
-<body style="background:#ffffff;">
-
-  <div flash-message="4000" style="position:fixed;top:70px;right:10px;z-index:9999;min-width:300px;"></div>
-  {% include 'app.social.header.html' %} {% verbatim %}
-  <!-- <h1>{{name}}</h1> -->
-
-  <!-- all the
-   new content here -->
-  <div class="col-md-2" style="padding-top:80px;background: -moz-linear-gradient(bottom,rgba(255,0,0,0),rgba(212, 212, 212, 1));min-height:800px;padding-left:0px;padding-right:0px">
-    <ul class="nav nav-sidebar" style="width:100%;">
-      <li class=text-center><i class="fa fa-cogs fa-4x"></i></li><br>
-      <li ng-click="tabChange('password')"><a href="">Password <i class="fa fa-lock fa-lg pull-right"></i></a></li>
-      <li ng-click="tabChange('organization')"><a href="">Organization <i class="fa fa-building-o fa-lg pull-right"></i></a></li>
-      <li ng-click="tabChange('office')"><a href="">Offices / Branches <i class="fa fa-sitemap fa-lg pull-right"></i></a></li>
-      <li ng-click="tabChange('notification')"><a href="">Notification <i class="fa fa-bell-o fa-lg pull-right"></i></a></li>
-    </ul>
+  <div ng-if="tabTyp == 'password'">
+    <div class="container-fluid" style="margin-top:70px;margin-left:15px">
+      <div class="row" style="margin-top:20px">
+        <div class="row" style="margin-bottom:30px;margin-left:10px">
+          <h3> Change Password </h3>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="form-group">
+              <label>Old Password</label>
+              <input type="password" class="form-control" ng-model="userPasswords.oldPassword" placeholder="Old Password" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" class="form-control" ng-model="userPasswords.password" placeholder="New Password" autocomplete="off">
+            </div>
+            <div class="form-group" ng-class="{'has-error' : userPasswords.password!=userPasswords.password2 && userPasswords.password!=''}">
+              <label class="control-label">Confirm Password</label>
+              <input type="password" class="form-control" ng-model="userPasswords.password2" placeholder="Confirm Password" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:25px">
+        <button ng-click="changeUserPassword()" type="button" class="btn btn-primary">
+          Save &nbsp;<i class="fa fa-lock"></i>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="col-md-10">
-
-    <div ng-if="tabTyp == 'password'">
-      <div class="container-fluid" style="margin-top:70px;margin-left:15px">
-        <div class="row" style="margin-top:20px">
-          <div class="row" style="margin-bottom:30px;margin-left:10px">
-            <h3> Change Password </h3>
+  <div ng-if="tabTyp == 'organization'">
+    <div class="container-fluid" style="margin-top:70px;">
+      <div class="row" style="margin-top:20px">
+        <div class="row" style="margin-bottom:30px">
+          <div class="col-md-4">
+            <div class="row pull-right">
+              <img style="width: 100px;height:100px;" class="img img-circle" ng-if="me.profile.displayPicture != null" ng-src="{{me.profile.displayPicture}}">
+              <img style="width: 100px;height:100px;" class="img img-circle" ng-if="me.profile.displayPicture == null" src="/static/images/img_avatar.png">
+            </div>
           </div>
-          <div class="col-md-6">
-            <div class="row">
+          <div class="col-md-7 col-md-offset-1">
+            <h3> Edit Organization Profile</h3>
+          </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+
+          <div class="row">
+            <div class="col-md-6">
               <div class="form-group">
-                <label>Old Password</label>
-                <input type="password" class="form-control" ng-model="userPasswords.oldPassword" placeholder="Old Password" autocomplete="off">
+                <label>Mobile</label>
+                <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
               </div>
+            </div>
+            <div class="col-md-6">
               <div class="form-group">
-                <label>New Password</label>
-                <input type="password" class="form-control" ng-model="userPasswords.password" placeholder="New Password" autocomplete="off">
+                <label>Email</label>
+                <input class="form-control" type="email" ng-model="profileForm.email">
               </div>
-              <div class="form-group" ng-class="{'has-error' : userPasswords.password!=userPasswords.password2 && userPasswords.password!=''}">
-                <label class="control-label">Confirm Password</label>
-                <input type="password" class="form-control" ng-model="userPasswords.password2" placeholder="Confirm Password" autocomplete="off">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>CIN</label>
+                <input type="text" class="form-control" ng-model="profileForm.cin" placeholder="">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Year Established</label>
+                <input class="form-control" type="text" ng-model="profileForm.year_established">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Street</label>
+                <input type="text" class="form-control" ng-model="profileForm.street" placeholder="">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>City</label>
+                <input class="form-control" type="text" ng-model="profileForm.city">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Pincode</label>
+                <input type="tel" class="form-control" ng-model="profileForm.pincode" placeholder="">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>State</label>
+                <input class="form-control" type="text" ng-model="profileForm.state">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Country</label>
+                <input type="text" class="form-control" ng-model="profileForm.country" placeholder="">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Website Url</label>
+                <input class="form-control" type="text" ng-model="profileForm.website">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Display Picture</label>
+                <input type="file" name="DP" file-model="profileForm.displayPicture">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Cover Photo</label>
+                <input type="file" name="CoverPhoto" file-model="profileForm.coverPicture">
               </div>
             </div>
           </div>
         </div>
-        <div class="row" style="margin-top:25px">
-          <button ng-click="changeUserPassword()" type="button" class="btn btn-primary">
-            Save &nbsp;<i class="fa fa-lock"></i>
+      </div>
+      <div class="row" style="margin-top:25px;margin-bottom:25px">
+        <div class="col-md-5 col-md-offset-5">
+          <button ng-click="saveOrganization()" type="button" class="btn btn-primary">
+            Save &nbsp;<i class="fa fa-building-o"></i>
           </button>
         </div>
       </div>
     </div>
-
-    <div ng-if="tabTyp == 'organization'">
-      <div class="container-fluid" style="margin-top:70px;">
-        <div class="row" style="margin-top:20px">
-          <div class="row" style="margin-bottom:30px">
-            <div class="col-md-4">
-              <div class="row pull-right">
-                <img style="width: 100px;height:100px;" class="img img-circle" ng-if="me.profile.displayPicture != null" ng-src="{{me.profile.displayPicture}}">
-                <img style="width: 100px;height:100px;" class="img img-circle" ng-if="me.profile.displayPicture == null" src="/static/images/img_avatar.png">
-              </div>
-            </div>
-            <div class="col-md-7 col-md-offset-1">
-              <h3> Edit Organization Profile</h3>
-            </div>
-          </div>
-          <div class="col-md-10 col-md-offset-1">
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Mobile</label>
-                  <input type="text" class="form-control" ng-model="profileForm.mobile" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Email</label>
-                  <input class="form-control" type="email" ng-model="profileForm.email">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>CIN</label>
-                  <input type="text" class="form-control" ng-model="profileForm.cin" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Year Established</label>
-                  <input class="form-control" type="text" ng-model="profileForm.year_established">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Street</label>
-                  <input type="text" class="form-control" ng-model="profileForm.street" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>City</label>
-                  <input class="form-control" type="text" ng-model="profileForm.city">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Pincode</label>
-                  <input type="tel" class="form-control" ng-model="profileForm.pincode" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>State</label>
-                  <input class="form-control" type="text" ng-model="profileForm.state">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Country</label>
-                  <input type="text" class="form-control" ng-model="profileForm.country" placeholder="">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Website Url</label>
-                  <input class="form-control" type="text" ng-model="profileForm.website">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Display Picture</label>
-                  <input type="file" name="DP" file-model="profileForm.displayPicture">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Cover Photo</label>
-                  <input type="file" name="CoverPhoto" file-model="profileForm.coverPicture">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row" style="margin-top:25px;margin-bottom:25px">
-          <div class="col-md-5 col-md-offset-5">
-            <button ng-click="saveOrganization()" type="button" class="btn btn-primary">
-              Save &nbsp;<i class="fa fa-building-o"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div ng-if="tabTyp == 'notification'">
-      <div class="container-fluid" style="margin-top:70px;">
-        <div class="row" style="margin-top:20px">
-          <div class="row" style="margin:5px 50px">
-            <!-- <div class="row text-center" style="margin-bottom:30px;margin-left:10px">
-              <h3> Change Notification Alerts </h3>
-            </div>
-            <hr> -->
-            <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
-              <div class="col-md-8">
-                <b>New Message Allert</b>
-              </div>
-              <div class="col-md-4">
-                <div class="row pull-right">
-                  <span style="margin-right:10px;font-size:15px">Off</span>
-                  <switch ng-model="notificationSettings.messageAlert" ></switch>
-                  <span style="margin-left:10px;font-size:15px">On</span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
-              <div class="col-md-8">
-                <b>New Request Allert</b>
-              </div>
-              <div class="col-md-4">
-                <div class="row pull-right">
-                  <span style="margin-right:10px;font-size:15px">Off</span>
-                  <switch ng-model="notificationSettings.requestAlert" ></switch>
-                  <span style="margin-left:10px;font-size:15px">On</span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
-              <div class="col-md-8">
-                <b>Periodic Notificaions</b>
-              </div>
-              <div class="col-md-4">
-                <div class="row pull-right">
-                  <span style="margin-right:10px;font-size:15px">Off</span>
-                  <switch ng-model="notificationSettings.periodicNotification" ></switch>
-                  <span style="margin-left:10px;font-size:15px">On</span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
-              <div class="col-md-8">
-                <b>Newsletter</b>
-              </div>
-              <div class="col-md-4">
-                <div class="row pull-right">
-                  <span style="margin-right:10px;font-size:15px">Off</span>
-                  <switch ng-model="notificationSettings.newsletter" ></switch>
-                  <span style="margin-left:10px;font-size:15px">On</span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
-              <div class="col-md-8">
-                <b>Promotional</b>
-              </div>
-              <div class="col-md-4">
-                <div class="row pull-right">
-                  <span style="margin-right:10px;font-size:15px">Off</span>
-                  <switch ng-model="notificationSettings.promotional" ></switch>
-                  <span style="margin-left:10px;font-size:15px">On</span>
-                </div>
-              </div>
-            </div>
-            <div class="row text-center" style="margin-top:20px">
-              <div class="btn btn-primary" ng-click = "saveNotification()">
-                Save &nbsp;<i class="fa fa-bell-o"></i>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div ng-if="tabTyp == 'office'">
-      <div class="row" style="margin-top:30px">
-        <div ng-include="'/static/ngTemplates/app.HR.form.organization.html'" ></div>
-      </div>
-    </div>
-
   </div>
 
-  {% endverbatim %}
-  <!-- all the new content here -->
+  <div ng-if="tabTyp == 'notification'">
+    <div class="container-fluid" style="margin-top:70px;">
+      <div class="row" style="margin-top:20px">
+        <div class="row" style="margin:5px 50px">
+          <!-- <div class="row text-center" style="margin-bottom:30px;margin-left:10px">
+            <h3> Change Notification Alerts </h3>
+          </div>
+          <hr> -->
+          <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
+            <div class="col-md-8">
+              <b>New Message Allert</b>
+            </div>
+            <div class="col-md-4">
+              <div class="row pull-right">
+                <span style="margin-right:10px;font-size:15px">Off</span>
+                <switch ng-model="notificationSettings.messageAlert" ></switch>
+                <span style="margin-left:10px;font-size:15px">On</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
+            <div class="col-md-8">
+              <b>New Request Allert</b>
+            </div>
+            <div class="col-md-4">
+              <div class="row pull-right">
+                <span style="margin-right:10px;font-size:15px">Off</span>
+                <switch ng-model="notificationSettings.requestAlert" ></switch>
+                <span style="margin-left:10px;font-size:15px">On</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
+            <div class="col-md-8">
+              <b>Periodic Notificaions</b>
+            </div>
+            <div class="col-md-4">
+              <div class="row pull-right">
+                <span style="margin-right:10px;font-size:15px">Off</span>
+                <switch ng-model="notificationSettings.periodicNotification" ></switch>
+                <span style="margin-left:10px;font-size:15px">On</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
+            <div class="col-md-8">
+              <b>Newsletter</b>
+            </div>
+            <div class="col-md-4">
+              <div class="row pull-right">
+                <span style="margin-right:10px;font-size:15px">Off</span>
+                <switch ng-model="notificationSettings.newsletter" ></switch>
+                <span style="margin-left:10px;font-size:15px">On</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding:10px 0px;border-bottom:2px solid #eeeeee">
+            <div class="col-md-8">
+              <b>Promotional</b>
+            </div>
+            <div class="col-md-4">
+              <div class="row pull-right">
+                <span style="margin-right:10px;font-size:15px">Off</span>
+                <switch ng-model="notificationSettings.promotional" ></switch>
+                <span style="margin-left:10px;font-size:15px">On</span>
+              </div>
+            </div>
+          </div>
+          <div class="row text-center" style="margin-top:20px">
+            <div class="btn btn-primary" ng-click = "saveNotification()">
+              Save &nbsp;<i class="fa fa-bell-o"></i>
+            </div>
+          </div>
 
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div ng-if="tabTyp == 'office'">
+    <div class="row" style="margin-top:30px">
+      <div ng-include="'/static/ngTemplates/app.HR.form.organization.html'" ></div>
+    </div>
+  </div>
 
-  {% if useCDN %}
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.9/angular-sanitize.min.js"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script> -->
-  <!-- <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.4/tinymce.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-audio/1.7.2/angular.audio.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.4.0/rzslider.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
-  {% else %}
-  <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-  <script src="{% static 'js/jquery.cookie-1.4.1.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/angular.min.js' %}"></script>
-  <script src="{% static 'js/angular-ui-router.min.js' %}"></script>
-  <script src="{% static 'js/angular-sanitize.min.js' %}"></script>
+</div>
 
+{% endverbatim %}
 
-
-  <script src="{% static 'js/tinymce.min.js' %}"></script>
-
-
-  <script src="{% static 'js/angular.audio.min.js' %}"></script>
-  <script src="{% static 'js/rzslider.min.js' %}"></script>
-  <script src="{% static 'js/lodash.js' %}"></script>
-  {% endif %}
-
-  <!-- <script src="{% static 'js/angular-google-maps.min.js' %}"></script> -->
-  <script src="{% static 'js/autobahn.min.js' %}"></script>
-  <script src="{% static 'js/ui-bootstrap-tpls-0.14.3.min.js' %}"></script>
-  <script src="{% static 'js/angular-bootstrap-confirm.min.js' %}"></script>
-  <script src="{% static 'js/ng-tinymce.js' %}"></script>
-  <script src="{% static 'js/ng-tags-input.min.js' %}"></script>
-  <script src="{% static 'js/angular-simple-logger.min.js' %}"></script>
-  <script src="{% static 'js/angular-flash.js' %}"></script>
-  <script src="{% static 'js/ngDraggable.js' %}"></script>
-  <script src="{% static 'js/angular-aside.min.js' %}"></script>
-  <script src="{% static 'js/angular-ui-switch.min.js' %}"></script>
-  <!-- Custom JS files -->
-  <script type="text/javascript">
-    var wampServer = '{{wampServer}}';
-    var wampBindName = "{{user.username}}";
-    var BRAND_LOGO = "{{BRAND_LOGO}}";
-  </script>
-  <script src="{% static 'js/app.social.account.js' %}"></script>
-  <!-- <script src="{% static 'HR/' %}"></script> -->
-  <script src="{% static 'js/custom/wampProcessors.js' %}"></script>
-  <script src="{% static 'js/custom/nativeJS.js' %}"></script>
-  <script src="{% static 'js/custom/directives.js' %}"></script>
-  <script src="{% static 'js/custom/directives.native.js' %}"></script>
-  <script src="{% static 'js/custom/filters.js' %}"></script>
-  <script src="{% static 'js/custom/services.js' %}"></script>
-
-
-</body>
-
-</html>
+{% endblock %}
+{% block specific_js %}
+<script src="{% static 'js/app.social.account.js' %}"></script>
+{% endblock %}

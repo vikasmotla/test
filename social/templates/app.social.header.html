@@ -1,7 +1,7 @@
 <div class="row" style="background-color:rgb(67, 98, 125);padding:10px;padding-left:30px;padding-right:30px; position:fixed; width:100%; margin-left:0px; z-index:1000">
   <div class="col-md-3">
     <!-- <span style="color:white;font-size:20px;">Yomillio</span> -->
-    <a href="#"><img src="/static/images/yomillio.png" width="150px;" alt="" ></a>
+    <a href="/social"><img src="/static/images/yomillio.png" width="150px;" alt="" ></a>
   </div>
   <div class="col-md-4 ">
     <input type="text" class="form-control" placeholder="Search ...">
@@ -118,8 +118,9 @@
                 {% if profileObj.displayPicture %}
                 <li> <img src="{{ profileObj.displayPicture.url }}" style="width: 170px;" alt=""> </li>
                 {% else %}
-                <li> <img src="/static/images/img_avatar.png" style="width: 120px;" alt=""> </li>
+                <li> <img src="/static/images/img_avatar.png" style="width: 170px;" alt=""> </li>
                 {% endif %}
+                <li><a href="/social/profile/{{userObj.username}}">MyProfile</a></li>
                 <li><a href="/social/account">Account</a></li>
                 <li><a href="/logout">Logout</a></li>
               </ul>

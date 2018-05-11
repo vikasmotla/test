@@ -15,7 +15,7 @@ app.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $s
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("app.social.account", function($scope, $state, $rootScope,$users,$http,Flash) {
+app.controller("main", function($scope, $state, $rootScope,$users,$http,Flash) {
   $scope.me = $users.get('mySelf')
   console.log($scope.me);
   console.log('coming in ctrl');
@@ -219,6 +219,10 @@ app.controller('admin.manageUsers.editOffice' , function($scope , $http , $aside
   }
   $scope.saveOffice = function(){
     var f = $scope.officeForm
+    if (f.name==null || f.name.length == 0 || f.contactName==null || f.contactName.length == 0 || f.contactNumber==null || f.contactNumber.length == 0 || f.gstIn==null || f.gstIn.length == 0 || f.street==null || f.street.length == 0 || f.city==null || f.city.length == 0 || f.state==null || f.state.length == 0 || f.pincode ==null) {
+      Flash.create('warning' , 'All Fields Are Required')
+      return
+    }
     if (typeof f.pk != 'undefined') {
       var method = 'PATCH'
       var url = '/api/HR/office/' + f.pk + '/'
