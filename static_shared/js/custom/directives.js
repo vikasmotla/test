@@ -6,19 +6,22 @@ app.directive('commentEdit', function () {
     scope: {
       comment :'=',
       send : '=',
+      config: '='
     },
     controller : function($scope , $state , $stateParams , $http , Flash){
 
       //fetch the comment with $scope.pk
 
-      console.log('in diireeee',$scope.text, $scope.fileObj);
-
-
-      // $scope.comment = {txt : ''};
-      // $scope.filename = {name : emptyFile};
+      if ($scope.config==undefined) {
+        $scope.placeholder = 'Write Comment';
+        $scope.expansion = true;
+      }else {
+        $scope.placeholder = $scope.config.placeholder;
+        $scope.expansion = $scope.config.expansion;
+      }
 
       $scope.$watch('comment.txt' , function(newValue , oldValue){
-        if (newValue==undefined) {
+        if (newValue==undefined || $scope.expansion == false) {
           return;
         }
         if (newValue=='') {
@@ -52,6 +55,7 @@ app.directive('commentEdit', function () {
 
       $scope.removeFile = function() {
         $scope.fileSize = 0;
+        $scope.comment.file = emptyFile;
       }
 
     },

@@ -18,9 +18,11 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
 app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
   $scope.me = $users.get('mySelf');
   // console.log($scope.me);
-  $scope.fileName;
-  $scope.fileSize = 0;
+
+  // $scope.fileName;
+  // $scope.fileSize = 0;
   $scope.showComments = false;
+
   $scope.allComments = function() {
     if ($scope.showComments == false) {
       $scope.showComments = true;
@@ -32,6 +34,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
 
   // related to the chatter
   $scope.commenEdit = {txt : '' , file : emptyFile}
+  $scope.config={expansion: true , placeholder: 'Type your comment here...'}
 
   $scope.addComment = function() {
     console.log("outside the directive");

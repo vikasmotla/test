@@ -22,25 +22,35 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal) {
   $scope.peopleInView = 0;
   $scope.textReply = '';
   $scope.peoples = [
-    {name : 'Vikas Motla', profileImage:"abc.jpg", id:123 , messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
-    {name : 'Ashish Shah', profileImage:"abc.jpg", id:234 , messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"abc.jpg", id:345, messages : [{msg : "sai hi"}]},
-    {name : 'Ankita Sharma', profileImage:"abc.jpg", id:456, messages : [{msg : "ank hi"}]},
-    {name : 'Amit Kumar', profileImage:"abc.jpg", id:567, messages : [{msg : "ami t hi"}]}
+    {name : 'Vikas Motla', profileImage:"/static/images/img_avatar.png",  messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ankita Sharma', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ank hi"}]},
+    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
+    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
+    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
+    {name : 'Vikas Motla', profileImage:"/static/images/img_avatar.png", messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
+    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
+    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]}
+
     ];
 
 
   $scope.setInView = function(index) {
     $scope.peopleInView = index;
   }
-
-  $scope.sendMessage = function() {
-    $scope.peoples[$scope.peopleInView].messages.push({msg : $scope.textReply});
-    $scope.textReply = '';
-  }
-
-  // $scope.peoples[0].messages.push({img : "/static/images/screenshot.png"})
-  // console.log('herer',$scope.peoples[0].messages);
 
   $scope.search =function() {
     $scope.mode = 'search';
@@ -50,24 +60,25 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal) {
     $scope.mode = 'list';
   }
 
+  $scope.commenEdit = {txt : '' , file : emptyFile}
+  $scope.config={expansion: false , placeholder: 'Type your text here...'}
 
-  $scope.addFile = function() {
-    console.log("will add file");
-    $('#filePicker').click();
-  }
-
-  document.getElementById('filePicker').onchange = function(e) {
-    var reader = new FileReader();
-
-    reader.onload = function(event) {
-      var imgObj = new Image();
-      imgObj.src = event.target.result;
-      console.log('source....');
-
-      $scope.peoples[0].messages.push({img : "/static/images/screenshot.png"})
-      console.log('herer',$scope.peoples[0].messages);
+  $scope.addComment = function() {
+    console.log("outside the directive");
+    if ($scope.commenEdit.txt!='' && $scope.commenEdit.file.size!=0) {
+      console.log('push both.....');
+      $scope.peoples[$scope.peopleInView].messages.push({msg : $scope.commenEdit.txt});
+      $scope.peoples[$scope.peopleInView].messages.push({img : "/static/images/screenshot.png"})
     }
-    reader.readAsDataURL(e.target.files[0]);
+    else if ($scope.commenEdit.txt!='') {
+      console.log('push only cmmnt');
+       $scope.peoples[$scope.peopleInView].messages.push({msg : $scope.commenEdit.txt});
+    }
+    else if ($scope.commenEdit.file.size!=0) {
+      console.log('push only file');
+      console.log($scope.commenEdit.file.url);
+       $scope.peoples[$scope.peopleInView].messages.push({img : "/static/images/screenshot.png"})
+    }
   }
 
   $scope.expandImage = function(imageUrl) {

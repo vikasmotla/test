@@ -1,7 +1,4 @@
-{% extends 'app.socialBase.html' %}
-{% load staticfiles %}
-
-{% block contentBody %}
+{% extends 'app.socialBase.html' %} {% load staticfiles %} {% block contentBody %}
 <div class="container-fluid">
   <div class="row">
 
@@ -9,10 +6,8 @@
       <div class="row" style="padding:10px;padding-top:70px">
         <div class="col-md-3">
           {% if profileObj.displayPicture %}
-          <img src="{{ profileObj.displayPicture.url }}" alt="Profile Pic" style="padding-top:15px; width:70px;">
-          {% else %}
-          <img src="/static/images/img_avatar.png" alt="Profile Pic" style="padding-top:15px; width:70px;">
-          {% endif %}
+          <img src="{{ profileObj.displayPicture.url }}" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% else %}
+          <img src="/static/images/img_avatar.png" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% endif %}
         </div>
         <div class="col-md-9">
           <div class="row" style="margin-left:10px">
@@ -101,16 +96,17 @@
 
     </div>
 
+    {% verbatim %}
     <div class="col-md-6 col-md-offset-3 newsFeed" style="background-color:#ffffff">
+
+      <div class="row">
+        <comment-Edit comment="postEdit" send="addPost" config="configPost" style="border: 2px solid #eeeeee;"></comment-Edit>
+        <!-- <textarea type="text" class="form-control" name="" value="" placeholder="Sell,buy,barter?" style="resize:none;"></textarea> -->
+      </div>
+
       <div style="padding:20px;">
-
-        <div class="row">
-          <textarea type="text" class="form-control" name="" value="" placeholder="Sell,buy,barter?" style="resize:none;"></textarea>
-        </div>
-
-
         <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="item in [1,2,3,4,5]">
-          <div class="row" style="border-bottom:solid 2px #eeeeee; margin:0px;">
+          <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
             <div class="col-xs-2" style="padding:0px;">
               <img src="/static/images/img_avatar.png" width="50" height="50" alt="">
             </div>
@@ -122,7 +118,6 @@
               <span class="text-muted pull-right" style="font-size:11px;">21 mins</span>
             </div>
           </div>
-
           <div class="row">
             <div class="container-fluid" style="padding:20px;">
               <span style="font-size:20px;">I want to sell abc s Lorem ipsum dolor sit amet, consectetur adipisicing elit,
@@ -133,17 +128,18 @@
               </span>
             </div>
           </div>
-          <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee">
+          <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
 
             <div class="col-xs-6" style="padding-top:10px;">
               <div class="col-xs-1">
-                <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i> </span>
+                <span style="color:#43627d; cursor:pointer;" ng-click="allComments();"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
               </div>
               <div class="col-xs-1">
-                <span style="color:#43627d; cursor:pointer;"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
+                <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
               </div>
-              <div class="col-xs-1">
-                <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true"></i> </span>
+              <div class="col-xs-4">
+                <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true" style="margin-right:10px;"></i>3 Likes </span>
+
               </div>
             </div>
 
@@ -154,6 +150,52 @@
             <div class="col-xs-3" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;">
               Barter
             </div>
+          </div>
+
+          <div ng-if="showComments" class="row" style="padding:30px; padding-bottom:0px;">
+            <!-- <social-Comment ng-repeat="c in post.comments" pk="c"></social-Comment> -->
+
+
+            <div class="media" ng-repeat="comments in [1,2]">
+              <div class="media-left">
+                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+              </div>
+              <div class="media-body">
+                <h5 class="media-heading" style="cursor:pointer;"><strong>Andrew Singh</strong></h5>
+                <span style="font-size:15px;"> Cras sit amet nibh libero, in gravida nulla.Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</span>
+                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+
+              </div>
+            </div>
+
+            <div class="media">
+              <div class="media-left">
+                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"></a>
+              </div>
+              <div class="media-body">
+                <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
+                <!-- <span style="font-size:15px;"> <img ng-click="expandImage(me.profile.displayPicture)" class="img img-rounded" ng-src="{{me.profile.displayPicture}}" alt="" width="300px;"> </span> -->
+                <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
+                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+              </div>
+            </div>
+
+            <div class="media">
+              <div class="media-left">
+                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+              </div>
+              <div class="media-body">
+                <h5 class="media-heading" style="cursor:pointer;"><strong>Sachin Bansal</strong></h5>
+                <span style="font-size:15px;"> <i class="fa {{ '/some.pdf' | fileTypeIcon }} fa-3x"></i>  <a href="/some.pdf">some.pdf</a> </span>
+                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:20px; ">
+              <comment-Edit comment="commenEdit" send="addComment" config="config"></comment-Edit>
+            </div>
+
+
           </div>
 
         </div>
@@ -188,7 +230,7 @@
 
 
     </div>
-
+    {% endverbatim %}
 
 
 
@@ -200,7 +242,6 @@
 
 </div>
 </div>
-{% endblock %}
-{% block specific_js %}
+{% endblock %} {% block specific_js %}
 <script src="{% static 'js/app.social.js' %}"></script>
 {% endblock %}
