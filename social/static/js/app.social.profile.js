@@ -16,6 +16,7 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
 }]);
 
 app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
+
   $scope.me = $users.get('mySelf');
   // console.log($scope.me);
   $scope.fileName;
@@ -61,7 +62,12 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
 
     });
   }
-
+  $scope.msgRequest = function(obj){
+    console.log(obj,typeof obj);
+    $rootScope.$broadcast('msgRequestData', {
+      data: parseInt(obj)
+    });
+  }
 
 });
 
