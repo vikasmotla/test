@@ -14,16 +14,15 @@
           <i ng-if="mode=='search'" ng-click="closeSearch();" class="fa fa-times fa-lg" aria-hidden="true" ng-click="search();"></i>
         </div>
       </div>
-      <div class="row" style="height:83vh; overflow-y:auto; overflow-x:hidden;">
+      <div class="row" style="height:82vh; overflow-y:auto; overflow-x:hidden;">
 
-        <div class="row chatBox" ng-repeat="people in peoples" ng-click="setInView($index)" style="padding-bottom:5px; padding-top:5px; padding-left:15px;">
+        <div class="row chatBox" ng-repeat="people in users" ng-click="setInView($index)" style="padding-bottom:5px; padding-top:5px; padding-left:15px;">
           <div class="col-xs-2" style="padding:0px;">
-            <img src="{{people.profileImage}}" class="img-circle" width="50" height="50" alt="">
+            <img ng-src="{{people.profile.displayPicture ? people.profile.displayPicture : '/static/images/img_avatar.png'}}" class="img-circle" width="50" height="50" alt="">
           </div>
           <div class="col-xs-6 " style="padding-top:10px;">
-            <span>{{people.name}}</span> <br>
-            <span ng-if="people.messages.slice(-1)[0].msg" class="text-muted" style="font-size:11px;"> {{people.messages.slice(-1)[0].msg}}</span>
-            <span ng-if="people.messages.slice(-1)[0].img" class="text-muted" style="font-size:11px;">Image</span>
+            <span>{{people.first_name}}</span> <br>
+            <!-- <span class="text-muted" style="font-size:10px;">Last Message</span> -->
           </div>
           <div class="col-xs-4 " style="padding:20px; padding-bottom:0px;">
             <span class="text-muted pull-right" style="font-size:10px;">21 mins</span>
@@ -34,34 +33,36 @@
     </div>
     <div class="col-md-7 hidden-xs hidden-sm" style="border-left:2px solid #e0e0e0;">
       <div class="row topSpace text-center" style="border-bottom:1px solid #e0e0e0;">
-        <span style="font-size:20px;">{{peoples[peopleInView].name}}</span>
+        <span style="font-size:20px;">{{personInView.first_name}} {{personInView.last_name}}</span>
       </div>
-      <div style="height:74vh; overflow-y:auto; overflow-x:hidden;">
-        <div class="row" ng-repeat="message in peoples[peopleInView].messages">
-          <div class="container-fluid pull-right" ng-if="message.msg">
-            <div class="container-fluid text-right" style="border:solid 1px #e0e0e0;padding:10px;">
-              <span>{{message.msg}}</span>
+      <div style="height:75vh; overflow-y:auto; overflow-x:hidden;">
+        <div class="row" ng-repeat="msg in ims">
+          <div class="container-fluid {{msg.originator == me.pk ? 'pull-right' : 'pull-left'}} " >
+            <div class="container-fluid {{msg.originator == me.pk ? 'text-right' : 'text-left'}} " style="border:solid 1px #e0e0e0;padding:10px;">
+              <span ng-if="msg.attachment==null" >{{msg.message}}</span>
+              <span ng-if="msg.attachment"> <img ng-click="expandImage(msg.attachment)" src="{{msg.attachment}}" alt="message attachment" width="240px;"> <p ng-if="msg.message" class="text-center" >{{msg.message}}</p> </span>
             </div>
             <div class="container-fluid text-right" style="color:#c7c7c7;font-size:10px;">
-              0 min ago
+              {{msg.created |date:'hh:mm a'}}
             </div>
           </div>
 
-          <div class="container-fluid pull-right" ng-if="message.img">
+          <!-- <div  class="container-fluid {{msg.originator == me.pk ? 'pull-right' : 'pull-left'}} " ng-if="msg.attachment">
             <div class="container-fluid text-right" style="border:solid 1px #e0e0e0;padding:10px;">
-              <span ng-if="message.img"><img ng-click="expandImage(message.img);" src="{{message.img}}" width="250px;" height="250;" alt=""></span>
+             <span><img ng-click="expandImage(msg.attachment)" ng-src="{{msg.attachment}}" alt="message attachment"></span>
+             <span></span>
             </div>
             <div class="container-fluid text-right" style="color:#c7c7c7;font-size:10px;">
               0 min ago
             </div>
-          </div>
+          </div> -->
 
         </div>
       </div>
 
 
       <div class="row">
-        <comment-Edit comment="commenEdit" send="addComment" config="config"></comment-Edit>
+        <comment-Edit comment="commenEdit" send="sendMessage" config="config"></comment-Edit>
       </div>
 
     </div>

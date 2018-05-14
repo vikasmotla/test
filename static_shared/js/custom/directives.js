@@ -14,6 +14,7 @@ app.directive('chatWindow', function() {
       //fetch the messages with $scope.pk
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
       $scope.me = $users.get("mySelf");
+      $scope.friend = $users.get($scope.user);
       $scope.toggler = function() {
         $scope.toggle = !$scope.toggle;
       }
@@ -47,14 +48,15 @@ app.directive('chatWindow', function() {
         });
       };
 
-      $http({
-        method: 'GET',
-        url: '/api/HR/users/' + $scope.user + '/'
-      }).
-      then(function(response) {
-        $scope.friend = response.data
-        $scope.fetchMessages();
-      });
+      // $http({
+      //   method: 'GET',
+      //   url: '/api/HR/users/' + $scope.user + '/'
+      // }).
+      // then(function(response) {
+      //   $scope.friend = response.data
+      //   $scope.fetchMessages();
+      // });
+      $scope.fetchMessages();
 
       $scope.messageToSend = "";
       $scope.send = function() {
@@ -785,14 +787,14 @@ app.directive('notificationStrip', function() {
 //     },
 //     // attrs is the attrs passed from the main scope
 //     link: function postLink(scope, element, attrs) {
-//       scope.$watch('messageToSend', function(newValue , oldValue ){
-//         // console.log("changing");
-//         scope.status = "T"; // the sender is typing a message
-//         if (newValue!="") {
-//           connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
-//         }
-//         scope.status = "N";
-//       }); // watch for the messageTosend
+      // scope.$watch('messageToSend', function(newValue , oldValue ){
+      //   // console.log("changing");
+      //   scope.status = "T"; // the sender is typing a message
+      //   if (newValue!="") {
+      //     connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
+      //   }
+      //   scope.status = "N";
+      // }); // watch for the messageTosend
 //       scope.$watch('ims.length', function( ){
 //         setTimeout( function(){
 //           scope.scroll();

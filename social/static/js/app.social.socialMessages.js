@@ -2,7 +2,6 @@ var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngSanitize', 'ngA
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $provide) {
 
-  $urlRouterProvider.otherwise('/home');
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
   $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
   $httpProvider.defaults.withCredentials = true;
@@ -16,73 +15,215 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state, $rootScope, $uibModal) {
-  console.log('coming in ctrl');
-  $scope.mode = 'list';
-  $scope.peopleInView = 0;
-  $scope.textReply = '';
-  $scope.peoples = [
-    {name : 'Vikas Motla', profileImage:"/static/images/img_avatar.png",  messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ankita Sharma', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ank hi"}]},
-    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
-    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
-    {name : 'Amit Kumar', profileImage:"/static/images/img_avatar.png", messages : [{msg : "ami t hi"}]},
-    {name : 'Vikas Motla', profileImage:"/static/images/img_avatar.png", messages : [{msg : "hi"},{img: "/static/images/food.png"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]},
-    {name : 'Ashish Shah', profileImage:"/static/images/img_avatar.png", messages : [{msg : "dfg"}]},
-    {name : 'Sai Kiran', profileImage:"/static/images/img_avatar.png", messages : [{msg : "sai hi"}]}
-
-    ];
+app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $http) {
+  $scope.me = $users.get('mySelf');
+  $scope.people = [];
+  $scope.users;
+  $scope.friend;
 
 
-  $scope.setInView = function(index) {
-    $scope.peopleInView = index;
+  $http({
+    method: 'GET',
+    url: '/api/HR/users/'
+  }).
+  then(function(response) {
+    $scope.users = response.data;
+    for (var i = 0; i < response.data.length; i++) {
+      if ($scope.me.pk == $scope.users[i].pk) {
+        $scope.users.splice(i, 1)
+      }
+    }
+  })
+
+
+
+
+  // $scope.roomID = '123';
+  $scope.handleRemoteContent = function(args) {
+    console.log('arrgs', args);
   }
 
-  $scope.search =function() {
+
+  $scope.connection = new autobahn.Connection({
+    url: 'ws://skinstore.monomerce.com:8080/ws',
+    realm: 'default'
+  });
+
+  $scope.chatResponse = function (args) {
+    console.log('ddddd',args);
+    if (args[0]=='T') {
+      console.log('typinmgg',args[1]);
+      $scope.typing = true;
+      $Timeout(function () {
+        $scope.typing = false;
+      }, 1000);
+    }else if (args[0]=='M') {
+      console.log('message came', args[1]);
+      $http({
+        method: "GET",
+        url: '/api/PIM/chatMessageBetween/'+ args[3] +'/'
+      }).
+      then(function(response) {
+        console.log('resssssss',response.data);
+        $scope.ims.push(response.data);
+        $scope.senderIsMe.push(false);
+      });
+    }
+
+
+  }
+
+  $scope.connection.onopen = function(session) {
+    $scope.session = session;
+    console.log("Connected")
+    console.log(wampBindName);
+
+
+
+    $scope.session.subscribe('service.chat.'+ wampBindName, $scope.chatResponse).then(
+    function (sub) {
+      console.log("subscribed to topic 'chatResonse'");
+      },
+    function (err) {
+      console.log("failed to subscribed: " + err);
+      }
+    );
+
+    // $scope.connection.session.subscribe('123', $scope.handleRemoteContent).then(
+    //   function(sub) {
+    //     console.log("subscribed to", $scope.roomID);
+    //   },
+    //   function(err) {
+    //     console.log("failed to subscribed: " + err);
+    //   }
+    // );
+
+  }
+
+  $scope.connection.open();
+
+  console.log('coming in ctrl');
+  $scope.mode = 'list';
+  $scope.personInView = 0;
+  $scope.setInView = function(index) {
+    $scope.personInView = $scope.users[index];
+    console.log($scope.personInView);
+  }
+
+  $scope.search = function() {
     $scope.mode = 'search';
   }
 
-  $scope.closeSearch =function() {
+  $scope.closeSearch = function() {
     $scope.mode = 'list';
   }
 
-  $scope.commenEdit = {txt : '' , file : emptyFile}
-  $scope.config={expansion: false , placeholder: 'Type your text here...'}
-
-  $scope.addComment = function() {
-    console.log("outside the directive");
-    if ($scope.commenEdit.txt!='' && $scope.commenEdit.file.size!=0) {
-      console.log('push both.....');
-      $scope.peoples[$scope.peopleInView].messages.push({msg : $scope.commenEdit.txt});
-      $scope.peoples[$scope.peopleInView].messages.push({img : "/static/images/screenshot.png"})
-    }
-    else if ($scope.commenEdit.txt!='') {
-      console.log('push only cmmnt');
-       $scope.peoples[$scope.peopleInView].messages.push({msg : $scope.commenEdit.txt});
-    }
-    else if ($scope.commenEdit.file.size!=0) {
-      console.log('push only file');
-      console.log($scope.commenEdit.file.url);
-       $scope.peoples[$scope.peopleInView].messages.push({img : "/static/images/screenshot.png"})
-    }
+  $scope.commenEdit = {
+    txt: '',
+    file: emptyFile
+  }
+  $scope.config = {
+    expansion: false,
+    placeholder: 'Type your text here...'
   }
 
+  $scope.fetchMessages = function() {
+    $scope.friend = $scope.personInView;
+    $scope.method = 'GET';
+    $scope.url = '/api/PIM/chatMessageBetween/?other=' + $scope.friend.username;
+    $scope.ims = [];
+    $scope.imsCount = 0;
+    $scope.senderIsMe = [];
+    $http({
+      method: $scope.method,
+      url: $scope.url
+    }).
+    then(function(response) {
+      $scope.imsCount = response.data.length;
+      for (var i = 0; i < response.data.length; i++) {
+        var im = response.data[i];
+        var sender = $users.get(im.originator)
+        if (sender.username == $scope.me.username) {
+          $scope.senderIsMe.push(true);
+        } else {
+          $scope.senderIsMe.push(false);
+        }
+        $scope.ims.push(im);
+      }
+    });
+    console.log($scope.ims);
+  };
+
+
+
+  $scope.$watch('personInView', function(newValue, oldValue) {
+    $scope.fetchMessages();
+  }, true)
+
+  $scope.$watch('commenEdit.txt', function(newValue, oldValue) {
+    $scope.status = "T"; // the sender is typing a message
+      if (newValue!="") {
+        console.log('typing....');
+        console.log($scope.friend.username);
+        $scope.connection.session.publish('service.chat.'+$scope.friend.username, [$scope.status , $scope.me.username], {}, {acknowledge: true}).
+        then(function (publication) {});
+        // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
+      }
+  }, true)
+
+  $scope.sendMessage = function() {
+    var msg = $scope.commenEdit.txt;
+    var file = $scope.commenEdit.file;
+    if (msg != "" || file != "") {
+      $scope.status = "M"; // contains message
+      var fd = new FormData();
+      fd.append('message' , msg);
+      fd.append('attachment' , file);
+      fd.append('read' , false);
+      fd.append('user' , $scope.personInView.pk);
+      $http({
+        method: 'POST',
+        data: fd,
+        url: '/api/PIM/chatMessage/',
+        transformRequest: angular.identity, headers: {'Content-Type': undefined}
+      }).
+      then(function(response) {
+        $scope.ims.push(response.data)
+        $scope.senderIsMe.push(true);
+        console.log('heree...',response.data);
+        console.log($scope.friend.username);
+        $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , response.data.message , $scope.me.username , response.data.pk], {}, {acknowledge: true}).
+        then(function (publication) {});
+        $scope.commenEdit.txt = "";
+        $scope.commenEdit.file = emptyFile;
+      })
+    }
+  };
+
+  // $scope.sendMessage = function() {
+  //   console.log("outside the directive");
+  //   if ($scope.commenEdit.txt != '' && $scope.commenEdit.file.size != 0) {
+  //     $scope.people[$scope.peopleInView].messages.push({
+  //       msg: $scope.commenEdit.txt
+  //     });
+  //     $scope.people[$scope.peopleInView].messages.push({
+  //       img: "/static/images/screenshot.png"
+  //     })
+  //   } else if ($scope.commenEdit.txt != '') {
+  //     $scope.people[$scope.peopleInView].messages.push({
+  //       msg: $scope.commenEdit.txt
+  //     });
+  //   } else if ($scope.commenEdit.file.size != 0) {
+  //     $scope.people[$scope.peopleInView].messages.push({
+  //       img: "/static/images/screenshot.png"
+  //     })
+  //   }
+  //
+  //   $scope.commenEdit.txt = '';
+  //   $scope.commenEdit.file = emptyFile ;
+  // }
+
   $scope.expandImage = function(imageUrl) {
-    console.log('dddddddddddddd',imageUrl);
     $uibModal.open({
       templateUrl: '/static/ngTemplates/app.social.expandImage.html',
       size: 'lg',

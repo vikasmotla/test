@@ -89,19 +89,22 @@ class chatMessageBetweenViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        reciepient = User.objects.get(username = self.request.GET['other'])
-        if "pk" in self.request.GET:
-            pk = int(self.request.GET['pk'])
-            qs1 = chatMessage.objects.filter(originator = self.request.user , user= reciepient).filter(id__gt=pk)
-            qs2 = chatMessage.objects.filter(user = self.request.user , originator= reciepient).filter(id__gt=pk)
+        if "other" in self.request.GET:
+            reciepient = User.objects.get(username = self.request.GET['other'])
+            if "pk" in self.request.GET:
+                pk = int(self.request.GET['pk'])
+                qs1 = chatMessage.objects.filter(originator = self.request.user , user= reciepient).filter(id__gt=pk)
+                qs2 = chatMessage.objects.filter(user = self.request.user , originator= reciepient).filter(id__gt=pk)
+            else:
+                qs1 = chatMessage.objects.filter(originator = self.request.user , user= reciepient)
+                qs2 = chatMessage.objects.filter(user = self.request.user , originator= reciepient)
+            qs = qs1 | qs2
+            for msg in qs:
+                msg.read = True
+                msg.save()
+            return qs.order_by('created')[:150]
         else:
-            qs1 = chatMessage.objects.filter(originator = self.request.user , user= reciepient)
-            qs2 = chatMessage.objects.filter(user = self.request.user , originator= reciepient)
-        qs = qs1 | qs2
-        for msg in qs:
-            msg.read = True
-            msg.save()
-        return qs.order_by('created')[:150]
+            return chatMessage.objects.all()
 
 class blogViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
