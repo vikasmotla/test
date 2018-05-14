@@ -47,6 +47,7 @@ app.directive('chatWindow', function() {
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
       $scope.me = $users.get("mySelf");
       $scope.friend = $users.get($scope.user)
+
       $scope.toggler = function() {
         $scope.toggle = !$scope.toggle;
       }
@@ -80,7 +81,9 @@ app.directive('chatWindow', function() {
         });
       };
 
+
       $scope.fetchMessages();
+
       $scope.messageToSend = "";
       $scope.send = function() {
         // var msg = angular.copy($scope.messageToSend)
@@ -855,14 +858,14 @@ app.directive('notificationStrip', function() {
 //     },
 //     // attrs is the attrs passed from the main scope
 //     link: function postLink(scope, element, attrs) {
-//       scope.$watch('messageToSend', function(newValue , oldValue ){
-//         // console.log("changing");
-//         scope.status = "T"; // the sender is typing a message
-//         if (newValue!="") {
-//           connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
-//         }
-//         scope.status = "N";
-//       }); // watch for the messageTosend
+      // scope.$watch('messageToSend', function(newValue , oldValue ){
+      //   // console.log("changing");
+      //   scope.status = "T"; // the sender is typing a message
+      //   if (newValue!="") {
+      //     connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
+      //   }
+      //   scope.status = "N";
+      // }); // watch for the messageTosend
 //       scope.$watch('ims.length', function( ){
 //         setTimeout( function(){
 //           scope.scroll();
