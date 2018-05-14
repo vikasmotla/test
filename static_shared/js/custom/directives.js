@@ -1,3 +1,35 @@
+app.directive('contenteditable', ['$sce', function($sce) {
+  return {
+    restrict: 'A', // only activate on element attribute
+    require: '?ngModel', // get a hold of NgModelController
+    link: function(scope, element, attrs, ngModel) {
+      if (!ngModel) return; // do nothing if no ng-model
+
+      // Specify how UI should be updated
+      ngModel.$render = function() {
+        element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+      };
+
+      // Listen for change events to enable binding
+      element.on('blur keyup change', function() {
+        scope.$evalAsync(read);
+      });
+      read(); // initialize
+
+      // Write data to the model
+      function read() {
+        var html = element.html();
+        // When we clear the content editable the browser leaves a <br> behind
+        // If strip-br attribute is provided then we strip this out
+        if ( attrs.stripBr && html == '<br>' ) {
+          html = '';
+        }
+        ngModel.$setViewValue(html);
+      }
+    }
+  };
+}]);
+
 app.directive('chatWindow', function() {
   return {
     templateUrl: '/static/ngTemplates/directive.chatWindow.html',
@@ -14,6 +46,7 @@ app.directive('chatWindow', function() {
       //fetch the messages with $scope.pk
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
       $scope.me = $users.get("mySelf");
+      $scope.friend = $users.get($scope.user)
       $scope.toggler = function() {
         $scope.toggle = !$scope.toggle;
       }
@@ -47,15 +80,7 @@ app.directive('chatWindow', function() {
         });
       };
 
-      $http({
-        method: 'GET',
-        url: '/api/HR/users/' + $scope.user + '/'
-      }).
-      then(function(response) {
-        $scope.friend = response.data
-        $scope.fetchMessages();
-      });
-
+      $scope.fetchMessages();
       $scope.messageToSend = "";
       $scope.send = function() {
         // var msg = angular.copy($scope.messageToSend)
@@ -99,9 +124,41 @@ app.directive('commentEdit', function() {
       send : '=',
       config: '='
     },
-    controller: function($scope, $state, $stateParams, $http, Flash) {
+    controller: function($scope, $state, $stateParams, $http, Flash, $timeout) {
 
       //fetch the comment with $scope.pk
+
+      $timeout(function() {
+        $('div#auto').tagautocomplete({
+          source: function (query, process) {
+
+            var position = getCaretPosition(document.getElementById('auto'));
+            query = query.substring(0, position);
+
+            var regex = new RegExp("(^|\\s)([" + this.options.character + "][\\w-]*)$");
+            var result = regex.exec(query);
+
+            if(result && result[2]){
+              result = result[2].trim().toLowerCase();
+            }else {
+              result = '';
+              return
+            }
+
+
+           return $.get('/api/HR/users/?', { username__contains: result.replace('@', '') }, function (data) {
+             var toReturn = [];
+             for (var i = 0; i < data.length; i++) {
+               toReturn.push('@' +  data[i].username)
+             }
+
+             return process(toReturn); //if JSON is [ "options" : { ...}
+           });
+
+         }
+        });
+      },1000)
+
 
       if ($scope.config==undefined) {
         $scope.placeholder = 'Write Comment';
@@ -111,14 +168,27 @@ app.directive('commentEdit', function() {
         $scope.expansion = $scope.config.expansion;
       }
 
+      $scope.height = '';
+
+
       $scope.$watch('comment.txt' , function(newValue , oldValue){
         if (newValue==undefined || $scope.expansion == false) {
           return;
         }
+
+        // return
+
         if (newValue == '') {
-          $("#cmt").css('height', '');
+          $scope.height = '';
         } else {
-          $("#cmt").css('height', '8em');
+
+          var cnt = (newValue.match(/<br>/g) || []).length;
+          if (cnt > 4) {
+            $scope.height = (cnt*2) + 'em';
+          }else{
+            $scope.height = '8em';
+          }
+
         }
       });
 

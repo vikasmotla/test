@@ -2,10 +2,11 @@
   <div class="row" style="background-color:rgb(67, 98, 125);padding:10px;padding-left:30px;padding-right:30px; position:fixed; width:100%; margin-left:0px; z-index:1000">
     <div class="col-md-3">
       <!-- <span style="color:white;font-size:20px;">Yomillio</span> -->
-      <a href="/social"><img src="/static/images/yomillio.png" width="150px;" alt="" ></a>
+      <a href="/social"><img src="/static/images/yo_icon.svg" width="200px;" alt="" ></a>
     </div>
+    {% if request.user.is_authenticated %}
     <div class="col-md-4 ">
-      <input uib-typeahead="user as user.username for user in userSearch($viewValue)" ng-model="header.userSearch" type="text" class="form-control" placeholder="Search">
+      <input uib-typeahead="user as user.username for user in userSearch($viewValue)" ng-model="header.userSearch" type="text" class="form-control" placeholder="Search" autocomplete="off">
     </div>
 
     <div class="col-md-5 navbarControls">
@@ -109,15 +110,15 @@
                 </div>
               </div>
               <div class="col-md-5">
-                {% if profileObj.displayPicture %}
-                <img src="{{ profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
+                {% if userObj.profileObj.displayPicture %}
+                <img src="{{ userObj.profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
                 {% else %}
                 <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
                 {% endif %}
 
                 <ul class="dropdown-menu " style="margin-right:0px;padding-top:0px;left:-100px;">
-                  {% if profileObj.displayPicture %}
-                  <li> <img src="{{ profileObj.displayPicture.url }}" style="width: 170px;" alt=""> </li>
+                  {% if userObj.profileObj.displayPicture %}
+                  <li> <img src="{{ userObj.profileObj.displayPicture.url }}" style="width: 170px;" alt=""> </li>
                   {% else %}
                   <li> <img src="/static/images/img_avatar.png" style="width: 170px;" alt=""> </li>
                   {% endif %}
@@ -129,8 +130,8 @@
             </div>
 
             <div class="visible-sm visible-xs" style="padding-top:10px;">
-              {% if profileObj.displayPicture %}
-              <img src="{{ profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
+              {% if userObj.profileObj.displayPicture %}
+              <img src="{{ userObj.profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
               {% else %}
               <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
               {% endif %}
@@ -148,6 +149,7 @@
 
       </div>
     </div>
+    {% endif %}
 
   </div>
 

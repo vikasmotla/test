@@ -45,10 +45,10 @@ def socialAccount(request):
 
 def profileDetails(request,profName):
     print 'proffffffffffffffffffffff',profName
-    userObj = User.objects.get(username=profName)
-    profileObj = profile.objects.get(user = userObj.pk)
+    obj = User.objects.get(username=profName)
+    profileObj = profile.objects.get(user = obj.pk)
     print profileObj,profileObj.mobile
-    return render(request, 'app.social.profile.html', {"home": True ,'userObj':userObj,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+    return render(request, 'app.social.profile.html', {"home": True ,'userObj':request.user,'obj':obj,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 class ProductTagViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
