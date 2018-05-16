@@ -1,9 +1,9 @@
 <div class="input-group" >
 
-  <div contenteditable class="form-control" style="resize:none; border:none; border-radius: 0px;height:{{height}}" ng-model="comment.txt" id="auto">@annvvxcv&nbsp; It works when there are multiple html nodes like <b>bold</b> and <i>italic</i> too!</div>
+  <div contenteditable class="form-control" style="resize:none; border:none; border-radius: 0px;height:{{height}}" ng-model="comment.txt" id="auto"></div>
   <!-- <textarea class="form-control" rows="1" cols="80" placeholder="{{placeholder}}" style="resize:none; border:none; border-radius: 0px;height:{{height}}" ng-model="comment.txt"></textarea> -->
   <span ng-if="fileSize!=0" class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;"><i class="fa {{fileName | fileTypeIcon }}"></i> <br> {{fileName}}</span>
-  <input type="file" id="filePicker" style="display:none;" file-model="comment.file">
+  <input type="file" id="filePicker{{comment.parent}}" style="display:none;" file-model="comment.file">
   <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="checkFile()"><i class="fa fa-{{fileSize == 0? 'paperclip':'times'}}" aria-hidden="true" ></i></span>
-  <span ng-click="send()" class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+  <span ng-click="send(comment.parent)" class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
 </div>

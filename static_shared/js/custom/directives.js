@@ -276,7 +276,8 @@ app.directive('commentEdit', function() {
       }
 
       $scope.attachInComments = function() {
-        $('#filePicker').click();
+        console.log('#filePicker'+$scope.comment.parent);
+        $('#filePicker'+$scope.comment.parent).click();
       }
 
       $scope.$watch('comment.file', function(newValue, oldValue) {

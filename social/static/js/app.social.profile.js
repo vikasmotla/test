@@ -15,11 +15,14 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
+app.controller("main", function($scope, $state,$http, $rootScope, $uibModal, $users) {
 
   $scope.me = $users.get('mySelf');
-  // console.log($scope.me);
+  console.log($scope.me);
 
+  $scope.following = following;
+  $scope.followersCount = followersCount;
+  console.log('ffffffffffff',$scope.following, $scope.followersCount);
   // $scope.fileName;
   // $scope.fileSize = 0;
   $scope.showComments = false;
@@ -65,14 +68,22 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
 
     });
   }
-  $scope.sendFollow = function(obj){
-    // url = '/api/HR/profile/'+ $scope.me.profile.pk +'/?follow=4'
+  $scope.sendFollow = function(obj,mod){
+    $scope.following = ! $scope.following
+    if (mod == 'follow') {
+      $scope.followersCount = $scope.followersCount + 1
+    }else {
+      $scope.followersCount = $scope.followersCount - 1
+    }
+    console.log(obj,typeof obj,mod, typeof mod);
+    url = '/api/HR/profile/'+ $scope.me.profile.pk +'/?follow=4'
     $http({
       method: 'PATCH',
-      url: '/api/HR/profile/'+ $scope.me.profile.pk +'/?following=' + obj + '/'
+      url: '/api/HR/profile/'+ $scope.me.profile.pk +'/?following=' + parseInt(obj) +'&mode=' + mod
     }).
     then(function(response) {
-      console.log(reponse.data);
+      console.log(response.data);
+      // $scope.me = response.data
     })
 
   }

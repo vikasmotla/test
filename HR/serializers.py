@@ -82,8 +82,14 @@ class userProfileSerializer(serializers.ModelSerializer):
             instance.buyingProduct.clear()
             for p in self.context['request'].data['buyingProduct']:
                 instance.buyingProduct.add( ProductTag.objects.get(pk = p))
-        if 'following' in self.context['request'].data:
-            instance.following.add( User.objects.get(pk = self.context['request'].data['following']))
+        print 'start'
+        if 'following' in self.context['request'].GET:
+            print 'innnnnnnnnnn'
+            if self.context['request'].GET['mode'] == 'follow':
+                instance.following.add( User.objects.get(pk = self.context['request'].GET['following']))
+            elif self.context['request'].GET['mode'] == 'unfollow':
+                instance.following.remove( User.objects.get(pk = self.context['request'].GET['following']))
+        print 'endddddddddddddd'
         instance.save()
         return instance
 
