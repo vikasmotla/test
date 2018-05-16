@@ -21,8 +21,8 @@
           {% if obj.pk != userObj.pk%}
           <div class="row text-center">
             <div class="btn-group btn-group">
-              <button type="button" class="btn btn-primary" ng-click="">
-                Friend Request &nbsp; <i class="fa fa-user-plus fa-lg"></i>
+              <button type="button" class="btn btn-primary" ng-click="sendFollow('{{obj.pk}}')">
+                Fallow &nbsp; <i class="fa fa-user-plus fa-lg"></i>
               </button>
               <button type="button" class="btn btn-default pull-right" ng-click="msgRequest('{{obj.pk}}')"><i class="fa fa-comments-o fa-lg"></i></button>
             </div>

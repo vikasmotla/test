@@ -89,14 +89,6 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       }
     );
 
-    // $scope.connection.session.subscribe('123', $scope.handleRemoteContent).then(
-    //   function(sub) {
-    //     console.log("subscribed to", $scope.roomID);
-    //   },
-    //   function(err) {
-    //     console.log("failed to subscribed: " + err);
-    //   }
-    // );
 
   }
 

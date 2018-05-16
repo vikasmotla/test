@@ -65,6 +65,17 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users) {
 
     });
   }
+  $scope.sendFollow = function(obj){
+    // url = '/api/HR/profile/'+ $scope.me.profile.pk +'/?follow=4'
+    $http({
+      method: 'PATCH',
+      url: '/api/HR/profile/'+ $scope.me.profile.pk +'/?following=' + obj + '/'
+    }).
+    then(function(response) {
+      console.log(reponse.data);
+    })
+
+  }
   $scope.msgRequest = function(obj){
     console.log(obj,typeof obj);
     $rootScope.$broadcast('msgRequestData', {

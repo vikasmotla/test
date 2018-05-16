@@ -41,7 +41,7 @@ app.directive('chatWindow', function() {
       close: '=',
       toggle: '='
     },
-    controller: function($scope, $state, $stateParams,$users, $http, Flash) {
+    controller: function($scope, $state, $stateParams,$users,$timeout, $http,$sce, Flash) {
 
       //fetch the messages with $scope.pk
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
@@ -75,6 +75,7 @@ app.directive('chatWindow', function() {
             } else {
               $scope.senderIsMe.push(false);
             }
+            im.message=$sce.getTrustedHtml(im.message)
             $scope.ims.push(im);
             // console.log($scope.ims.length);
           }
@@ -102,16 +103,86 @@ app.directive('chatWindow', function() {
             url: '/api/PIM/chatMessage/'
           }).
           then(function(response) {
+            response.data.message=$sce.getTrustedHtml(response.data.message)
             $scope.ims.push(response.data)
             $scope.senderIsMe.push(true);
             // connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
             //   acknowledge: true
             // }).
             // then(function(publication) {});
+            $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , response.data.message , $scope.me.username , response.data.pk], {}, {acknowledge: true}).
+            then(function (publication) {});
+
             $scope.messageToSend = "";
           })
         }
       }
+
+      $scope.connection = new autobahn.Connection({
+        url: 'ws://skinstore.monomerce.com:8080/ws',
+        realm: 'default'
+      });
+      $scope.isTyping = false;
+      $scope.chatResponse = function (args) {
+        console.log('ddddd',args);
+        if (args[0]=='T') {
+          $timeout(function () {
+            $scope.isTyping = true;;
+          }, 300);
+          $timeout(function () {
+            $scope.isTyping = false;
+            console.log($scope.isTyping);
+          }, 4000);
+          // $scope.isTyping = true;
+          console.log('typinmgg',args[1],$scope.isTyping);
+        }else if (args[0]=='M') {
+          console.log('message came', args[1]);
+          $http({
+            method: "GET",
+            url: '/api/PIM/chatMessageBetween/'+ args[3] +'/'
+          }).
+          then(function(response) {
+            console.log('resssssss',response.data);
+            response.data.message=$sce.getTrustedHtml(response.data.message)
+            $scope.ims.push(response.data);
+            $scope.senderIsMe.push(false);
+          });
+        }
+
+
+      }
+
+      $scope.connection.onopen = function(session) {
+        $scope.session = session;
+        console.log("Connected")
+        console.log(wampBindName);
+
+
+
+        $scope.session.subscribe('service.chat.'+ wampBindName, $scope.chatResponse).then(
+        function (sub) {
+          console.log("subscribed to topic 'chatResonse'");
+          },
+        function (err) {
+          console.log("failed to subscribed: " + err);
+          }
+        );
+
+
+      }
+
+      $scope.connection.open();
+
+      $scope.$watch('messageToSend', function(newValue, oldValue) {
+        $scope.status = "T"; // the sender is typing a message
+          if (newValue!="") {
+            console.log('typing....');
+            console.log($scope.friend.username);
+            $scope.connection.session.publish('service.chat.'+$scope.friend.username, [$scope.status , $scope.me.username], {}, {acknowledge: true}).
+            then(function (publication) {});
+            // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
+          }
+      }, true)
 
     },
   };

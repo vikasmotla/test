@@ -64,7 +64,7 @@ class userProfileSerializer(serializers.ModelSerializer):
     buyingProduct = ProductTagSerializer(many=True , read_only=True)
     class Meta:
         model = profile
-        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional',)
+        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional','following')
     def update(self, instance, validated_data):
         print '@@@@@@@@@@@@@@@@@@@@@@22'
         print self.context['request'].data
@@ -82,6 +82,8 @@ class userProfileSerializer(serializers.ModelSerializer):
             instance.buyingProduct.clear()
             for p in self.context['request'].data['buyingProduct']:
                 instance.buyingProduct.add( ProductTag.objects.get(pk = p))
+        if 'following' in self.context['request'].data:
+            instance.following.add( User.objects.get(pk = self.context['request'].data['following']))
         instance.save()
         return instance
 
