@@ -124,8 +124,9 @@
               <div class="dropdown">
                   <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
                   <ul class="dropdown-menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
+                      <li ng-click="changeType($index)"><a href="#">Change Type</a></li>
+                      <li><a href="#">Delete</a></li>
+                      <li ng-click=editPost($index)><a href="#">Edit</a></li>
                   </ul>
               </div>
             </div>
@@ -156,10 +157,10 @@
               </div>
             </div>
             <div class="col-md-4" style="padding-right:0px;">
-              <div class="col-xs-6" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'" ng-click="postResponse($index,'Buying')">
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'" ng-click="postResponse($index,'Buying')">
                 Buy
               </div>
-              <div class="col-xs-6" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'" ng-click="postResponse($index,'Selling')">
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'" ng-click="postResponse($index,'Selling')">
                 Sell
               </div>
               <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-click="postResponse($index,'Barter')">

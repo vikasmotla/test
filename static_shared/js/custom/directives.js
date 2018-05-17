@@ -209,8 +209,21 @@ app.directive('commentEdit', function() {
       config: '='
     },
     controller: function($scope, $state, $stateParams, $http, Flash, $timeout) {
+      $scope.backupTxt = angular.copy($scope.comment.txt);
+      $timeout(function () {
+        $scope.comment.txt = $scope.backupTxt;
+        if (typeof $scope.comment.file=='string') {
+          $scope.isImage = true;
+          $scope.fileSize = 10;
+          console.log( $scope.comment.file);
+          console.log($scope.comment.parent);
+          // document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
+        }
+      }, 1000);
 
-      //fetch the comment with $scope.pk
+
+
+
 
       $timeout(function() {
         $('div#auto').tagautocomplete({
@@ -253,6 +266,8 @@ app.directive('commentEdit', function() {
       }
 
       $scope.height = '';
+      $scope.isImage = false ;
+      $scope.fileSize = 0;
 
 
       $scope.$watch('comment.txt' , function(newValue , oldValue){
@@ -302,15 +317,32 @@ app.directive('commentEdit', function() {
       $scope.attachInComments = function() {
         console.log('#filePicker'+$scope.comment.parent);
         $('#filePicker'+$scope.comment.parent).click();
+
       }
 
       $scope.$watch('comment.file', function(newValue, oldValue) {
-        if (newValue == undefined) {
+        if (newValue == emptyFile) {
           return;
         }
         if (typeof newValue.name != 'undefined') {
+          $scope.fr = new FileReader();
+          $scope.fr.readAsDataURL(newValue);
+
+          var fileType = $scope.comment.file.type.split('/')[0];
+
+          if (fileType ==  'image') {
+            console.log('its image');
+            $scope.isImage = true;
+            $scope.fr.onload = function (oFREvent) {
+              document.getElementById("filePreview"  + $scope.comment.parent ).src = oFREvent.target.result;
+            };
+          }else {
+            $scope.isImage = false;
+          }
+
           $scope.fileSize = newValue.size;
           $scope.fileName = newValue.name;
+
         }
       });
 

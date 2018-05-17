@@ -235,25 +235,134 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     $scope.posts[indx].showComments = !$scope.posts[indx].showComments
   }
 
-  $scope.expandImage = function(imageUrl) {
-    console.log('dddddddddddddd', imageUrl);
+  $scope.changeType = function(indx) {
+    // console.log($scope.posts[indx]);
+    $scope.typeOfPost;
     $uibModal.open({
-      templateUrl: '/static/ngTemplates/app.social.expandImage.html',
+      templateUrl: '/static/ngTemplates/app.social.changeType.html',
       size: 'md',
       backdrop: true,
       resolve: {
-        data: function() {
-          return imageUrl;
+        post: function() {
+          return $scope.posts;
+        },
+        index: function() {
+          return indx;
         }
       },
-      controller: "app.social.expandImage",
-
-    }).result.then(function() {
-      console.log('here...');
-    }, function() {
-
-    });
+      controller: function($scope, post, index, $http, Flash, $uibModalInstance) {
+        $scope.posts = post;
+        console.log('in this ctrll');
+        $scope.changingType = function(type) {
+          console.log($scope.posts[index].pk);
+          $scope.typeOfPost = type;
+          console.log('type of post', $scope.typeOfPost);
+          $scope.typeData = {
+            'typ': $scope.typeOfPost
+          }
+          $http({
+            method: 'PATCH',
+            url: '/api/social/post/' + $scope.posts[index].pk +'/',
+            data: $scope.typeData
+          }).
+          then(function(response) {
+            console.log('res typ', response.data.typ);
+            $scope.posts[index].typ = response.data.typ;
+            Flash.create('success', 'Type Changed')
+          })
+          $uibModalInstance.dismiss();
+        }
+      }
+    })
   }
+
+$scope.editPost = function (indx) {
+    $uibModal.open({
+      template: '<comment-Edit comment="editPostData" send="sendEditPost" config="editPostConfig" style="border: 2px solid #eeeeee;"></comment-Edit>',
+      // templateUrl:'/static/ngTemplates/app.social.editPost.html',
+      size: 'md',
+      backdrop: true,
+      resolve: {
+        post: function() {
+          return $scope.posts[indx];
+        }
+      },
+      controller: function($scope, post, $http, Flash, $uibModalInstance) {
+        $scope.post = post;
+        console.log('file isss', $scope.post);
+
+        // $scope.fileSize = 10;
+        // $scope.isImage = true;
+
+        $scope.editPostData = {
+          txt: $scope.post.txt,
+          file: $scope.post.mediaPost[0].fil,
+          parent: 'postEditModal'
+        }
+
+        console.log('edit post data',$scope.editPostData.file);
+
+
+        $scope.editPostConfig = {
+          expansion: true,
+          placeholder: 'Edit Your Post...'
+        }
+
+        $scope.sendEditPost = function() {
+
+          $scope.editPostDataText = {
+            'txt' : $scope.editPostData.txt,
+          }
+          console.log('it comes here...');
+          $http({
+            method: 'PATCH',
+            url: '/api/social/post/' + $scope.post.pk +'/',
+            data: $scope.editPostDataText
+          }).
+          then(function(response) {
+            console.log('resssssss', response.data);
+            $scope.posts[index] = response.data;
+            Flash.create('success', 'Edited Successfully')
+            $scope.posts[index].txt = $sce.getTrustedHtml($scope.posts[index].txt)
+
+            // $scope.posts.splice(0, 0, response.data)
+            // $scope.posts[0].txt = $sce.getTrustedHtml($scope.posts[0].txt)
+            // $scope.postData.txt = ''
+
+            console.log($scope.editPostData.file, $scope.posts[index].pk);
+            if ($scope.editPostData.file != emptyFile) {
+              var posatMediaData = new FormData();
+              posatMediaData.append('parent', $scope.posts[index].pk);
+              posatMediaData.append('fil', $scope.editPostData.file);
+              $http({
+                method: "PATCH",
+                url: '/api/social/postMedia/' + $scope.posts[index].pk + '/',
+                data: posatMediaData,
+                transformRequest: angular.identity,
+                headers: {
+                  'Content-Type': undefined
+                }
+              }).
+              then(function(response) {
+                console.log('resssssss', response.data);
+                Flash.create('success', 'Image Edited Successfully')
+                $scope.posts[index].mediaPost = [response.data];
+                $scope.editPostData = {
+                  txt: '',
+                  file: emptyFile,
+                }
+
+              });
+            }
+          });
+
+          $uibModalInstance.dismiss();
+        }
+
+      }
+    })
+  }
+
 
   $scope.sharePost = function(idx) {
     console.log('dddddddddddddd', idx);
@@ -280,6 +389,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
       }
     })
   }
+
 
   $scope.postResponse = function(idx, typ) {
     console.log('dddddddddddddd', idx);
@@ -341,8 +451,19 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     })
   }
 
+
+  $scope.expandImage = function(imageUrl) {
+    $uibModal.open({
+      template: '<div class="modal-body">' +
+        '<img ng-src="{{imageUrl}}" alt="" width="100%;">' +
+        '</div>',
+      size: 'md',
+      backdrop: true,
+      controller: function($scope, $http, Flash) {
+        $scope.imageUrl = imageUrl;
+      }
+    })
+  }
+
+
 });
-app.controller("app.social.expandImage", function($scope, $rootScope, data, $state, $uibModal, $uibModalInstance) {
-  console.log('modal img ctrl');
-  $scope.imageUrl = data;
-})
