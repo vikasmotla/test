@@ -64,7 +64,7 @@ class userProfileSerializer(serializers.ModelSerializer):
     buyingProduct = ProductTagSerializer(many=True , read_only=True)
     class Meta:
         model = profile
-        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional',)
+        fields = ('pk','user', 'displayPicture', 'coverPicture', 'sellingProduct' ,'buyingProduct', 'email','mobile','website','cin','year_established','street','city','state','pincode','country','lat','lon','messageAlert','requestAlert','periodicNotification','newsletter','promotional','following')
     def update(self, instance, validated_data):
         print '@@@@@@@@@@@@@@@@@@@@@@22'
         print self.context['request'].data
@@ -82,6 +82,14 @@ class userProfileSerializer(serializers.ModelSerializer):
             instance.buyingProduct.clear()
             for p in self.context['request'].data['buyingProduct']:
                 instance.buyingProduct.add( ProductTag.objects.get(pk = p))
+        print 'start'
+        if 'following' in self.context['request'].GET:
+            print 'innnnnnnnnnn'
+            if self.context['request'].GET['mode'] == 'follow':
+                instance.following.add( User.objects.get(pk = self.context['request'].GET['following']))
+            elif self.context['request'].GET['mode'] == 'unfollow':
+                instance.following.remove( User.objects.get(pk = self.context['request'].GET['following']))
+        print 'endddddddddddddd'
         instance.save()
         return instance
 

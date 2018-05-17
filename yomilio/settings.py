@@ -55,8 +55,8 @@ USE_CDN = False # when turned on the application will use the cndjs.com and othe
 # Application definition
 BRAND_NAME = 'yomilio'
 
-BRAND_LOGO = '/static/images/yomillio.jpeg'
-BRAND_LOGO_INVERT = '/static/images/yomillio.jpeg'
+BRAND_LOGO = '/static/images/yo_icon.svg'
+BRAND_LOGO_INVERT = '/static/images/yo_icon.svg'
 
 SMS_API_PREFIX = "http://sms.azmobia.com/http-api.php?username=CIOC&password=cioc567&senderid=CIOCPL&route=1&"
 

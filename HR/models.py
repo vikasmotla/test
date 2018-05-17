@@ -54,6 +54,7 @@ class profile(models.Model):
     periodicNotification = models.BooleanField(default = True)
     newsletter = models.BooleanField(default = True)
     promotional = models.BooleanField(default = True)
+    following = models.ManyToManyField(User , related_name = 'followers' , blank = True)
 
 User.profile = property(lambda u : profile.objects.get_or_create(user = u)[0])
 

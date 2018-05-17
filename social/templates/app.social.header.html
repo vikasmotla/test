@@ -4,6 +4,18 @@
       <!-- <span style="color:white;font-size:20px;">Yomillio</span> -->
       <a href="/social"><img src="/static/images/yo_icon.svg" width="200px;" alt="" ></a>
     </div>
+    {% if not user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="/register" style="color:white;background-color: transparent !important"> <i class="fa fa-user"></i> Register</a>
+        </li>
+        <li>
+          <a href="/login" style="color:white;background-color: transparent !important"> <i class="fa fa-sign-in"></i> Login</a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
     {% if request.user.is_authenticated %}
     <div class="col-md-4 ">
       <input uib-typeahead="user as user.username for user in userSearch($viewValue)" ng-model="header.userSearch" type="text" class="form-control" placeholder="Search" autocomplete="off">
@@ -110,15 +122,15 @@
                 </div>
               </div>
               <div class="col-md-5">
-                {% if userObj.profileObj.displayPicture %}
-                <img src="{{ userObj.profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
+                {% if userObj.profile.displayPicture %}
+                <img src="{{ userObj.profile.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
                 {% else %}
                 <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:40px;width:40px; cursor:pointer;">
                 {% endif %}
 
                 <ul class="dropdown-menu " style="margin-right:0px;padding-top:0px;left:-100px;">
-                  {% if userObj.profileObj.displayPicture %}
-                  <li> <img src="{{ userObj.profileObj.displayPicture.url }}" style="width: 170px;" alt=""> </li>
+                  {% if userObj.profile.displayPicture %}
+                  <li> <img src="{{ userObj.profile.displayPicture.url }}" style="width: 170px;" alt=""> </li>
                   {% else %}
                   <li> <img src="/static/images/img_avatar.png" style="width: 170px;" alt=""> </li>
                   {% endif %}
@@ -130,8 +142,8 @@
             </div>
 
             <div class="visible-sm visible-xs" style="padding-top:10px;">
-              {% if userObj.profileObj.displayPicture %}
-              <img src="{{ userObj.profileObj.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
+              {% if userObj.profile.displayPicture %}
+              <img src="{{ userObj.profile.displayPicture.url }}" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
               {% else %}
               <img src="/static/images/img_avatar.png" class="img img-circle  dropdown-toggle" data-toggle="dropdown" style="height:30px;width:30px; cursor:pointer;">
               {% endif %}

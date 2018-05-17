@@ -61,6 +61,9 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    def get_queryset(self):
+        u = self.request.user
+        return Post.objects.all().order_by('-updated')
 
 class PostMediaViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)

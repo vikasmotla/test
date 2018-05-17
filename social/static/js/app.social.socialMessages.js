@@ -95,14 +95,6 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       }
     );
 
-    // $scope.connection.session.subscribe('123', $scope.handleRemoteContent).then(
-    //   function(sub) {
-    //     console.log("subscribed to", $scope.roomID);
-    //   },
-    //   function(err) {
-    //     console.log("failed to subscribed: " + err);
-    //   }
-    // );
 
   }
 
@@ -111,7 +103,14 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   console.log('coming in ctrl');
   $scope.mode = 'list';
   $scope.personInView = 0;
+  $scope.showCommentBox = false
   $scope.setInView = function(index) {
+    $scope.showCommentBox = true
+    $scope.commenEdit = {
+      txt: '',
+      file: emptyFile,
+      parent : 0
+    }
     $scope.personInView = $scope.users[index];
     console.log($scope.personInView);
   }
@@ -124,10 +123,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     $scope.mode = 'list';
   }
 
-  $scope.commenEdit = {
-    txt: '',
-    file: emptyFile
-  }
+
   $scope.config = {
     expansion: false,
     placeholder: 'Type your text here...'
@@ -164,6 +160,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
 
   $scope.$watch('personInView', function(newValue, oldValue) {
+    console.log('jhjkhjjkii',$scope.personInView);
     $scope.fetchMessages();
   }, true)
 

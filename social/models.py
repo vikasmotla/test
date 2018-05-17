@@ -56,12 +56,12 @@ class PostMedia(models.Model):
 class PostLike(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User , related_name="postLikeUser" , null = True)
-    parent = models.ForeignKey(Post , related_name='likedPost' , null = True)
+    parent = models.ForeignKey(Post , related_name='likes' , null = True)
 
 class PostComment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User , related_name="postCommentUser" , null = True)
-    parent = models.ForeignKey(Post , related_name='commentedPost' , null = True)
+    parent = models.ForeignKey(Post , related_name='comments' , null = True)
     txt = models.CharField(null = True , max_length = 1000)
     mention = models.ManyToManyField(User , related_name = 'mentionedUser' , blank = True)
     replyTo = models.ForeignKey('self' , related_name='replies' , null = True)
