@@ -254,12 +254,12 @@
         <div ng-if="p.showComments" class="row" style="padding:30px; padding-bottom:0px;">
           <div class="media" ng-repeat="comment in p.comments">
             <div class="media-left">
-              <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.user | getDP}}"> </a>
+              <a href="#"> <img alt="" class="media-object"  style="width: 30px; height: 30px;" ng-src="{{comment.user | getDP}}"> </a>
             </div>
             <div class="media-body">
               <h5 class="media-heading" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></h5>
-              <span style="font-size:15px;" ng-bind-html="comment.txt"> </span><br><br>
-              <span style="font-size:15px;" ng-if="comment.fil != null"> <img ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;"> </span>
+              <span style="font-size:13px;" ng-bind-html="comment.txt"> </span>
+              <span style="font-size:13px;" ng-if="comment.fil != null"> <br><br><img ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;"> </span>
               <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
             </div>
           </div>
