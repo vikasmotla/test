@@ -49,25 +49,18 @@ app.controller("main", function($scope, $state,$http, $rootScope, $uibModal, $us
 
 
   $scope.expandImage = function(imageUrl) {
-    console.log('fdg',imageUrl);
-
-    $uibModal.open({
-      templateUrl: '/static/ngTemplates/app.social.expandImage.html',
-      size: 'lg',
-      backdrop: true,
-      resolve: {
-        data: function() {
-          return imageUrl;
+      $uibModal.open({
+        template: '<div class="modal-body">'+
+           '<img ng-src="{{imageUrl}}" alt="" width="100%;">'+
+        '</div>',
+        size: 'md',
+        backdrop : true,
+        controller : function($scope , $http , Flash) {
+          $scope.imageUrl = imageUrl;
         }
-      },
-      controller: "app.social.expandImage",
-
-    }).result.then(function() {
-      console.log('here...');
-    }, function() {
-
-    });
+      })
   }
+
   $scope.sendFollow = function(obj,mod){
     $scope.following = ! $scope.following
     if (mod == 'follow') {
@@ -93,10 +86,5 @@ app.controller("main", function($scope, $state,$http, $rootScope, $uibModal, $us
       data: parseInt(obj)
     });
   }
-
-});
-
-app.controller("app.social.expandImage", function($scope, $rootScope, data, $state, $uibModal, $uibModalInstance) {
-  $scope.imageUrl = data;
 
 });

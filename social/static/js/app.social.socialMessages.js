@@ -232,28 +232,17 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   // }
 
   $scope.expandImage = function(imageUrl) {
-    $uibModal.open({
-      templateUrl: '/static/ngTemplates/app.social.expandImage.html',
-      size: 'lg',
-      backdrop: true,
-      resolve: {
-        data: function() {
-          return imageUrl;
+      $uibModal.open({
+        template: '<div class="modal-body">'+
+           '<img ng-src="{{imageUrl}}" alt="" width="100%;">'+
+        '</div>',
+        size: 'md',
+        backdrop : true,
+        controller : function($scope , $http , Flash) {
+          $scope.imageUrl = imageUrl;
         }
-      },
-      controller: "app.social.expandImage",
-
-    }).result.then(function() {
-      console.log('here...');
-    }, function() {
-
-    });
+      })
   }
 
 
-
-});
-app.controller("app.social.expandImage", function($scope, $rootScope, data, $state, $uibModal, $uibModalInstance) {
-  console.log('modal img ctrl');
-  $scope.imageUrl = data;
 });

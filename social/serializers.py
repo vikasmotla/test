@@ -36,7 +36,7 @@ class PostMediaSerializer(serializers.ModelSerializer):
 class PostCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostComment
-        fields = ('pk' , 'user','parent','txt','mention','replyTo' ,'fil')
+        fields = ('pk' , 'user','parent','txt','mention','replyTo' ,'fil', 'created')
     def create(self , validated_data):
         del validated_data['mention']
         print '##################33',validated_data
