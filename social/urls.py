@@ -12,6 +12,7 @@ router.register(r'postMedia' , PostMediaViewSet , base_name ='postMedia')
 router.register(r'postLike' , PostLikeViewSet , base_name ='postLike')
 router.register(r'postComment' , PostCommentViewSet , base_name ='postComment')
 router.register(r'postResponse' , PostResponseViewSet , base_name ='postResponse')
+router.register(r'postLite' , PostLiteViewSet , base_name ='postLite')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -15,10 +15,50 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModal) {
-
+app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uibModal, $timeout) {
 
   $scope.me = $users.get('mySelf');
+
+  $scope.emojiClicked = function(inp, pk) {
+    console.log("clicked", inp, pk);
+    var method = 'POST'
+    var url = '/api/social/postLike/'
+    for (var i = 0; i < $scope.posts.length; i++) {
+      console.log(i, $scope.posts[i].user_reaction);
+      if ($scope.posts[i].pk == pk) {
+        var idx = i
+      }
+      if ($scope.posts[i].pk == pk && $scope.posts[i].user_reaction.length != 0) {
+        console.log('yesssssssssssss');
+        var method = 'PATCH'
+        var url = '/api/social/postLike/' + $scope.posts[i].like_pk + '/'
+      }
+    }
+    var likedData = {
+      parent: pk,
+      typ: inp
+    }
+    $http({
+      method: method,
+      url: url,
+      data: likedData
+    }).
+    then(function(method, idx) {
+      return function(response) {
+        if (method == 'POST') {
+          $scope.posts[idx].likes_count = $scope.posts[idx].likes_count + 1
+          $scope.posts[idx].user_reaction = response.data.typ
+          $scope.posts[idx].like_pk = response.data.pk
+          $scope.posts[idx].reacted = true
+        } else {
+          $scope.posts[idx].user_reaction = response.data.typ
+        }
+        console.log(method);
+        console.log(response);
+      }
+    }(method, idx));
+  }
+
 
   $scope.fetchAllPosts = function() {
     $scope.posts = [];
@@ -29,6 +69,10 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
     then(function(response) {
       $scope.posts = response.data;
       for (var i = 0; i < $scope.posts.length; i++) {
+        $scope.posts[i].reacted = false
+        if ($scope.posts[i].user_reaction.length > 0) {
+          $scope.posts[i].reacted = true
+        }
         $scope.posts[i].txt = $sce.getTrustedHtml($scope.posts[i].txt);
         for (var j = 0; j < $scope.posts[i].comments.length; j++) {
           $scope.posts[i].comments[j].txt = $sce.getTrustedHtml($scope.posts[i].comments[j].txt);
@@ -36,7 +80,7 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
         $scope.posts[i].podtEditComments = {
           txt: '',
           file: emptyFile,
-          parent:$scope.posts[i].pk
+          parent: $scope.posts[i].pk
         }
 
       }
@@ -45,10 +89,34 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
   };
   $scope.fetchAllPosts();
 
+  $scope.fetchAllOffers = function() {
+    $scope.offers = [];
+    $http({
+      method: 'GET',
+      url: '/api/social/postLite/?res=' + $scope.me.pk,
+    }).
+    then(function(response) {
+      console.log('resssssssssssss',response.data);
+      $scope.postRes = response.data
+      for (var i = 0; i < $scope.postRes.length; i++) {
+        $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0,40);
+        console.log($scope.postRes[i].txt);
+        $scope.postRes[i].minVal = 10000
+        for (var j = 0; j < $scope.postRes[i].responses.length; j++) {
+          if ($scope.postRes[i].responses[j].value < $scope.postRes[i].minVal) {
+            $scope.postRes[i].minVal = $scope.postRes[i].responses[j].value
+          }
+        }
+      }
+
+    });
+  };
+  $scope.fetchAllOffers();
+
   $scope.postData = {
     txt: '',
     file: emptyFile,
-    parent : 0
+    parent: 0
   }
   $scope.postConfig = {
     expansion: true,
@@ -63,31 +131,35 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
       return
     }
 
-    var postData = {txt : $scope.postData.txt}
+    var postData = {
+      txt: $scope.postData.txt
+    }
     $http({
       method: "POST",
       url: '/api/social/post/',
       data: postData
     }).
     then(function(response) {
-      console.log('resssssss',response.data);
-      $scope.posts.splice(0,0,response.data)
+      console.log('resssssss', response.data);
+      $scope.posts.splice(0, 0, response.data)
       $scope.posts[0].txt = $sce.getTrustedHtml($scope.posts[0].txt)
       $scope.postData.txt = ''
 
-      if ($scope.postData.file != emptyFile){
+      if ($scope.postData.file != emptyFile) {
         var posatMediaData = new FormData();
-        posatMediaData.append('parent' , response.data.pk);
-        posatMediaData.append('fil' , $scope.postData.file);
+        posatMediaData.append('parent', response.data.pk);
+        posatMediaData.append('fil', $scope.postData.file);
         $http({
           method: "POST",
           url: '/api/social/postMedia/',
           data: posatMediaData,
           transformRequest: angular.identity,
-          headers: {'Content-Type': undefined}
+          headers: {
+            'Content-Type': undefined
+          }
         }).
         then(function(response) {
-          console.log('resssssss',response.data);
+          console.log('resssssss', response.data);
           Flash.create('success', 'Posted Successfully')
           $scope.posts[0].mediaPost = [response.data];
           $scope.postData = {
@@ -106,7 +178,7 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
   // }
   $scope.postCommentConfig = {
     expansion: true,
-    placeholder: 'Post Your Requirement Here...'
+    placeholder: 'Make An Offer ....'
   }
 
   $scope.postComment = function(parent) {
@@ -122,27 +194,30 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
         }
 
         var fd = new FormData();
-        if ($scope.posts[i].podtEditComments.txt != '' || $scope.posts[i].podtEditComments.txt.length != 0 || $scope.posts[i].podtEditComments.txt != '<br>'){
-          fd.append('txt' , $scope.posts[i].podtEditComments.txt);
+        if ($scope.posts[i].podtEditComments.txt != '' || $scope.posts[i].podtEditComments.txt.length != 0 || $scope.posts[i].podtEditComments.txt != '<br>') {
+          fd.append('txt', $scope.posts[i].podtEditComments.txt);
         }
-        if ($scope.posts[i].podtEditComments.file != emptyFile){
-          fd.append('fil' , $scope.posts[i].podtEditComments.file);
+        if ($scope.posts[i].podtEditComments.file != emptyFile) {
+          fd.append('fil', $scope.posts[i].podtEditComments.file);
         }
-        fd.append('parent' , parent);
+        fd.append('parent', parent);
 
         $http({
           method: 'POST',
           data: fd,
           url: '/api/social/postComment/',
-          transformRequest: angular.identity, headers: {'Content-Type': undefined}
+          transformRequest: angular.identity,
+          headers: {
+            'Content-Type': undefined
+          }
         }).
         then(function(i) {
-          return function(response){
-            console.log('commmmmmm',response.data);
+          return function(response) {
+            console.log('commmmmmm', response.data);
             $scope.posts[i].podtEditComments = {
               txt: '',
               file: emptyFile,
-              parent:$scope.posts[i].pk
+              parent: $scope.posts[i].pk
             }
             $scope.posts[i].comments.push(response.data)
           }
@@ -180,7 +255,91 @@ app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModa
     });
   }
 
+  $scope.sharePost = function(idx) {
+    console.log('dddddddddddddd', idx);
+    $uibModal.open({
+      templateUrl: '/static/ngTemplates/app.social.sharePost.html',
+      size: 'md',
+      backdrop: true,
+      resolve: {
+        posts: function() {
+          return $scope.posts[idx];
+        }
+      },
+      controller: function($scope, $rootScope, $state, posts, $uibModal, $uibModalInstance) {
+        console.log('modal img ctrl', posts);
+        $scope.showBtn = ''
+        $scope.input = {
+          num: '',
+          email: ''
+        }
+        $scope.send = function(typ) {
+          console.log('send Type is ', typ, $scope.input);
+          console.log('data issss', posts);
+        }
+      }
+    })
+  }
 
+  $scope.postResponse = function(idx, typ) {
+    console.log('dddddddddddddd', idx);
+    $uibModal.open({
+      templateUrl: '/static/ngTemplates/app.social.postResponse.html',
+      size: 'md',
+      backdrop: true,
+      resolve: {
+        posts: function() {
+          return $scope.posts[idx];
+        },
+        typ: function() {
+          return typ;
+        }
+      },
+      controller: function($scope, $rootScope, $state, posts, typ, $uibModal, $uibModalInstance) {
+        $scope.responseForm = {
+          txt: '',
+          value: 0,
+          fil: emptyFile
+        }
+        $scope.post = function() {
+          console.log('send Type is ', typ, $scope.responseForm);
+          console.log('data issss', posts);
+          if ($scope.responseForm.txt.length == 0 || $scope.responseForm.txt == null) {
+            Flash.create('warning', 'Please Write Some Message')
+            return
+          }
+          if ($scope.responseForm.value < 0 || $scope.responseForm.value == null) {
+            Flash.create('warning', 'Please Mention The Amount')
+            return
+          }
+          var fd = new FormData();
+          fd.append('txt', $scope.responseForm.txt);
+          fd.append('value', $scope.responseForm.value);
+          fd.append('parent', posts.pk);
+          fd.append('typ', typ);
+          if ($scope.responseForm.fil != emptyFile) {
+            fd.append('fil', $scope.responseForm.fil);
+          }
+          console.log(fd);
+
+          $http({
+            method: 'POST',
+            data: fd,
+            url: '/api/social/postResponse/',
+            transformRequest: angular.identity,
+            headers: {
+              'Content-Type': undefined
+            }
+          }).
+          then(function(response) {
+            console.log('commmmmmm', response.data);
+            Flash.create('success', 'Successfully Posted')
+            $uibModalInstance.dismiss();
+          })
+        }
+      }
+    })
+  }
 
 });
 app.controller("app.social.expandImage", function($scope, $rootScope, data, $state, $uibModal, $uibModalInstance) {

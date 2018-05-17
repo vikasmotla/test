@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row" style="padding:20px">
+      <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-block" ng-click="showBtn = 'sms'">
+          SMS &nbsp; <i class="fa fa-mobile fa-lg"></i>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-warning btn-block" ng-click="showBtn = 'email'">
+          Email &nbsp; <i class="fa fa-envelope fa-lg"></i>
+        </button>
+      </div>
+    </div>
+      <div class="row" style="margin-top:15px;padding:5px 20px" ng-if="showBtn=='sms'">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="input.num" placeholder="Mobile Number"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" ng-click="send('sms')">Send</i></button>
+          </span>
+        </div>
+      </div>
+      <div class="row" style="margin-top:15px;padding:5px 20px" ng-if="showBtn=='email'">
+        <div class="input-group">
+          <input type="email" class="form-control" ng-model="input.email" placeholder="Valid Email Address"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" ng-click="send('email')">Send</i></button>
+          </span>
+        </div>
+      </div>
+  </div>
+</div>

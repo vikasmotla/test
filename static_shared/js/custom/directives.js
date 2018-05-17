@@ -1,3 +1,13 @@
+app.directive('reactions', ['$sce', function($sce) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      console.log(attrs);
+      element.facebookReactions(attrs.pk);
+    }
+  };
+}]);
+
 app.directive('contenteditable', ['$sce', function($sce) {
   return {
     restrict: 'A', // only activate on element attribute
@@ -265,6 +275,20 @@ app.directive('commentEdit', function() {
 
         }
       });
+
+      $scope.focus = function() {
+        console.log($scope.comment.txt );
+        $scope.comment.txt = $scope.comment.txt.replace('<!-- ngIf: !focused -->', '')
+        $scope.focused = true;
+      }
+
+      $scope.blurr = function() {
+        if ($scope.comment.txt == '<br>') {
+          console.log($scope.comment.txt );
+          $scope.comment.txt = '';
+        }
+        $scope.focused = false;
+      }
 
       $scope.checkFile = function() {
         console.log('file sizee');
