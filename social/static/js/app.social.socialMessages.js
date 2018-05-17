@@ -96,7 +96,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
   console.log('coming in ctrl');
   $scope.mode = 'list';
-  $scope.personInView = 0;
+  // $scope.personInView = 0;
   $scope.showCommentBox = false
   $scope.setInView = function(index) {
     $scope.showCommentBox = true
@@ -154,7 +154,9 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
   $scope.$watch('personInView', function(newValue, oldValue) {
     console.log('jhjkhjjkii',$scope.personInView);
-    $scope.fetchMessages();
+    if ($scope.personInView != undefined) {      
+      $scope.fetchMessages();
+    }
   }, true)
 
   $scope.$watch('commenEdit.txt', function(newValue, oldValue) {
