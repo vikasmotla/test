@@ -4,12 +4,12 @@
 
     <div class="col-md-3 visible-lg visible-md " style="background-color:#e0e0e0;height:100vh;position:fixed;">
       <div class="row" style="padding:10px;padding-top:70px">
-        <div class="col-md-3">
-          {% if profileObj.displayPicture %}
-          <img src="{{ profileObj.displayPicture.url }}" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% else %}
-          <img src="/static/images/img_avatar.png" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% endif %}
-        </div>
-        <div class="col-md-9">
+        <div class="container-fluid">
+          <div class="row" style="padding-left:30px;">
+            {% if profileObj.displayPicture %}
+            <img src="{{ profileObj.displayPicture.url }}" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% else %}
+            <img src="/static/images/img_avatar.png" alt="Profile Pic" style="padding-top:15px; width:70px;"> {% endif %}
+          </div>
           <div class="row" style="margin-left:10px">
             <h4><b>{{userObj.first_name}} {{userObj.last_name}}</b></h4>
           </div>
@@ -84,12 +84,12 @@
               <img src="/static/images/group.jpg" width="100%" alt="">
             </div>
             <div class="row" style="margin:15px;">
-              <div class="col-xs-8" style="background:#ffffff; padding:0px; height:30px;">
+              <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
                 <span style="cursor:pointer">abcd pvt ltd</span>
               </div>
               <div class="col-xs-4" style="padding:0px; height:30px;">
                 <div class="col-xs-12" style="cursor:pointer;background:#0f2d53;padding:5px;color:white;">
-                  Connect
+                  Follow
                 </div>
               </div>
             </div>
@@ -106,200 +106,97 @@
     </div>
 
     {% verbatim %}
-    <div class="col-md-6 col-md-offset-3 newsFeed" style="background-color:#ffffff;">
-
+    <div class="col-md-6 col-md-offset-3 newsFeed" style="background-color:#ffffff;border-right:#e0dfdf solid 2px;border-left:#e0dfdf solid 2px">
       <div class="row">
         <comment-Edit comment="postData" send="sendPost" config="postConfig" style="border: 2px solid #eeeeee;"></comment-Edit>
-        <!-- <textarea type="text" class="form-control" name="" value="" placeholder="Sell,buy,barter?" style="resize:none;"></textarea> -->
       </div>
-
       <div style="padding:20px;">
-        <!-- <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="item in [1,2,3,4,5]">
+        <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
           <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
-            <div class="col-xs-2" style="padding:0px;">
-              <img src="/static/images/img_avatar.png" width="50" height="50" alt="">
+            <div class="col-xs-1" style="padding:0px;">
+              <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="" >
             </div>
-            <div class="col-xs-8">
-              <span style="cursor:pointer;">Amit kumar</span> <br>
-              <span class="text-muted" style="font-size:11px;">Marketing Manager</span> <br>
+            <div class="col-xs-9" style="padding-top:5px">
+              <span class="text-primary" style="cursor:pointer;font-size:17px;">{{p.user | getName}}</span> <br>
+              <span class="text-muted" style="font-size:11px;">{{p.updated | timeAgo}} ago</span>
             </div>
-            <div class="col-xs-2" style="padding:20px;padding-bottom:0px;">
-              <span class="text-muted pull-right" style="font-size:11px;">21 mins</span>
+            <div class="col-xs-2 text-right" style="padding:20px;padding-bottom:0px;">
+              <div class="dropdown">
+                  <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
+                  <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                  </ul>
+              </div>
             </div>
           </div>
           <div class="row">
             <div class="container-fluid" style="padding:20px;">
-              <span style="font-size:20px;">I want to sell abc s Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident
-                , sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <span style="font-size:15px;" ng-bind-html="p.txt">
               </span>
+
+            </div>
+          </div>
+          <div class="row" ng-if="p.mediaPost[0].fil != null">
+            <div class="container-fluid">
+              <img ng-src="{{p.mediaPost[0].fil}}" class="img" style="width:30%" alt="" ng-click="expandImage(p.mediaPost[0].fil)">
             </div>
           </div>
           <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
-
-            <div class="col-xs-6" style="padding-top:10px;">
-              <div class="col-xs-1">
-                <span style="color:#43627d; cursor:pointer;" ng-click="allComments();"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
+            <div class="col-xs-8" style="">
+              <div class="col-xs-2" style="padding-top:10px;">
+                <span style="color:#43627d; cursor:pointer;" ng-click="allComments($index);"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
               </div>
-              <div class="col-xs-1">
+              <div class="col-xs-2" style="padding-top:10px;">
                 <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
               </div>
               <div class="col-xs-4">
-                <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true" style="margin-right:10px;"></i>3 Likes </span>
+                <span reactions class="FB_reactions"><span>0 Likes</span> </span>
               </div>
             </div>
-            <div class="col-xs-3" style="cursor:pointer;background:#fc5900;padding:10px;color:white;">
-              Buy
-            </div>
-            <div class="col-xs-3" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;">
-              Barter
+            <div class="col-md-4" style="padding-right:0px;">
+              <div class="col-xs-6" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'">
+                Buy
+              </div>
+              <div class="col-xs-6" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'">
+                Sell
+              </div>
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" >
+                Barter
+              </div>
             </div>
           </div>
-          <div ng-if="showComments" class="row" style="padding:30px; padding-bottom:0px;">
-            <div class="media" ng-repeat="comments in [1,2]">
+          <div ng-if="p.showComments" class="row" style="padding:15px; padding-bottom:0px;margin:0px;background:#eeeeee;">
+
+            <div class="text-center text-muted" style="padding:40px;font-size:25px;" ng-if="p.comments.length == 0">
+              Be the first one to comment / Make an offer
+            </div>
+
+
+            <div class="media" ng-repeat="comment in p.comments">
               <div class="media-left">
-                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
+                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.user | getDP}}"> </a>
               </div>
-              <div class="media-body">
-                <h5 class="media-heading" style="cursor:pointer;"><strong>Andrew Singh</strong></h5>
-                <span style="font-size:15px;"> Cras sit amet nibh libero, in gravida nulla.Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</span>
-                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
-              </div>
-            </div>
-            <div class="media">
-              <div class="media-left">
-                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"></a>
-              </div>
-              <div class="media-body">
-                <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
+              <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></span>
+                <span style="font-size:15px;" ng-bind-html="comment.txt"> </span> <br ng-if="comment.fil != null">
+                <img ng-if="comment.fil != null" ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;">
 
-                <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
-                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
+                <span class="pull-right text-muted" style="position: absolute;right: 50px;margin-top: -20px;">{{comment.created | timeAgo}} ago</span>
+
               </div>
             </div>
-            <div class="media">
-              <div class="media-left">
-                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
-              </div>
-              <div class="media-body">
-                <h5 class="media-heading" style="cursor:pointer;"><strong>Sachin Bansal</strong></h5>
-                <span style="font-size:15px;"> <i class="fa {{ '/some.pdf' | fileTypeIcon }} fa-3x"></i>  <a href="/some.pdf">some.pdf</a> </span>
-                <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
-              </div>
+            <div class="row" style="margin-top:20px;">
+              <comment-Edit comment="p.podtEditComments" send="postComment" config="postCommentConfig"></comment-Edit>
             </div>
-            <div class="row" style="margin-top:20px; ">
-              <comment-Edit comment="commenEdit" send="addComment" config="config"></comment-Edit>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div> -->
-
-      <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
-        <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
-          <div class="col-xs-2" style="padding:0px;">
-
-            <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="" >
-            <!-- <img src="/static/images/img_avatar.png" width="50" height="50" alt="" ng-if="p.user.profile.displayPicture == null"> -->
-
-          </div>
-          <div class="col-xs-8" style="padding-top:5px">
-            <span style="cursor:pointer;">{{p.user | getName}}</span> <br>
-            <!-- <span class="text-muted" style="font-size:11px;">Marketing Manager</span> <br> -->
-
-          </div>
-          <div class="col-xs-2" style="padding:20px;padding-bottom:0px;">
-            <span class="text-muted pull-right" style="font-size:11px;">{{p.updated | timeAgo}}</span>
-
           </div>
         </div>
-        <div class="row">
-          <div class="container-fluid" style="padding:20px;">
-            <span style="font-size:15px;" ng-bind-html="p.txt">
-            </span>
-          </div>
-        </div>
-        <div class="row" ng-if="p.mediaPost[0].fil != null">
-          <div class="container-fluid">
-            <img ng-src="{{p.mediaPost[0].fil}}" class="img" style="width:30%" alt="" ng-click="expandImage(p.mediaPost[0].fil)">
-          </div>
-        </div>
-        <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
-
-          <div class="col-xs-8" style="padding:5px;">
-            <div class="col-xs-1">
-              <span style="color:#43627d; cursor:pointer;" ng-click="allComments($index);"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
-            </div>
-            <div class="col-xs-1">
-              <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
-            </div>
-            <div class="col-xs-4">
-              <span style="color:#43627d; cursor:pointer;"> <i class="fa fa-thumbs-up fa-lg" aria-hidden="true" style="margin-right:10px;"></i>3 Likes </span>
-            </div>
-          </div>
-          <!-- <div class="col-xs-3" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'">
-            Buy
-          </div>
-          <div class="col-xs-3" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'">
-            Sell
-          </div>
-          <div class="col-xs-3" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'">
-            Barter
-          </div> -->
-        </div>
-        <div ng-if="p.showComments" class="row" style="padding:30px; padding-bottom:0px;">
-          <div class="media" ng-repeat="comment in p.comments">
-            <div class="media-left">
-              <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.user | getDP}}"> </a>
-            </div>
-            <div class="media-body">
-              <h5 class="media-heading" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></h5>
-              <span style="font-size:15px;" ng-bind-html="comment.txt"> </span><br><br>
-              <span style="font-size:15px;" ng-if="comment.fil != null"> <img ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;"> </span>
-              <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
-            </div>
-          </div>
-          <!-- <div class="media">
-            <div class="media-left">
-              <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"></a>
-            </div>
-            <div class="media-body">
-              <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
-
-              <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
-              <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left">
-              <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" src="/static/images/avatar5.png"> </a>
-            </div>
-            <div class="media-body">
-              <h5 class="media-heading" style="cursor:pointer;"><strong>Sachin Bansal</strong></h5>
-              <span style="font-size:15px;"> <i class="fa {{ '/some.pdf' | fileTypeIcon }} fa-3x"></i>  <a href="/some.pdf">some.pdf</a> </span>
-              <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
-            </div>
-          </div> -->
-          <div class="row" style="margin-top:20px;">
-            <comment-Edit comment="p.podtEditComments" send="postComment" config="postCommentConfig"></comment-Edit>
-          </div>
-
-        </div>
-
       </div>
-
-    </div>
-
     </div>
 
     <div class="col-xs-3 col-xs-offset-9 " style="background:#eeeeee;height:100vh;position:fixed;">
       <div class="row" style="padding:30px;padding-top:70px;">
         <strong>Leads</strong>
-
         <div class="card" style="padding-bottom:0px; margin-top:20px; background:#ffffff " ng-repeat="lead in [1,2]">
           <div class="row" style=" margin:0px; border-bottom:1px solid #e0e0e0">
             <div class="col-xs-2" style="padding:0px;">

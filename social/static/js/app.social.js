@@ -15,7 +15,12 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModal) {
+app.controller("main", function($scope, $state,$http,$sce, Flash,$users,$uibModal , $timeout) {
+
+  $scope.emojiClicked = function(inp , pk) {
+    console.log("clicked" , inp, pk);
+  }
+
 
 
   $scope.me = $users.get('mySelf');

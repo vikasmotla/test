@@ -1,3 +1,13 @@
+app.directive('reactions', ['$sce', function($sce) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      // console.log(element);
+      element.facebookReactions();
+    }
+  };
+}]);
+
 app.directive('contenteditable', ['$sce', function($sce) {
   return {
     restrict: 'A', // only activate on element attribute

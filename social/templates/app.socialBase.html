@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{{BRAND_NAME}} - ERP Messages</title>
+  <title>Yommillio</title>
   <meta name="viewport" content="initial-scale=1">
   <!-- stock css libraries -->
 
@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{% static 'css/angular-ui-switch.min.css' %}" charset="utf-8">
   <link rel="stylesheet" href="{% static 'css/ripple.min.css' %}" charset="utf-8">
   <link rel="stylesheet" href="{% static 'css/foundation-icons.css' %}" charset="utf-8">
+  <link rel="stylesheet" href="{% static 'css/reaction.css' %}" charset="utf-8">
 
   <!-- custom css -->
   <link rel="stylesheet" href="{% static 'css/custom/base.css' %}" charset="utf-8">
@@ -35,6 +36,7 @@
 
 
   <style media="screen">
+
     @media only screen and (max-width: 670px) {
 
       .navbarControls .dropdown {
@@ -127,6 +129,10 @@
       height: 8em;
     } */
 
+    .commentEdit:focus span{
+      display: none;
+    }
+
 
   </style>
 
@@ -192,6 +198,7 @@
   <script src="{% static 'js/rangy-core.js' %}"></script>
   <script src="{% static 'js/caret-position.js' %}"></script>
   <script src="{% static 'js/bootstrap-tagautocomplete.js' %}"></script>
+  <script src="{% static 'js/reaction.js' %}"></script>
 
 
   <!-- Custom JS files -->
