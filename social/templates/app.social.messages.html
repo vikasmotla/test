@@ -34,13 +34,14 @@
     <div class="col-md-7 hidden-xs hidden-sm" style="border-left:2px solid #e0e0e0;">
       <div class="row topSpace text-center" style="border-bottom:1px solid #e0e0e0;">
         <span style="font-size:20px;">{{personInView.first_name}} {{personInView.last_name}}</span>
+        {{isOnline}} <span ng-if="isOnline"> green dot   </span>
       </div>
       <div style="height:75vh; overflow-y:auto; overflow-x:hidden;">
         <div class="row" ng-repeat="msg in ims">
           <div class="container-fluid {{msg.originator == me.pk ? 'pull-right' : 'pull-left'}} " >
             <div class="container-fluid {{msg.originator == me.pk ? 'text-right' : 'text-left'}} " style="border:solid 1px #e0e0e0;padding:10px;">
-              <span ng-if="msg.attachment==null" >{{msg.message}}</span>
-              <span ng-if="msg.attachment"> <img ng-click="expandImage(msg.attachment)" src="{{msg.attachment}}" alt="message attachment" width="240px;"> <p ng-if="msg.message" class="text-center" >{{msg.message}}</p> </span>
+              <span ng-if="msg.attachment==null" ng-bind-html="msg.message" ></span>
+              <span ng-if="msg.attachment"> <img ng-click="expandImage(msg.attachment)" src="{{msg.attachment}}" alt="message attachment" width="240px;"> <p ng-if="msg.message" class="text-center" ng-bind-html="msg.message" ></p> </span>
             </div>
             <div class="container-fluid text-right" style="color:#c7c7c7;font-size:10px;">
               {{msg.created |date:'hh:mm a'}}
@@ -58,10 +59,11 @@
           </div> -->
 
         </div>
+        <span ng-if="isTyping"> Typing...</span>
       </div>
 
 
-      <div class="row">
+      <div class="row" ng-if="showCommentBox">
         <comment-Edit comment="commenEdit" send="sendMessage" config="config"></comment-Edit>
       </div>
 

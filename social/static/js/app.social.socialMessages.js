@@ -15,11 +15,12 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $http) {
+app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $http, $sce, $timeout) {
   $scope.me = $users.get('mySelf');
   $scope.people = [];
   $scope.users;
   $scope.friend;
+  $scope.isTyping= false;
 
 
   $http({
@@ -53,10 +54,14 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     console.log('ddddd',args);
     if (args[0]=='T') {
       console.log('typinmgg',args[1]);
-      $scope.typing = true;
-      $Timeout(function () {
-        $scope.typing = false;
-      }, 1000);
+      $timeout(function () {
+        $scope.isTyping = true;
+        console.log($scope.isTyping);
+      }, 500);
+      $timeout(function () {
+        $scope.isTyping = false;
+        console.log($scope.isTyping);
+      }, 4000);
     }else if (args[0]=='M') {
       console.log('message came', args[1]);
       $http({
@@ -65,6 +70,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       }).
       then(function(response) {
         console.log('resssssss',response.data);
+        response.data.message = $sce.getTrustedHtml(response.data.message);
         $scope.ims.push(response.data);
         $scope.senderIsMe.push(false);
       });
@@ -97,7 +103,14 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   console.log('coming in ctrl');
   $scope.mode = 'list';
   $scope.personInView = 0;
+  $scope.showCommentBox = false
   $scope.setInView = function(index) {
+    $scope.showCommentBox = true
+    $scope.commenEdit = {
+      txt: '',
+      file: emptyFile,
+      parent : 0
+    }
     $scope.personInView = $scope.users[index];
     console.log($scope.personInView);
   }
@@ -110,10 +123,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     $scope.mode = 'list';
   }
 
-  $scope.commenEdit = {
-    txt: '',
-    file: emptyFile
-  }
+
   $scope.config = {
     expansion: false,
     placeholder: 'Type your text here...'
@@ -140,6 +150,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         } else {
           $scope.senderIsMe.push(false);
         }
+        im.message = $sce.getTrustedHtml(im.message);
         $scope.ims.push(im);
       }
     });
@@ -149,6 +160,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
 
   $scope.$watch('personInView', function(newValue, oldValue) {
+    console.log('jhjkhjjkii',$scope.personInView);
     $scope.fetchMessages();
   }, true)
 
@@ -180,6 +192,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         transformRequest: angular.identity, headers: {'Content-Type': undefined}
       }).
       then(function(response) {
+        response.data.message = $sce.getTrustedHtml(response.data.message);
         $scope.ims.push(response.data)
         $scope.senderIsMe.push(true);
         console.log('heree...',response.data);
