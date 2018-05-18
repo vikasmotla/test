@@ -238,21 +238,26 @@
 
           </div>
           <div class="row" style="padding-left:10px; padding-right:10px; " >
-            <div  class="col-md-1 text-center" style="padding:0px; ">
-              <a href="#" ng-click="prevOfferRes($index);">&#10094;</a>
+            <div  class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
+              <a ng-if="lead.showPrev" href="#" ng-click="prevOfferRes($index);" style="font-size:20px; text-decoration: none; "> &#10094;</a>
             </div>
-            <div class="col-md-10"  style="padding:0px;" >
+            <div class="col-md-10"  style="padding:10px;" >
                 <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
                 <span>{{lead.responseValue.user | getName }}</span> <br>
                 <span> {{lead.responseValue.txt}} </span>
             </div>
-            <div class="col-md-1 text-center"  style="padding:0px;">
-              <a href="#" ng-click="nextOfferRes($index);">&#10095;</a>
+            <div  class="col-md-1 text-center"  style="padding:0px;  padding-top:20px;">
+              <a  ng-if="lead.showNext" href="#" ng-click="nextOfferRes($index);" style="font-size:20px; text-decoration: none;">&#10095;</a>
             </div>
           </div>
           <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
             <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="offerComment.txt"></textarea>
             <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue)" ><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+          </div>
+        </div>
+        <div ng-if="showMoreBtn" class="row text-center" style="padding: 20px;">
+          <div class="btn btn-primary" ng-click="">
+            Show More
           </div>
         </div>
 

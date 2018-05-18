@@ -61,7 +61,7 @@ class PostLikeSerializer(serializers.ModelSerializer):
 class PostResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostResponse
-        fields = ('pk' ,'created', 'user','txt','parent','value','typ','status','acknowledged','fil')
+        fields = ('pk' ,'created', 'user','txt','parent','value','typ','status','acknowledged','fil','reply')
     def create(self , validated_data):
         p = PostResponse(**validated_data)
         p.user = self.context['request'].user

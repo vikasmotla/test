@@ -116,11 +116,24 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     }).
     then(function(response) {
       console.log('resssssssssssss', response.data);
-      $scope.postRes = response.data
+      $scope.totalPostRes = response.data;
+      console.log($scope.totalPostRes );
+      if ($scope.totalPostRes.length>2) {
+        $scope.showMoreBtn = true;
+      }
+      $scope.postRes = $scope.totalPostRes.slice(0,2);
+      console.log( 'osdfsdfdsf', $scope.postRes);
       for (var i = 0; i < $scope.postRes.length; i++) {
         $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0, 40);
         console.log($scope.postRes[i].txt);
         $scope.postRes[i].responseValue = $scope.postRes[i].responses[0];
+        $scope.postRes[i].showPrev = false;
+        $scope.postRes[i].showNext = false;
+        if ($scope.postRes[i].responses.length>1) {
+          $scope.postRes[i].showNext = true;
+        }
+
+
         // $scope.postRes[i].minVal = 10000
         // for (var j = 0; j < $scope.postRes[i].responses.length; j++) {
         //   if ($scope.postRes[i].responses[j].value < $scope.postRes[i].minVal) {
@@ -148,8 +161,11 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     }).
     then(function(response) {
       console.log('res', response.data);
-      resval = response.data;
+      // resval = response.data;
       Flash.create('success', 'Offer Comment Changed')
+      $scope.offerComment = {
+        txt: ''
+      };
     })
 
   }
@@ -157,19 +173,46 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
 
 
   $scope.prevOfferRes = function(indx) {
-    if ($scope.countForResp > 0) {
-      $scope.countForResp--;
+    $scope.countForResp--;
+    console.log($scope.postRes[indx].responses[$scope.countForResp]);
+    if ( $scope.postRes[indx].responses[$scope.countForResp] != undefined) {
+      if ($scope.countForResp==0) {
+        $scope.postRes[indx].showNext = true;
+        $scope.postRes[indx].showPrev = false;
+      }else {
+        $scope.postRes[indx].showNext = true;
+        $scope.postRes[indx].showPrev = true;
+      }
       $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
       console.log($scope.countForResp);
     }
+    // if ($scope.countForResp > 0) {
+    //   $scope.countForResp--;
+    //   $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
+    //   console.log($scope.countForResp);
+    // }
   }
 
   $scope.nextOfferRes = function(indx) {
-    if ($scope.countForResp < $scope.postRes[indx].responses.length-1) {
-      $scope.countForResp++;
+    $scope.countForResp++;
+    console.log($scope.postRes[indx].responses[$scope.countForResp]);
+    if ( $scope.postRes[indx].responses[$scope.countForResp] != undefined) {
+      if ($scope.countForResp+1==$scope.postRes[indx].responses.length) {
+        $scope.postRes[indx].showNext = false;
+        $scope.postRes[indx].showPrev = true;
+      }else {
+        $scope.postRes[indx].showNext = true;
+        $scope.postRes[indx].showPrev = true;
+      }
       $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
       console.log($scope.countForResp);
     }
+    // if ($scope.countForResp < $scope.postRes[indx].responses.length-1) {
+    //   if ($scope.countForResp == ) {
+    //
+    //   }
+    //
+    // }
   }
 
   $scope.postData = {
