@@ -115,22 +115,62 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
       url: '/api/social/postLite/?res=' + $scope.me.pk,
     }).
     then(function(response) {
-      console.log('resssssssssssss',response.data);
+      console.log('resssssssssssss', response.data);
       $scope.postRes = response.data
       for (var i = 0; i < $scope.postRes.length; i++) {
-        $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0,40);
+        $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0, 40);
         console.log($scope.postRes[i].txt);
-        $scope.postRes[i].minVal = 10000
-        for (var j = 0; j < $scope.postRes[i].responses.length; j++) {
-          if ($scope.postRes[i].responses[j].value < $scope.postRes[i].minVal) {
-            $scope.postRes[i].minVal = $scope.postRes[i].responses[j].value
-          }
-        }
+        $scope.postRes[i].responseValue = $scope.postRes[i].responses[0];
+        // $scope.postRes[i].minVal = 10000
+        // for (var j = 0; j < $scope.postRes[i].responses.length; j++) {
+        //   if ($scope.postRes[i].responses[j].value < $scope.postRes[i].minVal) {
+        //     $scope.postRes[i].minVal = $scope.postRes[i].responses[j].value
+        //   }
+        // }
       }
 
     });
   };
   $scope.fetchAllOffers();
+  $scope.countForResp = 0;
+  $scope.offerComment = {
+    txt: ''
+  };
+
+  $scope.sendOffer = function (resVal) {
+    console.log('resval', resVal.pk );
+    console.log($scope.offerComment.txt);
+
+    $http({
+      method: 'PATCH',
+      url: '/api/social/postResponse/' + resVal.pk + '/',
+      data: {reply: $scope.offerComment.txt}
+    }).
+    then(function(response) {
+      console.log('res', response.data);
+      resval = response.data;
+      Flash.create('success', 'Offer Comment Changed')
+    })
+
+  }
+
+
+
+  $scope.prevOfferRes = function(indx) {
+    if ($scope.countForResp > 0) {
+      $scope.countForResp--;
+      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
+      console.log($scope.countForResp);
+    }
+  }
+
+  $scope.nextOfferRes = function(indx) {
+    if ($scope.countForResp < $scope.postRes[indx].responses.length-1) {
+      $scope.countForResp++;
+      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
+      console.log($scope.countForResp);
+    }
+  }
 
   $scope.postData = {
     txt: '',
@@ -278,7 +318,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
           }
           $http({
             method: 'PATCH',
-            url: '/api/social/post/' + post.pk +'/',
+            url: '/api/social/post/' + post.pk + '/',
             data: $scope.typeData
           }).
           then(function(response) {
@@ -292,7 +332,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     })
   }
 
-$scope.editPost = function (indx) {
+  $scope.editPost = function(indx) {
     $uibModal.open({
       template: '<comment-Edit comment="editPostData" send="sendEditPost" config="editPostConfig" style="border: 2px solid #eeeeee;"></comment-Edit>',
       // templateUrl:'/static/ngTemplates/app.social.editPost.html',
@@ -314,7 +354,7 @@ $scope.editPost = function (indx) {
           parent: 'postEditModal'
         }
 
-        console.log('edit post data',$scope.editPostData.file);
+        console.log('edit post data', $scope.editPostData.file);
 
 
         $scope.editPostConfig = {
@@ -329,8 +369,10 @@ $scope.editPost = function (indx) {
           console.log('it comes here...');
           $http({
             method: 'PATCH',
-            url: '/api/social/post/' + post.pk +'/',
-            data: {txt : $scope.editPostData.txt}
+            url: '/api/social/post/' + post.pk + '/',
+            data: {
+              txt: $scope.editPostData.txt
+            }
           }).
           then(function(response) {
             console.log('resssssss', response.data);

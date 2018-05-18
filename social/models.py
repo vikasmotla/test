@@ -94,3 +94,4 @@ class PostResponse(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_TYPE_CHOICES, null=True)
     acknowledged = models.BooleanField(default=False)
     fil = models.FileField(upload_to=getPostResponseMediaAttachment,  null=True)
+    reply = models.CharField(null=True, max_length=300)
