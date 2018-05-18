@@ -14,6 +14,7 @@ router.register(r'media' , MediaViewSet , base_name = 'media')
 router.register(r'event' , EventsViewSet , base_name = 'event')
 router.register(r'eventItem' , EventItemViewSet , base_name = 'eventItem')
 router.register(r'eventRegistration' , EventRegistrationViewSet , base_name = 'eventRegistration')
+router.register(r'featuredPage' , FeaturedPageViewSet , base_name = 'featuredPage')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
