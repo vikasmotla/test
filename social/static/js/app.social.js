@@ -68,24 +68,43 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     }).
     then(function(response) {
       $scope.posts = response.data;
+      var imgTypes = ['png' , 'svg' , 'gif' , 'jpg' , 'jpeg']
       for (var i = 0; i < $scope.posts.length; i++) {
         $scope.posts[i].reacted = false
+        $scope.posts[i].timeline = []
         if ($scope.posts[i].user_reaction.length > 0) {
           $scope.posts[i].reacted = true
         }
         $scope.posts[i].txt = $sce.getTrustedHtml($scope.posts[i].txt);
         for (var j = 0; j < $scope.posts[i].comments.length; j++) {
           $scope.posts[i].comments[j].txt = $sce.getTrustedHtml($scope.posts[i].comments[j].txt);
+          $scope.posts[i].timeline.push({typ:'comment',created:$scope.posts[i].comments[j].created,data:$scope.posts[i].comments[j]})
+        }
+        for (var j = 0; j < $scope.posts[i].responses.length; j++) {
+          $scope.posts[i].responses[j].txt = $sce.getTrustedHtml($scope.posts[i].responses[j].txt);
+          var imgShow = false
+          if ($scope.posts[i].responses[j].fil != null) {
+            var filtyp = $scope.posts[i].responses[j].fil.split('.').slice(-1)[0]
+            console.log('fileeeeeeeeee',filtyp,imgTypes);
+            console.log(imgTypes.indexOf(filtyp));
+            if (imgTypes.indexOf(filtyp) >= 0) {
+              var imgShow = true
+            }
+          }
+          $scope.posts[i].timeline.push({typ:'offer',created:$scope.posts[i].responses[j].created,data:$scope.posts[i].responses[j],imgShow:imgShow})
         }
         $scope.posts[i].podtEditComments = {
           txt: '',
           file: emptyFile,
           parent: $scope.posts[i].pk
         }
-
+        $scope.posts[i].timeline.sort(function(a, b){
+          var dateA=new Date(a.created), dateB=new Date(b.created)
+          return dateA-dateB //sort by date ascending
+        })
       }
+      console.log('possssss',$scope.posts);
     });
-    console.log($scope.posts);
   };
   $scope.fetchAllPosts();
 
@@ -220,6 +239,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
               parent: $scope.posts[i].pk
             }
             $scope.posts[i].comments.push(response.data)
+            $scope.posts[i].timeline.push({typ:'comment',created:response.data.created,data:response.data})
           }
         }(i))
       }
@@ -433,6 +453,15 @@ $scope.editPost = function (indx) {
           then(function(response) {
             console.log('commmmmmm', response.data);
             Flash.create('success', 'Successfully Posted')
+            var imgShow = false
+            var imgTypes = ['png' , 'svg' , 'gif' , 'jpg' , 'jpeg']
+            if (response.data.fil != null) {
+              var filtyp = response.data.fil.split('.').slice(-1)[0]
+              if (imgTypes.indexOf(filtyp) >= 0) {
+                var imgShow = true
+              }
+            }
+            posts.timeline.push({typ:'offer',created:response.data.created,data:response.data,imgShow:imgShow})
             $uibModalInstance.dismiss();
           })
         }

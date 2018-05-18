@@ -57,8 +57,21 @@ class PostLikeSerializer(serializers.ModelSerializer):
         p.save()
         return p
 
+
+class PostResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostResponse
+        fields = ('pk' ,'created', 'user','txt','parent','value','typ','status','acknowledged','fil')
+    def create(self , validated_data):
+        p = PostResponse(**validated_data)
+        p.user = self.context['request'].user
+        p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
+        p.save()
+        return p
+
+
 class PostSerializer(serializers.ModelSerializer):
-    # user = userSampleSerializer(many = False , read_only = True)
+    responses = PostResponseSerializer(many = True , read_only = True)
     likes_count = serializers.SerializerMethodField()
     user_reaction = serializers.SerializerMethodField()
     like_pk = serializers.SerializerMethodField()
@@ -67,7 +80,7 @@ class PostSerializer(serializers.ModelSerializer):
     # likes = PostLikeSerializer(many= True ,read_only = True)
     class Meta:
         model = Post
-        fields = ('pk' , 'user','typ','txt','products','approved','created','updated' ,'mediaPost','comments','likes_count','user_reaction','like_pk')
+        fields = ('pk' , 'user','typ','txt','products','approved','created','updated' ,'mediaPost','comments','likes_count','user_reaction','like_pk', 'responses')
         read_only_fields = ( 'created' , 'updated' )
     def create(self , validated_data):
         p = Post(**validated_data)
@@ -99,17 +112,6 @@ class PostSerializer(serializers.ModelSerializer):
         return likePk
 
 
-
-class PostResponseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostResponse
-        fields = ('pk' , 'user','txt','parent','value','typ','status','acknowledged','fil')
-    def create(self , validated_data):
-        p = PostResponse(**validated_data)
-        p.user = self.context['request'].user
-        p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
-        p.save()
-        return p
 
 
 

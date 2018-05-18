@@ -170,23 +170,45 @@
           </div>
           <div ng-if="p.showComments" class="row" style="padding:15px; padding-bottom:0px;margin:0px;background:#eeeeee;">
 
-            <div class="text-center text-muted" style="padding:40px;font-size:25px;" ng-if="p.comments.length == 0">
+            <div class="text-center text-muted" style="padding:40px;font-size:25px;" ng-if="p.timeline.length == 0">
               Be the first one to comment / Make an offer
             </div>
 
 
-            <div class="media" ng-repeat="comment in p.comments">
-              <div class="media-left">
-                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.user | getDP}}"> </a>
-              </div>
-              <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-                <div class="row" style="padding:0px 25px">
-                  <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></span>
-                  <span class="pull-right text-muted">{{comment.created | timeAgo}} ago</span>
+            <div class="media" ng-repeat="comment in p.timeline">
+              <div class="row" ng-if="comment.typ == 'comment'" style="padding:0px 15px">
+                <div class="media-left">
+                  <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.data.user | getDP}}"> </a>
                 </div>
-                <div class="row" style="padding:0px 25px">
-                  <span style="font-size:15px;" ng-bind-html="comment.txt"> </span> <br ng-if="comment.fil != null && comment.txt != null">
-                  <img ng-if="comment.fil != null" ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;">
+                <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                  <div class="row" style="padding:0px 25px">
+                    <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+                    <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+                  </div>
+                  <div class="row" style="padding:0px 25px">
+                    <span style="font-size:15px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                    <img ng-if="comment.data.fil != null" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+                  </div>
+                </div>
+              </div>
+              <div class="row" ng-if="comment.typ == 'offer'" style="padding:0px 15px">
+                <div class="media-left">
+                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/offer_icon.png" ng-if="comment.data.typ == 'Buying'"> </a>
+                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/sell_icon.png" ng-if="comment.data.typ == 'Selling'"> </a>
+                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/barter_icon.jpg" ng-if="comment.data.typ == 'Barter'"> </a>
+                </div>
+                <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                  <div class="row" style="padding:0px 25px">
+                    <span class="media-heading"><strong>From : </strong></span>
+                    <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+                    <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+                  </div>
+                  <div class="row" style="padding:0px 25px">
+                    <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
+                    <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                    <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+                    <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
+                  </div>
                 </div>
               </div>
             </div>
