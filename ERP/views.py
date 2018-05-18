@@ -166,3 +166,8 @@ class eventRegDetailsApi(APIView):
                 return ExcelResponse(da)
         else:
             return Response(status = status.HTTP_400_BAD_REQUEST)
+
+class FeaturedPageViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated ,)
+    serializer_class = FeaturedPageSerializer
+    queryset = FeaturedPage.objects.all()

@@ -103,3 +103,15 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventRegistration
         fields = ('pk' ,'name', 'email', 'phoneNumber', 'regId', 'payAmount', 'payMode', 'payDate', 'payRefference', 'cancelReg')
+
+class FeaturedPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeaturedPage
+        fields = ('pk' , 'created' , 'active' , 'typ' ,'person' 'event' ,'blog')
+
+    # def create(self , validated_data):
+    #     print "came to create"
+    #     f = media(**validated_data)
+    #     f.user=self.context['request'].user
+    #     f.save()
+    #     return f

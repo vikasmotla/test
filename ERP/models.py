@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from time import time
 from django.db import models
 from django.contrib import admin
+from PIM.models import blogPost
 # Create your models here.
 
 def getERPPictureUploadPath(instance , filename ):
@@ -133,3 +134,17 @@ class EventRegistration(models.Model):
     payDate = models.DateTimeField(null = True)
     payRefference = models.CharField(null = True , max_length = 50)
     cancelReg = models.BooleanField(default = False)
+
+FEATURED_PAGE_TYPE_CHOICES = (
+    ('person' , 'person'),
+    ('event' , 'event'),
+    ('blog' , 'blog'),
+)
+
+class FeaturedPage(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    typ = models.CharField(choices = FEATURED_PAGE_TYPE_CHOICES , max_length = 10 ,null = True)
+    person = models.ForeignKey(User, related_name='featuredPage' , null=True)
+    event = models.ForeignKey(Events, related_name='featuredPageEvent' , null=True)
+    blog = models.ForeignKey(blogPost, related_name='featuredPageblog' , null=True)

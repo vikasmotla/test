@@ -134,7 +134,7 @@
           <div class="row">
             <div class="container-fluid" style="padding:20px;">
               <span style="font-size:15px;" ng-bind-html="p.txt">
-              </span>
+            </span>
 
             </div>
           </div>
@@ -152,7 +152,6 @@
                 <span style="color:#43627d; cursor:pointer;" ng-click="sharePost($index)" title="Share"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
               </div>
               <div class="col-xs-6" style="padding-top:3px;">
-                <!-- {{p.reacted ? 'background: url(/static/emojis/':''}} {{p.user_reaction == 'like' ? 'like.svg)' :''}} {{p.user_reaction == 'love' ? 'love.svg)' :''}} {{p.user_reaction == 'haha' ? 'haha.svg)' :''}} {{p.user_reaction == 'wow' ? 'wow.svg)' :''}} {{p.user_reaction == 'sad' ? 'sad.svg)' :''}} {{p.user_reaction == 'angry' ? 'angry.svg)' :''}} -->
                 <span reactions class="FB_reactions" pk="{{p.pk}}" style="{{p.reacted ? 'background-image: url(/static/emojis/':''}}{{p.user_reaction == 'like' ? 'like.png)' :''}}{{p.user_reaction == 'love' ? 'love.png)' :''}}{{p.user_reaction == 'haha' ? 'haha.png)' :''}}{{p.user_reaction == 'wow' ? 'wow.png)' :''}}{{p.user_reaction == 'sad' ? 'sad.png)' :''}}{{p.user_reaction == 'angry' ? 'angry.png)' :''}} !important;"><span>{{p.likes_count}} {{p.likes_count >1 ? 'Reactions' : 'Reaction'}}</span>                </span>
               </div>
             </div>
@@ -199,7 +198,6 @@
                 </div>
                 <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
                   <div class="row" style="padding:0px 25px">
-                    <span class="media-heading"><strong>From : </strong></span>
                     <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
                     <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
                   </div>
@@ -209,7 +207,24 @@
                     <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
                     <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
                   </div>
+
+                  <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
+                    <hr>
+                    <div class="media-left">
+                      <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{p.user | getDP}}"> </a>
+                    </div>
+                    <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                      <div class="row" style="padding:0px 25px">
+                        <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{p.user | getName}}</strong></span>
+                      </div>
+                      <div class="row" style="padding:0px 25px">
+                        <span style="font-size:17px;"> {{comment.data.reply}}</span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+
               </div>
             </div>
             <div class="row" style="margin-top:20px;">
@@ -217,6 +232,7 @@
             </div>
           </div>
         </div>
+        <!-- <social-Post data="p" ng-repeat="p in posts" index="$index"> </social-Post> -->
       </div>
     </div>
 
@@ -234,30 +250,30 @@
             </div>
           </div> -->
           <div class="row" style="padding:10px; margin:0 1px 0 1px; border-bottom: 1px solid #e0e0e0">
-              <!-- <span style="font-size:15px;" ng-bind-html="lead.txt"></span> -->
+            <!-- <span style="font-size:15px;" ng-bind-html="lead.txt"></span> -->
             <div class="col-md-11" style="padding-left:0px; padding-right:0px; ">
               <span style="font-size:15px;" ng-bind-html="lead.txt"></span>
             </div>
-            <div class="col-md-1"style="padding-left:0px; padding-right:0px; ">
+            <div class="col-md-1" style="padding-left:0px; padding-right:0px; ">
               <i class="fa fa-expand" aria-hidden="true" style="cursor:pointer;" ng-click="expandLeads(lead.pk)"></i>
             </div>
           </div>
-          <div class="row" style="padding-left:10px; padding-right:10px; " >
-            <div  class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
+          <div class="row" style="padding-left:10px; padding-right:10px; ">
+            <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
               <a ng-if="lead.showPrev" href="#" ng-click="prevOfferRes($index);" style="font-size:20px; text-decoration: none; "> &#10094;</a>
             </div>
-            <div class="col-md-10"  style="padding:10px;" >
-                <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
-                <span>{{lead.responseValue.user | getName }}</span> <br>
-                <span> {{lead.responseValue.txt}} </span>
+            <div class="col-md-10" style="padding:10px;">
+              <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
+              <span>{{lead.responseValue.user | getName }}</span> <br>
+              <span> {{lead.responseValue.txt}} </span>
             </div>
-            <div  class="col-md-1 text-center"  style="padding:0px;  padding-top:20px;">
-              <a  ng-if="lead.showNext" href="#" ng-click="nextOfferRes($index);" style="font-size:20px; text-decoration: none;">&#10095;</a>
+            <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
+              <a ng-if="lead.showNext" href="#" ng-click="nextOfferRes($index);" style="font-size:20px; text-decoration: none;">&#10095;</a>
             </div>
           </div>
           <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
-            <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="offerComment.txt"></textarea>
-            <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue)" ><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+            <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="lead.intrestTxt"></textarea>
+            <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue,$index)"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
           </div>
         </div>
         <div ng-if="showMoreBtn" class="row text-center" style="padding: 20px;">

@@ -40,5 +40,11 @@ app.controller('admin.settings' , function($scope , $stateParams , $http , $asid
     })
 
   }
+  $scope.name = 'sai'
+
+  // $http({method : 'GET' , url : '/api/ERP/appSettingsAdminMode/'}).
+  // then(function(response) {
+  //   $scope.settings = response.data;
+  // })
 
 });
