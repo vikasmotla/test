@@ -234,8 +234,13 @@
             </div>
           </div> -->
           <div class="row" style="padding:10px; margin:0 1px 0 1px; border-bottom: 1px solid #e0e0e0">
-            <span style="font-size:15px;" ng-bind-html="lead.txt"></span><br>
-
+              <!-- <span style="font-size:15px;" ng-bind-html="lead.txt"></span> -->
+            <div class="col-md-11" style="padding-left:0px; padding-right:0px; ">
+              <span style="font-size:15px;" ng-bind-html="lead.txt"></span>
+            </div>
+            <div class="col-md-1"style="padding-left:0px; padding-right:0px; ">
+              <i class="fa fa-expand" aria-hidden="true" style="cursor:pointer;" ng-click="expandLeads(lead.pk)"></i>
+            </div>
           </div>
           <div class="row" style="padding-left:10px; padding-right:10px; " >
             <div  class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">

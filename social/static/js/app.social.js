@@ -150,6 +150,61 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     txt: ''
   };
 
+  $scope.expandLeads = function (expandPostpk) {
+    console.log('expand post pk',expandPostpk);
+    $uibModal.open({
+      templateUrl: '/static/ngTemplates/app.social.expandLeads.html',
+      size: 'lg',
+      backdrop: true,
+      controller: function($scope, $http, Flash) {
+        $http({
+          method: 'GET',
+          url: '/api/social/post/' + expandPostpk + '/',
+        }).
+        then(function(response) {
+          console.log(response.data);
+          $scope.expandPostData = response.data;
+          $scope.expandPostData.timeline = []
+          var imgTypes = ['png' , 'svg' , 'gif' , 'jpg' , 'jpeg']
+          if ($scope.expandPostData.user_reaction.length > 0) {
+            $scope.expandPostData.reacted = true
+          }
+          $scope.expandPostData.txt = $sce.getTrustedHtml($scope.expandPostData.txt);
+          for (var j = 0; j < $scope.expandPostData.comments.length; j++) {
+            $scope.expandPostData.comments[j].txt = $sce.getTrustedHtml($scope.expandPostData.comments[j].txt);
+            $scope.expandPostData.timeline.push({typ:'comment',created:$scope.expandPostData.comments[j].created,data:$scope.expandPostData.comments[j]})
+          }
+          for (var j = 0; j < $scope.expandPostData.responses.length; j++) {
+            $scope.expandPostData.responses[j].txt = $sce.getTrustedHtml($scope.expandPostData.responses[j].txt);
+            var imgShow = false
+            if ($scope.expandPostData.responses[j].fil != null) {
+              var filtyp = $scope.expandPostData.responses[j].fil.split('.').slice(-1)[0]
+              console.log('fileeeeeeeeee',filtyp, imgTypes);
+              console.log(imgTypes.indexOf(filtyp));
+              if (imgTypes.indexOf(filtyp) >= 0) {
+                var imgShow = true
+              }
+            }
+            $scope.expandPostData.timeline.push({typ:'offer',created:$scope.expandPostData.responses[j].created,data:$scope.expandPostData.responses[j],imgShow:imgShow})
+          }
+
+          console.log('timeline', $scope.expandPostData.timeline);
+
+          $scope.expandPostData.timeline.sort(function(a, b){
+            var dateA=new Date(a.created), dateB=new Date(b.created)
+            return dateA-dateB //sort by date ascending
+          })
+        })
+
+        $scope.showComments = false;
+        $scope.allComments = function() {
+          $scope.expandPostData.showComments = !$scope.expandPostData.showComments
+        }
+
+      }
+    })
+  }
+
   $scope.sendOffer = function (resVal) {
     console.log('resval', resVal.pk );
     console.log($scope.offerComment.txt);
@@ -170,8 +225,6 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
 
   }
 
-
-
   $scope.prevOfferRes = function(indx) {
     $scope.countForResp--;
     console.log($scope.postRes[indx].responses[$scope.countForResp]);
@@ -186,11 +239,6 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
       $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
       console.log($scope.countForResp);
     }
-    // if ($scope.countForResp > 0) {
-    //   $scope.countForResp--;
-    //   $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
-    //   console.log($scope.countForResp);
-    // }
   }
 
   $scope.nextOfferRes = function(indx) {
@@ -207,12 +255,6 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
       $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
       console.log($scope.countForResp);
     }
-    // if ($scope.countForResp < $scope.postRes[indx].responses.length-1) {
-    //   if ($scope.countForResp == ) {
-    //
-    //   }
-    //
-    // }
   }
 
   $scope.postData = {
