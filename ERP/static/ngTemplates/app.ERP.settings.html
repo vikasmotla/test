@@ -22,8 +22,86 @@
         <hr ng-if="!$last">
       </div>
     </div> -->
+<div class="row" style="padding:20px">
+  <div class="row">
+  <div class="col-md-1">
+    <div class="row pull-right">
+      <strong>Type</strong>
+    </div>
+  </div>
+    <div class="col-md-8">
+      <div class="col-md-5">
+        <div class="form-group">
+          <!-- <label>Type</label> -->
+          <select class="form-control" ng-model="featuredPageForm.typ">
+            <option value="person">Person</option>
+            <option value="event">Event</option>
+            <option value="blog">Blog</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-5" ng-if="featuredPageForm.typ !=''">
+        <div class="form-group">
+          <!-- <label></label> -->
+          <input type="text" class="form-control" ng-model="featuredPageForm.obj" placeholder="Search Users Here" uib-typeahead="user as user.username for user in searchObj($viewValue)" ng-if="featuredPageForm.typ == 'person'">
+          <input type="text" class="form-control" ng-model="featuredPageForm.obj" placeholder="Search Events Here" uib-typeahead="event as event.name for event in searchObj($viewValue)" ng-if="featuredPageForm.typ == 'event'">
+          <input type="text" class="form-control" ng-model="featuredPageForm.obj" placeholder="Search Blogs Here" uib-typeahead="blog as blog.title for blog in searchObj($viewValue)" ng-if="featuredPageForm.typ == 'blog'">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="btn btn-success" ng-click="savePromotion()">
+          Add <i class="fa fa-plus"></i>
+        </div>
+      </div>
 
-{{name}}
+    </div>
+  </div>
+  <div class="row" style="padding:30px">
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Data</th>
+        <th>Active</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="d in featuredPageData">
+        <td>{{d.typ | humanize}}</td>
+        <td>
+          <div class="row" ng-if="d.typ == 'person'">
+          <strong>Name :</strong> {{d.person.first_name}}{{d.person.last_name}}<br>
+          <strong>Email :</strong> {{d.person.profile.email}}<br>
+          <strong>Mobile :</strong> {{d.person.profile.mobile}}
+        </div>
+        <div class="row" ng-if="d.typ == 'event'">
+        <strong>Name :</strong> {{d.event.name}}<br>
+        <strong>Venue :</strong> {{d.event.venue}}<br>
+        <strong>Entry Fee :</strong> {{d.event.entryFee}}<br>
+        <strong>Event Starts On :</strong> {{d.event.event_On}}
+      </div>
+      <div class="row" ng-if="d.typ == 'blog'">
+      <strong>Title :</strong> {{d.blog.title}}<br>
+      <strong>Author :</strong> {{d.blog.author}}<br>
+      <strong>Short Url :</strong> <a href="/{{d.blog.shortUrl}}" target="_blank">{{d.blog.shortUrl}}</a></strong>
+    </div>
+      </td>
+        <td><switch ng-model="d.active" class="green" ng-change="changeActive($index)"></switch></td>
+        <td><i class="fa fa-trash fa-lg" style="cursor:pointer"  mwl-confirm
+              title="Confirm"
+              message="Are you sure you want to delete this?"
+              confirm-text="Yes <i class='fa fa-check'></i>"
+              cancel-text="No"
+              on-confirm="deleteRow($index)"
+              confirm-button-type="danger"
+              cancel-button-type="default"></i></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+</div>
 
 
 

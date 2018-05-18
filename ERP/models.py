@@ -145,6 +145,6 @@ class FeaturedPage(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     typ = models.CharField(choices = FEATURED_PAGE_TYPE_CHOICES , max_length = 10 ,null = True)
-    person = models.ForeignKey(User, related_name='featuredPage' , null=True)
+    person = models.ForeignKey(User, related_name='featuredPageperson' , null=True)
     event = models.ForeignKey(Events, related_name='featuredPageEvent' , null=True)
     blog = models.ForeignKey(blogPost, related_name='featuredPageblog' , null=True)

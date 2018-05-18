@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from fabric.api import *
 import os
 from django.conf import settings as globalSettings
+from PIM.models import *
+from HR.models import *
 
 class addressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -104,14 +106,50 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
         model = EventRegistration
         fields = ('pk' ,'name', 'email', 'phoneNumber', 'regId', 'payAmount', 'payMode', 'payDate', 'payRefference', 'cancelReg')
 
+
+class userProfileLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = profile
+        fields = ('displayPicture' ,'pk' ,'email', 'mobile')
+
+class userLiteSerializer(serializers.ModelSerializer):
+    profile = userProfileLiteSerializer(many=False , read_only=True)
+    class Meta:
+        model = User
+        fields = ( 'pk', 'username' , 'first_name' , 'last_name' , 'profile')
+
+class EventLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Events
+        fields = ('pk' , 'name','event_On','regEndsOn', 'venue', 'entryFee')
+
+class blogLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = blogPost
+        fields = ( 'pk' ,'title' , 'shortUrl' , 'author')
+
 class FeaturedPageSerializer(serializers.ModelSerializer):
+    event = EventLiteSerializer(read_only = True, many = False)
+    person = userLiteSerializer(read_only = True, many = False)
+    blog = blogLiteSerializer(read_only = True, many = False)
     class Meta:
         model = FeaturedPage
-        fields = ('pk' , 'created' , 'active' , 'typ' ,'person' 'event' ,'blog')
+        fields = ('pk' , 'created' , 'active' , 'typ' ,'person' ,'event' ,'blog')
 
-    # def create(self , validated_data):
-    #     print "came to create"
-    #     f = media(**validated_data)
-    #     f.user=self.context['request'].user
-    #     f.save()
-    #     return f
+    def create(self , validated_data):
+        print "came to create"
+        print validated_data
+        f = FeaturedPage(**validated_data)
+        if validated_data['typ'] == 'person':
+            f.person = User.objects.get(pk = self.context['request'].data['obj'])
+        elif validated_data['typ'] == 'event':
+            f.event = Events.objects.get(pk = self.context['request'].data['obj'])
+        elif validated_data['typ'] == 'blog':
+            f.blog = blogPost.objects.get(pk = self.context['request'].data['obj'])
+        f.save()
+        return f
+
+    def update(self, instance, validated_data):
+        instance.active = validated_data['active']
+        instance.save()
+        return instance
