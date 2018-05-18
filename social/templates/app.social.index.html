@@ -146,23 +146,24 @@
           <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
             <div class="col-xs-8" style="">
               <div class="col-xs-2" style="padding-top:10px;">
-                <span style="color:#43627d; cursor:pointer;" ng-click="allComments($index);"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
+                <span style="color:#43627d; cursor:pointer;" ng-click="allComments($index);" title="Comment"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
               </div>
               <div class="col-xs-2" style="padding-top:10px;">
-                <span style="color:#43627d; cursor:pointer;"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
+                <span style="color:#43627d; cursor:pointer;" ng-click="sharePost($index)" title="Share"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
               </div>
-              <div class="col-xs-4">
-                <span reactions class="FB_reactions"><span>0 Likes</span> </span>
+              <div class="col-xs-6" style="padding-top:3px;">
+                 <!-- {{p.reacted ? 'background: url(/static/emojis/':''}} {{p.user_reaction == 'like' ? 'like.svg)' :''}} {{p.user_reaction == 'love' ? 'love.svg)' :''}} {{p.user_reaction == 'haha' ? 'haha.svg)' :''}} {{p.user_reaction == 'wow' ? 'wow.svg)' :''}} {{p.user_reaction == 'sad' ? 'sad.svg)' :''}} {{p.user_reaction == 'angry' ? 'angry.svg)' :''}} -->
+                <span reactions class="FB_reactions" pk="{{p.pk}}" style="{{p.reacted ? 'background-image: url(/static/emojis/':''}}{{p.user_reaction == 'like' ? 'like.png)' :''}}{{p.user_reaction == 'love' ? 'love.png)' :''}}{{p.user_reaction == 'haha' ? 'haha.png)' :''}}{{p.user_reaction == 'wow' ? 'wow.png)' :''}}{{p.user_reaction == 'sad' ? 'sad.png)' :''}}{{p.user_reaction == 'angry' ? 'angry.png)' :''}} !important;"><span>{{p.likes_count}} {{p.likes_count >1 ? 'Reactions' : 'Reaction'}}</span> </span>
               </div>
             </div>
             <div class="col-md-4" style="padding-right:0px;">
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' ||p.typ == 'Barter'">
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'" ng-click="postResponse($index,'Buying')">
                 Buy
               </div>
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'">
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'" ng-click="postResponse($index,'Selling')">
                 Sell
               </div>
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-if="p.typ=='Barter'" >
+              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-click="postResponse($index,'Barter')">
                 Barter
               </div>
             </div>
@@ -179,12 +180,14 @@
                 <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.user | getDP}}"> </a>
               </div>
               <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-                <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></span>
-                <span style="font-size:15px;" ng-bind-html="comment.txt"> </span> <br ng-if="comment.fil != null">
-                <img ng-if="comment.fil != null" ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;">
-
-                <span class="pull-right text-muted" style="position: absolute;right: 50px;margin-top: -20px;">{{comment.created | timeAgo}} ago</span>
-
+                <div class="row" style="padding:0px 25px">
+                  <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.user | getName}}</strong></span>
+                  <span class="pull-right text-muted">{{comment.created | timeAgo}} ago</span>
+                </div>
+                <div class="row" style="padding:0px 25px">
+                  <span style="font-size:15px;" ng-bind-html="comment.txt"> </span> <br ng-if="comment.fil != null && comment.txt != null">
+                  <img ng-if="comment.fil != null" ng-click="expandImage(comment.fil)" class="img img-rounded" ng-src="{{comment.fil}}" alt="" width="300px;">
+                </div>
               </div>
             </div>
             <div class="row" style="margin-top:20px;">
@@ -197,9 +200,9 @@
 
     <div class="col-xs-3 col-xs-offset-9 " style="background:#eeeeee;height:100vh;position:fixed;">
       <div class="row" style="padding:30px;padding-top:70px;">
-        <strong>Leads</strong>
-        <div class="card" style="padding-bottom:0px; margin-top:20px; background:#ffffff " ng-repeat="lead in [1,2]">
-          <div class="row" style=" margin:0px; border-bottom:1px solid #e0e0e0">
+        <strong>Leads / Offers</strong>
+        <div class="card" style="padding-bottom:0px; margin-top:20px; background:#ffffff " ng-repeat="lead in postRes">
+          <!-- <div class="row" style=" margin:0px; border-bottom:1px solid #e0e0e0">
             <div class="col-xs-2" style="padding:0px;">
               <img src="/static/images/img_avatar.png" width="40" height="40" alt="">
             </div>
@@ -207,9 +210,10 @@
               <span>Ashish Singh</span> <br>
               <span class="text-muted" style="font-size:11px;">Head of Digital Marketing </span>
             </div>
-          </div>
-          <div class="row" style="margin:10px;">
-            <span>35 Carpets</span>
+          </div> -->
+          <div class="row" style="padding:25px;">
+            <span style="font-size:15px;" ng-bind-html="lead.txt"></span><br>
+            <strong class="text-muted">Value : </strong>{{lead.minVal}} <i class="fa fa-inr"></i>
           </div>
           <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
             <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?"></textarea>

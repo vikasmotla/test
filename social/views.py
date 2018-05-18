@@ -17,6 +17,7 @@ from API.permissions import *
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
+from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.template.loader import render_to_string, get_template
@@ -24,6 +25,7 @@ from django.core.mail import send_mail, EmailMessage
 from .models import *
 from .serializers import *
 from HR.models import profile
+from django.forms.models import model_to_dict
 
 # Create your views here.
 @login_required
@@ -60,10 +62,21 @@ class ProductTagViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
     def get_queryset(self):
         u = self.request.user
-        return Post.objects.all().order_by('-updated')
+        if 'res' in self.request.GET:
+            postObjs = Post.objects.filter(user = u)
+            responsesReceived = PostResponse.objects.filter(parent__in = postObjs,acknowledged=False)
+            dataArr = []
+            for i in responsesReceived:
+                if i.parent not in dataArr:
+                    dataArr.append(i.parent)
+
+            return dataArr
+
+        else:
+            return Post.objects.all().order_by('-updated')
+
 
 class PostMediaViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
@@ -84,3 +97,22 @@ class PostResponseViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = PostResponseSerializer
     queryset = PostResponse.objects.all()
+
+
+class PostLiteViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated ,)
+    serializer_class = PostLiteSerializer
+    def get_queryset(self):
+        u = self.request.user
+        if 'res' in self.request.GET:
+            postObjs = Post.objects.filter(user = u)
+            responsesReceived = PostResponse.objects.filter(parent__in = postObjs,acknowledged=False)
+            dataArr = []
+            for i in responsesReceived:
+                if i.parent not in dataArr:
+                    dataArr.append(i.parent)
+
+            return dataArr
+
+        else:
+            return Post.objects.all().order_by('-updated')

@@ -161,8 +161,8 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
   $scope.$watch('personInView', function(newValue, oldValue) {
     console.log('jhjkhjjkii',$scope.personInView);
-    if ($scope.personInView!=undefined) {
-        $scope.fetchMessages();
+    if ($scope.personInView != undefined) {
+      $scope.fetchMessages();
     }
 
   }, true)

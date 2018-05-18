@@ -2,8 +2,8 @@ app.directive('reactions', ['$sce', function($sce) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      // console.log(element);
-      element.facebookReactions();
+      console.log(attrs);
+      element.facebookReactions(attrs.pk);
     }
   };
 }]);
@@ -215,8 +215,7 @@ app.directive('commentEdit', function() {
         if (typeof $scope.comment.file=='string') {
           $scope.isImage = true;
           $scope.fileSize = 10;
-          console.log( $scope.comment.file);
-          console.log($scope.comment.parent);
+          $scope.fileName = $scope.comment.file.split('postMedia/')[1];
           // document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
         }
       }, 1000);
@@ -291,6 +290,20 @@ app.directive('commentEdit', function() {
         }
       });
 
+      $scope.focus = function() {
+        console.log($scope.comment.txt );
+        $scope.comment.txt = $scope.comment.txt.replace('<!-- ngIf: !focused -->', '')
+        $scope.focused = true;
+      }
+
+      $scope.blurr = function() {
+        if ($scope.comment.txt == '<br>') {
+          console.log($scope.comment.txt );
+          $scope.comment.txt = '';
+        }
+        $scope.focused = false;
+      }
+
       $scope.checkFile = function() {
         console.log('file sizee');
         if ($scope.fileSize == 0) {
@@ -309,6 +322,12 @@ app.directive('commentEdit', function() {
       $scope.$watch('comment.file', function(newValue, oldValue) {
         if (newValue == emptyFile) {
           return;
+        }
+        if (typeof newValue=='string') {
+          console.log($scope.comment.file , $scope.comment.parent);
+          $timeout(function() {
+            document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
+          },1000)
         }
         if (typeof newValue.name != 'undefined') {
           $scope.fr = new FileReader();

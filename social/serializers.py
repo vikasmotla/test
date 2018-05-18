@@ -12,13 +12,13 @@ class ProductTagSerializer(serializers.ModelSerializer):
         model = ProductTag
         fields = ('pk' , 'txt')
 
-class userSampleProfileSerializer(serializers.ModelSerializer):
+class UserSampleProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = profile
         fields = ('displayPicture' ,'pk' )
 
 class userSampleSerializer(serializers.ModelSerializer):
-    profile = userSampleProfileSerializer(many=False , read_only=True)
+    profile = UserSampleProfileSerializer(many=False , read_only=True)
     class Meta:
         model = User
         fields = ( 'pk', 'username' , 'first_name' , 'last_name' , 'profile'  , 'date_joined')
@@ -46,13 +46,28 @@ class PostCommentSerializer(serializers.ModelSerializer):
         p.save()
         return p
 
+class PostLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostLike
+        fields = ('pk' , 'user','parent','typ')
+    def create(self , validated_data):
+        p = PostLike(**validated_data)
+        p.user = self.context['request'].user
+        p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
+        p.save()
+        return p
+
 class PostSerializer(serializers.ModelSerializer):
     # user = userSampleSerializer(many = False , read_only = True)
+    likes_count = serializers.SerializerMethodField()
+    user_reaction = serializers.SerializerMethodField()
+    like_pk = serializers.SerializerMethodField()
     mediaPost = PostMediaSerializer(many= True ,read_only = True)
     comments = PostCommentSerializer(many= True ,read_only = True)
+    # likes = PostLikeSerializer(many= True ,read_only = True)
     class Meta:
         model = Post
-        fields = ('pk' , 'user','typ','txt','products','approved','created','updated' ,'mediaPost','comments')
+        fields = ('pk' , 'user','typ','txt','products','approved','created','updated' ,'mediaPost','comments','likes_count','user_reaction','like_pk')
         read_only_fields = ( 'created' , 'updated' )
     def create(self , validated_data):
         p = Post(**validated_data)
@@ -66,16 +81,40 @@ class PostSerializer(serializers.ModelSerializer):
         p.save()
         return p
 
-
-
-class PostLikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostLike
-        fields = ('pk' , 'user','parent')
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+    def get_user_reaction(self, obj):
+        pl=obj.likes.filter(user= self.context['request'].user)
+        if len(pl) > 0:
+            typ = pl[0].typ
+        else:
+            typ = ''
+        return typ
+    def get_like_pk(self, obj):
+        pl=obj.likes.filter(user= self.context['request'].user)
+        if len(pl) > 0:
+            likePk = pl[0].pk
+        else:
+            likePk = 0
+        return likePk
 
 
 
 class PostResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostResponse
-        fields = ('pk' , 'user','txt','parent')
+        fields = ('pk' , 'user','txt','parent','value','typ','status','acknowledged','fil')
+    def create(self , validated_data):
+        p = PostResponse(**validated_data)
+        p.user = self.context['request'].user
+        p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
+        p.save()
+        return p
+
+
+
+class PostLiteSerializer(serializers.ModelSerializer):
+    responses = PostResponseSerializer(many = True , read_only = True)
+    class Meta:
+        model = Post
+        fields = ('pk' , 'user','typ','txt' , 'responses')
