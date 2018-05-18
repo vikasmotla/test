@@ -215,8 +215,7 @@ app.directive('commentEdit', function() {
         if (typeof $scope.comment.file=='string') {
           $scope.isImage = true;
           $scope.fileSize = 10;
-          console.log( $scope.comment.file);
-          console.log($scope.comment.parent);
+          $scope.fileName = $scope.comment.file.split('postMedia/')[1];
           // document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
         }
       }, 1000);
@@ -323,6 +322,12 @@ app.directive('commentEdit', function() {
       $scope.$watch('comment.file', function(newValue, oldValue) {
         if (newValue == emptyFile) {
           return;
+        }
+        if (typeof newValue=='string') {
+          console.log($scope.comment.file , $scope.comment.parent);
+          $timeout(function() {
+            document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
+          },1000)
         }
         if (typeof newValue.name != 'undefined') {
           $scope.fr = new FileReader();

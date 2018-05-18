@@ -244,17 +244,13 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
       backdrop: true,
       resolve: {
         post: function() {
-          return $scope.posts;
-        },
-        index: function() {
-          return indx;
+          return $scope.posts[indx];
         }
       },
-      controller: function($scope, post, index, $http, Flash, $uibModalInstance) {
-        $scope.posts = post;
+      controller: function($scope, post, $http, Flash, $uibModalInstance) {
         console.log('in this ctrll');
         $scope.changingType = function(type) {
-          console.log($scope.posts[index].pk);
+          console.log(post.pk);
           $scope.typeOfPost = type;
           console.log('type of post', $scope.typeOfPost);
           $scope.typeData = {
@@ -262,12 +258,12 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
           }
           $http({
             method: 'PATCH',
-            url: '/api/social/post/' + $scope.posts[index].pk +'/',
+            url: '/api/social/post/' + post.pk +'/',
             data: $scope.typeData
           }).
           then(function(response) {
             console.log('res typ', response.data.typ);
-            $scope.posts[index].typ = response.data.typ;
+            post.typ = response.data.typ;
             Flash.create('success', 'Type Changed')
           })
           $uibModalInstance.dismiss();
@@ -288,15 +284,13 @@ $scope.editPost = function (indx) {
         }
       },
       controller: function($scope, post, $http, Flash, $uibModalInstance) {
-        $scope.post = post;
-        console.log('file isss', $scope.post);
 
         // $scope.fileSize = 10;
         // $scope.isImage = true;
 
         $scope.editPostData = {
-          txt: $scope.post.txt,
-          file: $scope.post.mediaPost[0].fil,
+          txt: post.txt,
+          file: post.mediaPost[0].fil,
           parent: 'postEditModal'
         }
 
@@ -310,33 +304,27 @@ $scope.editPost = function (indx) {
 
         $scope.sendEditPost = function() {
 
-          $scope.editPostDataText = {
-            'txt' : $scope.editPostData.txt,
-          }
+          console.log($scope.editPostData);
+
           console.log('it comes here...');
           $http({
             method: 'PATCH',
-            url: '/api/social/post/' + $scope.post.pk +'/',
-            data: $scope.editPostDataText
+            url: '/api/social/post/' + post.pk +'/',
+            data: {txt : $scope.editPostData.txt}
           }).
           then(function(response) {
             console.log('resssssss', response.data);
-            $scope.posts[index] = response.data;
+            post.txt = response.data.txt;
             Flash.create('success', 'Edited Successfully')
-            $scope.posts[index].txt = $sce.getTrustedHtml($scope.posts[index].txt)
+            post.txt = $sce.getTrustedHtml(post.txt)
 
-            // $scope.posts.splice(0, 0, response.data)
-            // $scope.posts[0].txt = $sce.getTrustedHtml($scope.posts[0].txt)
-            // $scope.postData.txt = ''
-
-            console.log($scope.editPostData.file, $scope.posts[index].pk);
-            if ($scope.editPostData.file != emptyFile) {
+            if ($scope.editPostData.file != emptyFile && typeof $scope.editPostData.file != 'string') {
               var posatMediaData = new FormData();
-              posatMediaData.append('parent', $scope.posts[index].pk);
+              posatMediaData.append('parent', post.pk);
               posatMediaData.append('fil', $scope.editPostData.file);
               $http({
                 method: "PATCH",
-                url: '/api/social/postMedia/' + $scope.posts[index].pk + '/',
+                url: '/api/social/postMedia/' + post.mediaPost[0].pk + '/',
                 data: posatMediaData,
                 transformRequest: angular.identity,
                 headers: {
@@ -346,7 +334,7 @@ $scope.editPost = function (indx) {
               then(function(response) {
                 console.log('resssssss', response.data);
                 Flash.create('success', 'Image Edited Successfully')
-                $scope.posts[index].mediaPost = [response.data];
+                post.mediaPost = [response.data];
                 $scope.editPostData = {
                   txt: '',
                   file: emptyFile,
