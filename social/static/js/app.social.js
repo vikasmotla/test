@@ -457,6 +457,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
         }
       },
       controller: function($scope, $rootScope, $state, posts, typ, $uibModal, $uibModalInstance) {
+        $scope.typ = typ
         $scope.responseForm = {
           txt: '',
           value: 0,

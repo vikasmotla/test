@@ -199,7 +199,7 @@
                 </div>
                 <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
                   <div class="row" style="padding:0px 25px">
-                    <span class="media-heading"><strong>From : </strong></span>
+                    <!-- <span class="media-heading"><strong>From : </strong></span> -->
                     <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
                     <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
                   </div>
@@ -209,7 +209,25 @@
                     <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
                     <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
                   </div>
+
+                  <div class="row" style="padding-left:10px">
+                    <hr>
+                    <div class="media-left">
+                      <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{p.user | getDP}}"> </a>
+                    </div>
+                    <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                      <div class="row" style="padding:0px 25px">
+                        <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{p.user | getName}}</strong></span>
+                        <!-- <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span> -->
+                      </div>
+                      <div class="row" style="padding:0px 25px">
+                        <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+
               </div>
             </div>
             <div class="row" style="margin-top:20px;">

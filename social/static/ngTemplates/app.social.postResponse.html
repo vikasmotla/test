@@ -4,7 +4,7 @@
       <label>Message</label>
       <textarea type="text" rows="3"  value="" class="form-control " required ng-model="responseForm.txt"></textarea>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-if="typ != 'Barter'">
       <label>Amount</label>
       <input type="number" class="form-control" ng-model="responseForm.value">
     </div>
