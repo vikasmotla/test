@@ -364,6 +364,7 @@ $scope.editPost = function (indx) {
   }
 
 
+
   $scope.sharePost = function(idx) {
     console.log('dddddddddddddd', idx);
     $uibModal.open({
@@ -460,6 +461,7 @@ $scope.editPost = function (indx) {
       size: 'md',
       backdrop: true,
       controller: function($scope, $http, Flash) {
+        console.log(imageUrl);
         $scope.imageUrl = imageUrl;
       }
     })
