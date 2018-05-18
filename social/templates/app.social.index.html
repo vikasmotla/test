@@ -114,7 +114,7 @@
         <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
           <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
             <div class="col-xs-1" style="padding:0px;">
-              <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="" >
+              <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="">
             </div>
             <div class="col-xs-9" style="padding-top:5px">
               <span class="text-primary" style="cursor:pointer;font-size:17px;">{{p.user | getName}}</span> <br>
@@ -122,12 +122,12 @@
             </div>
             <div class="col-xs-2 text-right" style="padding:20px;padding-bottom:0px;">
               <div class="dropdown">
-                  <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
-                  <ul class="dropdown-menu">
-                      <li ng-click="changeType($index)"><a href="#">Change Type</a></li>
-                      <li><a href="#">Delete</a></li>
-                      <li ng-click=editPost($index)><a href="#">Edit</a></li>
-                  </ul>
+                <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
+                <ul class="dropdown-menu">
+                  <li ng-click="changeType($index)"><a href="#">Change Type</a></li>
+                  <li><a href="#">Delete</a></li>
+                  <li ng-click=editPost($index)><a href="#">Edit</a></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -152,8 +152,8 @@
                 <span style="color:#43627d; cursor:pointer;" ng-click="sharePost($index)" title="Share"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
               </div>
               <div class="col-xs-6" style="padding-top:3px;">
-                 <!-- {{p.reacted ? 'background: url(/static/emojis/':''}} {{p.user_reaction == 'like' ? 'like.svg)' :''}} {{p.user_reaction == 'love' ? 'love.svg)' :''}} {{p.user_reaction == 'haha' ? 'haha.svg)' :''}} {{p.user_reaction == 'wow' ? 'wow.svg)' :''}} {{p.user_reaction == 'sad' ? 'sad.svg)' :''}} {{p.user_reaction == 'angry' ? 'angry.svg)' :''}} -->
-                <span reactions class="FB_reactions" pk="{{p.pk}}" style="{{p.reacted ? 'background-image: url(/static/emojis/':''}}{{p.user_reaction == 'like' ? 'like.png)' :''}}{{p.user_reaction == 'love' ? 'love.png)' :''}}{{p.user_reaction == 'haha' ? 'haha.png)' :''}}{{p.user_reaction == 'wow' ? 'wow.png)' :''}}{{p.user_reaction == 'sad' ? 'sad.png)' :''}}{{p.user_reaction == 'angry' ? 'angry.png)' :''}} !important;"><span>{{p.likes_count}} {{p.likes_count >1 ? 'Reactions' : 'Reaction'}}</span> </span>
+                <!-- {{p.reacted ? 'background: url(/static/emojis/':''}} {{p.user_reaction == 'like' ? 'like.svg)' :''}} {{p.user_reaction == 'love' ? 'love.svg)' :''}} {{p.user_reaction == 'haha' ? 'haha.svg)' :''}} {{p.user_reaction == 'wow' ? 'wow.svg)' :''}} {{p.user_reaction == 'sad' ? 'sad.svg)' :''}} {{p.user_reaction == 'angry' ? 'angry.svg)' :''}} -->
+                <span reactions class="FB_reactions" pk="{{p.pk}}" style="{{p.reacted ? 'background-image: url(/static/emojis/':''}}{{p.user_reaction == 'like' ? 'like.png)' :''}}{{p.user_reaction == 'love' ? 'love.png)' :''}}{{p.user_reaction == 'haha' ? 'haha.png)' :''}}{{p.user_reaction == 'wow' ? 'wow.png)' :''}}{{p.user_reaction == 'sad' ? 'sad.png)' :''}}{{p.user_reaction == 'angry' ? 'angry.png)' :''}} !important;"><span>{{p.likes_count}} {{p.likes_count >1 ? 'Reactions' : 'Reaction'}}</span>                </span>
               </div>
             </div>
             <div class="col-md-4" style="padding-right:0px;">
@@ -211,13 +211,26 @@
               <span class="text-muted" style="font-size:11px;">Head of Digital Marketing </span>
             </div>
           </div> -->
-          <div class="row" style="padding:25px;">
+          <div class="row" style="padding:10px; margin:0 1px 0 1px; border-bottom: 1px solid #e0e0e0">
             <span style="font-size:15px;" ng-bind-html="lead.txt"></span><br>
-            <strong class="text-muted">Value : </strong>{{lead.minVal}} <i class="fa fa-inr"></i>
+
+          </div>
+          <div class="row" style="padding-left:10px; padding-right:10px; " >
+            <div  class="col-md-1 text-center" style="padding:0px; ">
+              <a href="#" ng-click="prevOfferRes($index);">&#10094;</a>
+            </div>
+            <div class="col-md-10"  style="padding:0px;" >
+                <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
+                <span>{{lead.responseValue.user | getName }}</span> <br>
+                <span> {{lead.responseValue.txt}} </span>
+            </div>
+            <div class="col-md-1 text-center"  style="padding:0px;">
+              <a href="#" ng-click="nextOfferRes($index);">&#10095;</a>
+            </div>
           </div>
           <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
-            <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?"></textarea>
-            <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+            <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="offerComment.txt"></textarea>
+            <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue)" ><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
           </div>
         </div>
 
