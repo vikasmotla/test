@@ -40,6 +40,30 @@ app.directive('contenteditable', ['$sce', function($sce) {
   };
 }]);
 
+app.directive('socialPost', function() {
+  return {
+    templateUrl: '/static/ngTemplates/directive.socialPost.html',
+    restrict: 'E',
+    replace: true,
+    scope: {
+      data :'=',
+      index: '='
+    },
+    controller: function($scope, $state, $stateParams, $http, Flash, $timeout) {
+      console.log($scope.data);
+      $scope.p = $scope.data;
+
+      $scope.showComments = false;
+      $scope.allComments = function(indx) {
+        console.log('open all cmts....',indx);
+        $scope.p.showComments = !$scope.p.showComments
+      }
+
+    },
+  };
+});
+
+
 app.directive('chatWindow', function() {
   return {
     templateUrl: '/static/ngTemplates/directive.chatWindow.html',
