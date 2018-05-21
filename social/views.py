@@ -62,6 +62,8 @@ class ProductTagViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['user' ,]
     def get_queryset(self):
         u = self.request.user
         if 'res' in self.request.GET:

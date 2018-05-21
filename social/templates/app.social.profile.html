@@ -7,6 +7,7 @@
 following = false;
 {% endif %}
 followersCount = {{profileObj.user.followers.count}}
+profileUserPk = {{profileObj.user.pk}}
 </script>
 
 <div class="container-fluid">
@@ -15,7 +16,7 @@ followersCount = {{profileObj.user.followers.count}}
       <div class="row text-center" style="position:relative;">
         {% if profileObj.coverPicture %}
 
-        <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;"> {% else %}
+        <img src="{{profileObj.coverPicture.url}}" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;">{% else %}
         <img src="/static/images/yomilio_profile_coverpic.jpeg" class="img-responsive" alt="cover" width="100%;" style="max-height:350px; margin-left:3px;"> {% endif %} {% if profileObj.displayPicture %}
         <img src="{{profileObj.displayPicture.url}}" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; "> {% else %}
         <img src="/static/images/img_avatar.png" class="img-responsive img-circle" alt="profile" width="100px;" height="100px;" style="position:absolute; bottom:-50px; left:50px; "> {% endif %}
@@ -23,6 +24,7 @@ followersCount = {{profileObj.user.followers.count}}
       </div>
     </div>
   </div>
+
 
   <div class="row">
     <div class="col-md-offset-1 col-md-10">
@@ -114,7 +116,11 @@ followersCount = {{profileObj.user.followers.count}}
 
         {% verbatim %}
         <div class="col-xs-8" style="padding-left:50px; padding-right:0px;">
-          <div class="row  " style=" background:#ffffff; border:solid 2px #eeeeee; margin-top:20px;{{ showComments ? 'border-bottom: solid 4px #fc5900;':''}}" ng-repeat="post in [1,2,3,4,5]">
+          <div class="row text-center" ng-if="noPosts">
+            <h2 class="text-muted"> There are no posts yet. </h2>
+          </div>
+          <social-Post data="p" ng-repeat="p in posts" index="$index"  me="me.pk" > </social-Post>
+          <!-- <div class="row  " style=" background:#ffffff; border:solid 2px #eeeeee; margin-top:20px;{{ showComments ? 'border-bottom: solid 4px #fc5900;':''}}" ng-repeat="post in [1,2,3,4,5]">
 
             <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
               <div class="col-xs-2" style="padding:0px;">
@@ -170,7 +176,6 @@ followersCount = {{profileObj.user.followers.count}}
             {% verbatim %}
 
             <div ng-if="showComments" class="row" style="padding:30px; padding-bottom:0px;">
-              <!-- <social-Comment ng-repeat="c in post.comments" pk="c"></social-Comment> -->
 
 
               <div class="media" ng-repeat="comments in [1,2]">
@@ -191,7 +196,6 @@ followersCount = {{profileObj.user.followers.count}}
                 </div>
                 <div class="media-body">
                   <h5 class="media-heading" style="cursor:pointer;"><strong>Sundar Pichai</strong></h5>
-                  <!-- <span style="font-size:15px;"> <img ng-click="expandImage(me.profile.displayPicture)" class="img img-rounded" ng-src="{{me.profile.displayPicture}}" alt="" width="300px;"> </span> -->
                   <span style="font-size:15px;"> <img ng-click="expandImage('/static/images/ecommerce.wallpaper3.jpg')" class="img img-rounded" src="/static/images/ecommerce.wallpaper3.jpg" alt="" width="300px;"> </span>
                   <h6 class="text-primary"> <i class="fa fa-thumbs-up"></i> 0 Likes</h6>
                 </div>
@@ -215,7 +219,7 @@ followersCount = {{profileObj.user.followers.count}}
 
             </div>
 
-          </div>
+          </div> -->
         </div>
         {% endverbatim %}
       </div>

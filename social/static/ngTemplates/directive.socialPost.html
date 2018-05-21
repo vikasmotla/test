@@ -8,12 +8,18 @@
     <span class="text-muted" style="font-size:11px;">{{p.updated | timeAgo}} ago</span>
   </div>
   <div class="col-xs-2 text-right" style="padding:20px;padding-bottom:0px;">
-    <div class="dropdown">
+    <div class="dropdown" ng-if="me==p.user">
       <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
       <ul class="dropdown-menu">
         <li ng-click="changeType(index)"><a href="#">Change Type</a></li>
         <li><a href="#">Delete</a></li>
         <li ng-click=editPost(index)><a href="#">Edit</a></li>
+      </ul>
+    </div>
+    <div class="dropdown" ng-if="me!=p.user">
+      <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
+      <ul class="dropdown-menu">
+        <li><a href="#">Report</a></li>
       </ul>
     </div>
   </div>

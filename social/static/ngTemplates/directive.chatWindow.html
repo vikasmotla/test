@@ -1,4 +1,4 @@
-<div class="chatWindow" style="height:{{toggle?500:36}}px;right:{{pos*320+ 30}}px;" friend-url="friend.url" id="chatWindowelizabeth" cancel="closeIMWindow($index)" >
+<div class="chatWindow" style="height:{{toggle?500:36}}px;right:{{pos*320+ 30}}px;" friend-url="friend.url" id="chatWindow{{friend.username}}" cancel="closeIMWindow($index)" >
   <div class="header" ng-click="toggler()">
     <div class="container-fluid">
       <i class="fa fa-circle onlineStatus"></i>
@@ -6,7 +6,7 @@
       <span class="pull-right" style="cursor:pointer;"><i class="fa {{ toggle? 'fa-chevron-down' :'fa-chevron-up'}}" ></i>&nbsp;&nbsp;&nbsp;<i class="fa fa-close" ng-click="cancel();$event.stopPropagation();"></i></span>
     </div>
   </div>
-  <div class="messageView container-fluid" ng-if="toggle" id="scrollArea0">
+  <div class="messageView container-fluid" style="padding:25px;" ng-if="toggle" id="scrollArea{{friend.pk}}" >
     <!-- <div ng-repeat="message in ims">
       <div class="row " ng-if="!senderIsMe[$index]">
         <div class="col-md-3">
@@ -18,21 +18,25 @@
         </div>
       </div>
     </div> -->
-    <div ng-repeat="message in ims">
+    <div ng-repeat="message in ims" style="padding:0px;">
       <div class="row" ng-if="!senderIsMe[$index]">
-        <div class="col-md-3">
-          <img class="img-responsive img-circle" ng-src="{{message.originator | getDP}}" width="40px" height="50px" alt="P" style="position:relative; top:10px;margin-left:5px;">
+        <div class="col-md-2" style="padding:0px;">
+          <img class="img-responsive img-circle" ng-src="{{message.originator | getDP}}" width="40px" height="50px" alt="P" style="position:relative; top:10px;margin-left:0px;">
         </div>
-        <div class="col-md-8 messageBubble"> <p style="word-wrap: break-word;font-size:12px" ng-bind-html="message.message"></p>
+        <div class="col-md-10 messageBubble" ng-if="message.attachment==null"> <p style="word-wrap: break-word;font-size:12px" ng-bind-html="message.message"></p>
+        </div>
+        <div class="col-md-10 messageBubble" ng-if="message.attachment"> <img ng-click="expandImage(message.attachment)" src="{{message.attachment}}" alt="message attachment" style="width:100%;"> <p ng-if="message.message" style="word-wrap: break-word;font-size:12px" class="" ng-bind-html="message.message" ></p>
         </div>
         <!-- <div ng-bind-html="ei.description">
         </div> -->
       </div>
       <!-- // for the bubble with sender picture is on the left -->
       <div class="row" ng-if="senderIsMe[$index]">
-        <div class="col-md-8 col-md-offset-1 messageBubble"> <p style="word-wrap: break-word;font-size:12px" ng-bind-html="message.message"></p>
+        <div class="col-md-10 messageBubble" ng-if="message.attachment==null"> <p style="word-wrap: break-word;font-size:12px;" ng-bind-html="message.message"></p>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-10 messageBubble text-right" ng-if="message.attachment"> <img ng-click="expandImage(message.attachment)" src="{{message.attachment}}" alt="message attachment" style="width:100%;"> <p ng-if="message.message" style="word-wrap: break-word;font-size:12px" class="text-right" ng-bind-html="message.message" ></p>
+        </div>
+        <div class="col-md-2" style="padding:0px;">
           <img class="img-responsive img-circle" ng-src="{{message.originator | getDP}}" width="40px" height="50px" alt="P" style="position:relative; top:10px;margin-left:5px;">
         </div>
       </div>
@@ -42,8 +46,15 @@
     </div>
   </div>
   <div class="footer" ng-show="toggle">
-    <div class="container-fluid">
-      <input class="form-control" value="" style="width:100%" ng-enter="send()" ng-model="messageToSend" type="text">
+    <div class="container-fluid input-group">
+      <input class="form-control" value="" style="width:100%" ng-enter="send()" ng-model="chat.messageToSend" type="text">
+      <input type="file" id="filePickerChat{{friend.pk}}" style="display:none;" file-model="chat.fileToSend">
+      <span ng-if="fileSize!=0" class="input-group-addon btn btn-default dropup"> <i data-toggle="dropdown" class="dropdown-toggle fa {{fileName | fileTypeIcon }}"></i>
+        <ul class="dropdown-menu" style="left:-125px">
+          <li ng-click="checkFile()" ><a href="#">Remove</a></li>
+        </ul>
+      </span>
+      <span ng-if="fileSize==0" class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="checkFile()"><i class="fa fa-paperclip" aria-hidden="true" ></i></span>
     </div>
   </div>
 </div>

@@ -111,7 +111,7 @@
         <comment-Edit comment="postData" send="sendPost" config="postConfig" style="border: 2px solid #eeeeee;"></comment-Edit>
       </div>
       <div style="padding:20px;">
-        <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
+        <!-- <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
           <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
             <div class="col-xs-1" style="padding:0px;">
               <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="">
@@ -231,8 +231,8 @@
               <comment-Edit comment="p.podtEditComments" send="postComment" config="postCommentConfig"></comment-Edit>
             </div>
           </div>
-        </div>
-        <!-- <social-Post data="p" ng-repeat="p in posts" index="$index"> </social-Post> -->
+        </div> -->
+        <social-Post data="p" ng-repeat="p in posts" index="$index" me="me.pk"> </social-Post>
       </div>
     </div>
 

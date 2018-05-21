@@ -2,7 +2,6 @@ app.directive('reactions', ['$sce', function($sce) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      console.log(attrs);
       element.facebookReactions(attrs.pk);
     }
   };
@@ -31,7 +30,7 @@ app.directive('contenteditable', ['$sce', function($sce) {
         var html = element.html();
         // When we clear the content editable the browser leaves a <br> behind
         // If strip-br attribute is provided then we strip this out
-        if ( attrs.stripBr && html == '<br>' ) {
+        if (attrs.stripBr && html == '<br>') {
           html = '';
         }
         ngModel.$setViewValue(html);
@@ -46,18 +45,307 @@ app.directive('socialPost', function() {
     restrict: 'E',
     replace: true,
     scope: {
-      data :'=',
-      index: '='
+      data: '=',
+      index: '=',
+      me: '='
     },
-    controller: function($scope, $state, $stateParams, $http, Flash, $timeout) {
-      console.log($scope.data);
+    controller: function($scope, $state, $stateParams, $http, Flash, $timeout, $sce, $users, $uibModal) {
+
+      // console.log($scope.data);
       $scope.p = $scope.data;
+      console.log('Mypk', $scope.me);
 
       $scope.showComments = false;
       $scope.allComments = function(indx) {
-        console.log('open all cmts....',indx);
+        console.log('open all cmts....', indx);
         $scope.p.showComments = !$scope.p.showComments
       }
+
+      $scope.changeType = function(indx) {
+        // console.log($scope.posts[indx]);
+        $scope.typeOfPost;
+        $uibModal.open({
+          templateUrl: '/static/ngTemplates/app.social.changeType.html',
+          size: 'md',
+          backdrop: true,
+          resolve: {
+            post: function() {
+              return $scope.p;
+            }
+          },
+          controller: function($scope, post, $http, Flash, $uibModalInstance) {
+            console.log('in this ctrll');
+            $scope.changingType = function(type) {
+              console.log(post.pk);
+              $scope.typeOfPost = type;
+              console.log('type of post', $scope.typeOfPost);
+              $scope.typeData = {
+                'typ': $scope.typeOfPost
+              }
+              $http({
+                method: 'PATCH',
+                url: '/api/social/post/' + post.pk + '/',
+                data: $scope.typeData
+              }).
+              then(function(response) {
+                console.log('res typ', response.data.typ);
+                post.typ = response.data.typ;
+                Flash.create('success', 'Type Changed')
+              })
+              $uibModalInstance.dismiss();
+            }
+          }
+        })
+      }
+
+      $scope.editPost = function(indx) {
+        $uibModal.open({
+          template: '<comment-Edit comment="editPostData" send="sendEditPost" config="editPostConfig" style="border: 2px solid #eeeeee;"></comment-Edit>',
+          // templateUrl:'/static/ngTemplates/app.social.editPost.html',
+          size: 'md',
+          backdrop: true,
+          resolve: {
+            post: function() {
+              return $scope.p;
+            }
+          },
+          controller: function($scope, post, $http, Flash, $uibModalInstance) {
+
+            // $scope.fileSize = 10;
+            // $scope.isImage = true;
+
+            $scope.editPostData = {
+              txt: post.txt,
+              file: post.mediaPost[0].fil,
+              parent: 'postEditModal'
+            }
+
+            console.log('edit post data', $scope.editPostData.file);
+
+
+            $scope.editPostConfig = {
+              expansion: true,
+              placeholder: 'Edit Your Post...'
+            }
+
+            $scope.sendEditPost = function() {
+
+              console.log($scope.editPostData);
+
+              console.log('it comes here...');
+              $http({
+                method: 'PATCH',
+                url: '/api/social/post/' + post.pk + '/',
+                data: {
+                  txt: $scope.editPostData.txt
+                }
+              }).
+              then(function(response) {
+                console.log('resssssss', response.data);
+                post.txt = response.data.txt;
+                Flash.create('success', 'Edited Successfully')
+                post.txt = $sce.getTrustedHtml(post.txt)
+
+                if ($scope.editPostData.file != emptyFile && typeof $scope.editPostData.file != 'string') {
+                  var posatMediaData = new FormData();
+                  posatMediaData.append('parent', post.pk);
+                  posatMediaData.append('fil', $scope.editPostData.file);
+                  $http({
+                    method: "PATCH",
+                    url: '/api/social/postMedia/' + post.mediaPost[0].pk + '/',
+                    data: posatMediaData,
+                    transformRequest: angular.identity,
+                    headers: {
+                      'Content-Type': undefined
+                    }
+                  }).
+                  then(function(response) {
+                    console.log('resssssss', response.data);
+                    Flash.create('success', 'Image Edited Successfully')
+                    post.mediaPost = [response.data];
+                    $scope.editPostData = {
+                      txt: '',
+                      file: emptyFile,
+                    }
+
+                  });
+                }
+              });
+
+              $uibModalInstance.dismiss();
+            }
+
+          }
+        })
+      }
+
+      $scope.sharePost = function(idx) {
+        console.log('dddddddddddddd', idx);
+        $uibModal.open({
+          templateUrl: '/static/ngTemplates/app.social.sharePost.html',
+          size: 'md',
+          backdrop: true,
+          resolve: {
+            post: function() {
+              return $scope.p;
+            }
+          },
+          controller: function($scope, $rootScope, $state, post, $uibModal, $uibModalInstance) {
+            console.log('modal img ctrl', post);
+            $scope.showBtn = ''
+            $scope.input = {
+              num: '',
+              email: ''
+            }
+            $scope.send = function(typ) {
+              console.log('send Type is ', typ, $scope.input);
+              console.log('data issss', post);
+            }
+          }
+        })
+      }
+
+      $scope.postResponse = function(idx, typ) {
+        console.log('dddddddddddddd', idx);
+        $uibModal.open({
+          templateUrl: '/static/ngTemplates/app.social.postResponse.html',
+          size: 'md',
+          backdrop: true,
+          resolve: {
+            post: function() {
+              return $scope.p;
+            },
+            typ: function() {
+              return typ;
+            }
+          },
+          controller: function($scope, $rootScope, $state, post, typ, $uibModal, $uibModalInstance) {
+            $scope.typ = typ
+            $scope.responseForm = {
+              txt: '',
+              value: 0,
+              fil: emptyFile
+            }
+            $scope.post = function() {
+              console.log('send Type is ', typ, $scope.responseForm);
+              console.log('data issss', post);
+              if ($scope.responseForm.txt.length == 0 || $scope.responseForm.txt == null) {
+                Flash.create('warning', 'Please Write Some Message')
+                return
+              }
+              if ($scope.responseForm.value < 0 || $scope.responseForm.value == null) {
+                Flash.create('warning', 'Please Mention The Amount')
+                return
+              }
+              var fd = new FormData();
+              fd.append('txt', $scope.responseForm.txt);
+              fd.append('value', $scope.responseForm.value);
+              fd.append('parent', post.pk);
+              fd.append('typ', typ);
+              if ($scope.responseForm.fil != emptyFile) {
+                fd.append('fil', $scope.responseForm.fil);
+              }
+              console.log(fd);
+
+              $http({
+                method: 'POST',
+                data: fd,
+                url: '/api/social/postResponse/',
+                transformRequest: angular.identity,
+                headers: {
+                  'Content-Type': undefined
+                }
+              }).
+              then(function(response) {
+                console.log('commmmmmm', response.data);
+                Flash.create('success', 'Successfully Posted')
+                var imgShow = false
+                var imgTypes = ['png', 'svg', 'gif', 'jpg', 'jpeg']
+                if (response.data.fil != null) {
+                  var filtyp = response.data.fil.split('.').slice(-1)[0]
+                  if (imgTypes.indexOf(filtyp) >= 0) {
+                    var imgShow = true
+                  }
+                }
+                post.timeline.push({
+                  typ: 'offer',
+                  created: response.data.created,
+                  data: response.data,
+                  imgShow: imgShow
+                })
+                $uibModalInstance.dismiss();
+              })
+            }
+          }
+        })
+      }
+
+      // }
+      $scope.postCommentConfig = {
+        expansion: true,
+        placeholder: 'Make An Offer ....'
+      }
+
+      $scope.postComment = function(parent) {
+        console.log('dataaaaaaaaaaaaaaaa', parent);
+        if (($scope.p.podtEditComments.txt == '' || $scope.p.podtEditComments.txt.length == 0 || $scope.p.podtEditComments.txt == '<br>') && ($scope.p.podtEditComments.file == emptyFile)) {
+          console.log('emptyyyyyyyyyyyy');
+          Flash.create('warning', 'Please Write Some Comment')
+          return
+        }
+
+        var fd = new FormData();
+        if ($scope.p.podtEditComments.txt != '' || $scope.p.podtEditComments.txt.length != 0 || $scope.p.podtEditComments.txt != '<br>') {
+          fd.append('txt', $scope.p.podtEditComments.txt);
+        }
+        if ($scope.p.podtEditComments.file != emptyFile) {
+          fd.append('fil', $scope.p.podtEditComments.file);
+        }
+        fd.append('parent', parent);
+
+        $http({
+          method: 'POST',
+          data: fd,
+          url: '/api/social/postComment/',
+          transformRequest: angular.identity,
+          headers: {
+            'Content-Type': undefined
+          }
+        }).
+        then(function(response) {
+          console.log('commmmmmm', response.data);
+          $scope.p.podtEditComments = {
+            txt: '',
+            file: emptyFile,
+            parent: $scope.p.pk
+          }
+          $scope.p.comments.push(response.data)
+          $scope.p.timeline.push({
+            typ: 'comment',
+            created: response.data.created,
+            data: response.data
+          })
+
+          console.log('post pk', $scope.p.pk);
+          console.log('comment pk', response.data.pk);
+        })
+
+      };
+
+      $scope.expandImage = function(imageUrl) {
+        $uibModal.open({
+          template: '<div class="modal-body">' +
+            '<img ng-src="{{imageUrl}}" alt="" width="100%;">' +
+            '</div>',
+          size: 'md',
+          backdrop: true,
+          controller: function($scope, $http, Flash) {
+            console.log(imageUrl);
+            $scope.imageUrl = imageUrl;
+          }
+        })
+      }
+
 
     },
   };
@@ -75,7 +363,7 @@ app.directive('chatWindow', function() {
       close: '=',
       toggle: '='
     },
-    controller: function($scope, $state, $stateParams,$users,$timeout, $http,$sce, Flash) {
+    controller: function($scope, $state,$uibModal, $stateParams, $users, $timeout, $http, $sce, Flash) {
 
       //fetch the messages with $scope.pk
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
@@ -87,6 +375,21 @@ app.directive('chatWindow', function() {
       }
       $scope.cancel = function() {
         $scope.close($scope.pos);
+      }
+
+      $scope.expandImage = function(imageUrl) {
+        console.log('asddddddddd');
+        $uibModal.open({
+          template: '<div class="modal-body">' +
+            '<img ng-src="{{imageUrl}}" alt="" width="100%;">' +
+            '</div>',
+          size: 'md',
+          backdrop: true,
+          controller: function($scope, $http, Flash) {
+            console.log(imageUrl);
+            $scope.imageUrl = imageUrl;
+          }
+        })
       }
 
       $scope.fetchMessages = function() {
@@ -109,96 +412,174 @@ app.directive('chatWindow', function() {
             } else {
               $scope.senderIsMe.push(false);
             }
-            im.message=$sce.getTrustedHtml(im.message)
+            im.message = $sce.getTrustedHtml(im.message)
             $scope.ims.push(im);
             // console.log($scope.ims.length);
           }
+          $scope.scroll(1000);
         });
       };
-
-
       $scope.fetchMessages();
 
-      $scope.messageToSend = "";
+      $scope.scroll = function(delay){
+        if (delay == undefined) {
+          delay = 100;
+        }
+        $timeout(function() {
+          var $id= $("#scrollArea"+$scope.friend.pk);
+
+          console.log($id);
+          $id.scrollTop($id[0].scrollHeight);
+        },delay)
+      }
+
+
+      // $scope.attachInComments = function() {
+      //   console.log('attach file');
+      //   console.log('#filePicker' + $scope.comment.parent);
+      //   $('#filePicker' + $scope.comment.parent).click();
+      // }
+
+      $scope.fileSize = 0;
+
+      $scope.chat = {
+        messageToSend: '',
+        fileToSend: emptyFile
+      }
+
+      $scope.$watch('chat.fileToSend', function(newValue, oldValue) {
+        if (newValue == emptyFile) {
+          return;
+        }
+        $scope.fileSize = newValue.size;
+        $scope.fileName = newValue.name;
+      });
+
+      $scope.checkFile = function() {
+        console.log('file sizee');
+        if ($scope.fileSize == 0) {
+          $scope.attach();
+        } else {
+          $scope.removeFile();
+        }
+      }
+
+      $scope.attach = function() {
+        console.log('add');
+        $('#filePickerChat' + $scope.friend.pk).click();
+        console.log('attach...');
+      }
+
+      $scope.removeFile = function() {
+        console.log('remove');
+        $scope.fileSize = 0;
+        $scope.chat.fileToSend = emptyFile;
+      }
+
+      $scope.chat.messageToSend = "";
+      $scope.chat.fileToSend = emptyFile;
+
       $scope.send = function() {
+        console.log('sending');
         // var msg = angular.copy($scope.messageToSend)
-        var msg = $scope.messageToSend
-        console.log('messssageeeeee', $scope.messageToSend);
-        if (msg != "") {
+        var msg = $scope.chat.messageToSend;
+        var file = $scope.chat.fileToSend;
+
+        console.log('messssageeeeee', $scope.chat.messageToSend, $scope.chat.fileToSend);
+        if (msg != "" || file != emptyFile) {
+          var fd = new FormData();
+          if (msg != "" && file != emptyFile) {
+            fd.append('message', msg);
+            fd.append('attachment', file);
+            fd.append('read', false);
+            fd.append('user', $scope.friend.pk);
+          } else if (file == emptyFile) {
+            console.log('send only msg');
+            fd.append('message', msg);
+            fd.append('read', false);
+            fd.append('user', $scope.friend.pk);
+          } else {
+            console.log('send only image');
+            fd.append('attachment', file);
+            fd.append('read', false);
+            fd.append('user', $scope.friend.pk);
+          }
           $scope.status = "M"; // contains message
-          var dataToSend = {
-            message: msg,
-            user: $scope.friend.pk,
-            read: false
-          };
+          console.log('patch');
           $http({
             method: 'POST',
-            data: dataToSend,
-            url: '/api/PIM/chatMessage/'
+            data: fd,
+            url: '/api/PIM/chatMessage/',
+            transformRequest: angular.identity,
+            headers: {
+              'Content-Type': undefined
+            }
           }).
           then(function(response) {
-            response.data.message=$sce.getTrustedHtml(response.data.message)
+            response.data.message = $sce.getTrustedHtml(response.data.message)
             $scope.ims.push(response.data)
             $scope.senderIsMe.push(true);
-            // connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
-            //   acknowledge: true
-            // }).
-            // then(function(publication) {});
-            $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , response.data.message , $scope.me.username , response.data.pk], {}, {acknowledge: true}).
-            then(function (publication) {});
+            $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
+              acknowledge: true
+            }).
+            then(function(publication) {});
+            $scope.chat = {
+              messageToSend: '',
+              fileToSend: emptyFile
+            }
+            $scope.fileSize = 0;
 
-            $scope.messageToSend = "";
           })
         }
       }
 
-      $scope.connection = new autobahn.Connection({
-        url: 'ws://skinstore.monomerce.com:8080/ws',
-        realm: 'default'
-      });
+
       $scope.isTyping = false;
-      $scope.chatResponse = function (args) {
-        console.log('ddddd',args);
-        if (args[0]=='T') {
-          $timeout(function () {
+      $scope.chatResponse = function(args) {
+        console.log('ddddd', args);
+        if (args[0] == 'T') {
+          $timeout(function() {
             $scope.isTyping = true;;
           }, 300);
-          $timeout(function () {
+          $timeout(function() {
             $scope.isTyping = false;
             console.log($scope.isTyping);
           }, 4000);
           // $scope.isTyping = true;
-          console.log('typinmgg',args[1],$scope.isTyping);
-        }else if (args[0]=='M') {
+          console.log('typinmgg', args[1], $scope.isTyping);
+        } else if (args[0] == 'M') {
           console.log('message came', args[1]);
           $http({
             method: "GET",
-            url: '/api/PIM/chatMessageBetween/'+ args[3] +'/'
+            url: '/api/PIM/chatMessageBetween/' + args[3] + '/'
           }).
           then(function(response) {
-            console.log('resssssss',response.data);
-            response.data.message=$sce.getTrustedHtml(response.data.message)
+            console.log('resssssss', response.data);
+            response.data.message = $sce.getTrustedHtml(response.data.message)
             $scope.ims.push(response.data);
             $scope.senderIsMe.push(false);
+            $scope.scroll();
           });
         }
 
 
       }
 
+      $scope.connection = new autobahn.Connection({
+        url: 'ws://skinstore.monomerce.com:8080/ws',
+        realm: 'default'
+      });
+
       $scope.connection.onopen = function(session) {
         $scope.session = session;
         console.log("Connected")
         console.log(wampBindName);
-
-
-
-        $scope.session.subscribe('service.chat.'+ wampBindName, $scope.chatResponse).then(
-        function (sub) {
-          console.log("subscribed to topic 'chatResonse'");
+        $scope.session.subscribe('service.chat.' + wampBindName, $scope.chatResponse).then(
+          function(sub) {
+            console.log("subscribed to topic 'chatResonse'");
           },
-        function (err) {
-          console.log("failed to subscribed: " + err);
+          function(err) {
+            console.log("failed to subscribed: " + err);
           }
         );
 
@@ -207,15 +588,17 @@ app.directive('chatWindow', function() {
 
       $scope.connection.open();
 
-      $scope.$watch('messageToSend', function(newValue, oldValue) {
+      $scope.$watch('chat.messageToSend', function(newValue, oldValue) {
         $scope.status = "T"; // the sender is typing a message
-          if (newValue!="") {
-            console.log('typing....');
-            console.log($scope.friend.username);
-            $scope.connection.session.publish('service.chat.'+$scope.friend.username, [$scope.status , $scope.me.username], {}, {acknowledge: true}).
-            then(function (publication) {});
-            // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
-          }
+        if (newValue != "") {
+          console.log('typing....');
+          console.log($scope.friend.username);
+          $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, $scope.me.username], {}, {
+            acknowledge: true
+          }).
+          then(function(publication) {});
+          // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
+        }
       }, true)
 
     },
@@ -228,15 +611,15 @@ app.directive('commentEdit', function() {
     restrict: 'E',
     replace: true,
     scope: {
-      comment :'=',
-      send : '=',
+      comment: '=',
+      send: '=',
       config: '='
     },
     controller: function($scope, $state, $stateParams, $http, Flash, $timeout) {
       $scope.backupTxt = angular.copy($scope.comment.txt);
-      $timeout(function () {
+      $timeout(function() {
         $scope.comment.txt = $scope.backupTxt;
-        if (typeof $scope.comment.file=='string') {
+        if (typeof $scope.comment.file == 'string') {
           $scope.isImage = true;
           $scope.fileSize = 10;
           $scope.fileName = $scope.comment.file.split('postMedia/')[1];
@@ -250,7 +633,7 @@ app.directive('commentEdit', function() {
 
       $timeout(function() {
         $('div#auto').tagautocomplete({
-          source: function (query, process) {
+          source: function(query, process) {
 
             var position = getCaretPosition(document.getElementById('auto'));
             query = query.substring(0, position);
@@ -258,43 +641,45 @@ app.directive('commentEdit', function() {
             var regex = new RegExp("(^|\\s)([" + this.options.character + "][\\w-]*)$");
             var result = regex.exec(query);
 
-            if(result && result[2]){
+            if (result && result[2]) {
               result = result[2].trim().toLowerCase();
-            }else {
+            } else {
               result = '';
               return
             }
 
 
-           return $.get('/api/HR/users/?', { username__contains: result.replace('@', '') }, function (data) {
-             var toReturn = [];
-             for (var i = 0; i < data.length; i++) {
-               toReturn.push('@' +  data[i].username)
-             }
+            return $.get('/api/HR/users/?', {
+              username__contains: result.replace('@', '')
+            }, function(data) {
+              var toReturn = [];
+              for (var i = 0; i < data.length; i++) {
+                toReturn.push('@' + data[i].username)
+              }
 
-             return process(toReturn); //if JSON is [ "options" : { ...}
-           });
+              return process(toReturn); //if JSON is [ "options" : { ...}
+            });
 
-         }
+          }
         });
-      },1000)
+      }, 1000)
 
 
-      if ($scope.config==undefined) {
+      if ($scope.config == undefined) {
         $scope.placeholder = 'Write Comment';
         $scope.expansion = true;
-      }else {
+      } else {
         $scope.placeholder = $scope.config.placeholder;
         $scope.expansion = $scope.config.expansion;
       }
 
       $scope.height = '';
-      $scope.isImage = false ;
+      $scope.isImage = false;
       $scope.fileSize = 0;
 
 
-      $scope.$watch('comment.txt' , function(newValue , oldValue){
-        if (newValue==undefined || $scope.expansion == false) {
+      $scope.$watch('comment.txt', function(newValue, oldValue) {
+        if (newValue == undefined || $scope.expansion == false) {
           return;
         }
 
@@ -306,8 +691,8 @@ app.directive('commentEdit', function() {
 
           var cnt = (newValue.match(/<br>/g) || []).length;
           if (cnt > 4) {
-            $scope.height = (cnt*2) + 'em';
-          }else{
+            $scope.height = (cnt * 2) + 'em';
+          } else {
             $scope.height = '8em';
           }
 
@@ -315,14 +700,14 @@ app.directive('commentEdit', function() {
       });
 
       $scope.focus = function() {
-        console.log($scope.comment.txt );
+        console.log($scope.comment.txt);
         $scope.comment.txt = $scope.comment.txt.replace('<!-- ngIf: !focused -->', '')
         $scope.focused = true;
       }
 
       $scope.blurr = function() {
         if ($scope.comment.txt == '<br>') {
-          console.log($scope.comment.txt );
+          console.log($scope.comment.txt);
           $scope.comment.txt = '';
         }
         $scope.focused = false;
@@ -338,20 +723,21 @@ app.directive('commentEdit', function() {
       }
 
       $scope.attachInComments = function() {
-        console.log('#filePicker'+$scope.comment.parent);
-        $('#filePicker'+$scope.comment.parent).click();
+        console.log('#filePicker' + $scope.comment.parent);
+        $('#filePicker' + $scope.comment.parent).click();
 
       }
 
       $scope.$watch('comment.file', function(newValue, oldValue) {
         if (newValue == emptyFile) {
+          $scope.fileSize = 0;
           return;
         }
-        if (typeof newValue=='string') {
-          console.log($scope.comment.file , $scope.comment.parent);
+        if (typeof newValue == 'string') {
+          console.log($scope.comment.file, $scope.comment.parent);
           $timeout(function() {
-            document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
-          },1000)
+            document.getElementById("filePreview" + $scope.comment.parent).src = $scope.comment.file;
+          }, 1000)
         }
         if (typeof newValue.name != 'undefined') {
           $scope.fr = new FileReader();
@@ -359,13 +745,13 @@ app.directive('commentEdit', function() {
 
           var fileType = $scope.comment.file.type.split('/')[0];
 
-          if (fileType ==  'image') {
+          if (fileType == 'image') {
             console.log('its image');
             $scope.isImage = true;
-            $scope.fr.onload = function (oFREvent) {
-              document.getElementById("filePreview"  + $scope.comment.parent ).src = oFREvent.target.result;
+            $scope.fr.onload = function(oFREvent) {
+              document.getElementById("filePreview" + $scope.comment.parent).src = oFREvent.target.result;
             };
-          }else {
+          } else {
             $scope.isImage = false;
           }
 
@@ -1015,14 +1401,14 @@ app.directive('notificationStrip', function() {
 //     },
 //     // attrs is the attrs passed from the main scope
 //     link: function postLink(scope, element, attrs) {
-      // scope.$watch('messageToSend', function(newValue , oldValue ){
-      //   // console.log("changing");
-      //   scope.status = "T"; // the sender is typing a message
-      //   if (newValue!="") {
-      //     connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
-      //   }
-      //   scope.status = "N";
-      // }); // watch for the messageTosend
+// scope.$watch('messageToSend', function(newValue , oldValue ){
+//   // console.log("changing");
+//   scope.status = "T"; // the sender is typing a message
+//   if (newValue!="") {
+//     connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
+//   }
+//   scope.status = "N";
+// }); // watch for the messageTosend
 //       scope.$watch('ims.length', function( ){
 //         setTimeout( function(){
 //           scope.scroll();
