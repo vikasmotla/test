@@ -20,7 +20,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   $scope.people = [];
   $scope.users;
   $scope.friend;
-  $scope.isTyping= false;
+  $scope.isTyping = false;
 
 
   $http({
@@ -50,29 +50,30 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     realm: 'default'
   });
 
-  $scope.chatResponse = function (args) {
-    console.log('ddddd',args);
-    if (args[0]=='T') {
-      console.log('typinmgg',args[1]);
-      $timeout(function () {
+  $scope.chatResponse = function(args) {
+    console.log('ddddd', args);
+    if (args[0] == 'T') {
+      console.log('typinmgg', args[1]);
+      $timeout(function() {
         $scope.isTyping = true;
         console.log($scope.isTyping);
       }, 500);
-      $timeout(function () {
+      $timeout(function() {
         $scope.isTyping = false;
         console.log($scope.isTyping);
       }, 4000);
-    }else if (args[0]=='M') {
+    } else if (args[0] == 'M') {
       console.log('message came', args[1]);
       $http({
         method: "GET",
-        url: '/api/PIM/chatMessageBetween/'+ args[3] +'/'
+        url: '/api/PIM/chatMessageBetween/' + args[3] + '/'
       }).
       then(function(response) {
-        console.log('resssssss',response.data);
+        console.log('resssssss', response.data);
         response.data.message = $sce.getTrustedHtml(response.data.message);
         $scope.ims.push(response.data);
         $scope.senderIsMe.push(false);
+        $scope.scroll(500);
       });
     }
 
@@ -86,12 +87,12 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
 
 
 
-    $scope.session.subscribe('service.chat.'+ wampBindName, $scope.chatResponse).then(
-    function (sub) {
-      console.log("subscribed to topic 'chatResonse'");
+    $scope.session.subscribe('service.chat.' + wampBindName, $scope.chatResponse).then(
+      function(sub) {
+        console.log("subscribed to topic 'chatResonse'");
       },
-    function (err) {
-      console.log("failed to subscribed: " + err);
+      function(err) {
+        console.log("failed to subscribed: " + err);
       }
     );
 
@@ -109,7 +110,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     $scope.commenEdit = {
       txt: '',
       file: emptyFile,
-      parent : 0
+      parent: 0
     }
     $scope.personInView = $scope.users[index];
     console.log($scope.personInView);
@@ -153,14 +154,27 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         im.message = $sce.getTrustedHtml(im.message);
         $scope.ims.push(im);
       }
+      $scope.scroll(1000);
     });
     console.log($scope.ims);
   };
 
+  $scope.scroll = function(delay) {
+    if (delay == undefined) {
+      delay = 100;
+    }
+    $timeout(function() {
+      var $id = $("#scrollArea" + $scope.friend.pk);
+
+      console.log($id);
+      $id.scrollTop($id[0].scrollHeight);
+    }, delay)
+  }
+
 
 
   $scope.$watch('personInView', function(newValue, oldValue) {
-    console.log('jhjkhjjkii',$scope.personInView);
+    console.log('jhjkhjjkii', $scope.personInView);
     if ($scope.personInView != undefined) {
       $scope.fetchMessages();
     }
@@ -168,14 +182,20 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   }, true)
 
   $scope.$watch('commenEdit.txt', function(newValue, oldValue) {
+    console.log(newValue);
+    if (newValue == undefined) {
+      return;
+    }
     $scope.status = "T"; // the sender is typing a message
-      if (newValue!="") {
-        console.log('typing....');
-        console.log($scope.friend.username);
-        $scope.connection.session.publish('service.chat.'+$scope.friend.username, [$scope.status , $scope.me.username], {}, {acknowledge: true}).
-        then(function (publication) {});
-        // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
-      }
+    if (newValue != "") {
+      console.log('typing....');
+      console.log($scope.friend.username);
+      $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, $scope.me.username], {}, {
+        acknowledge: true
+      }).
+      then(function(publication) {});
+      // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
+    }
   }, true)
 
   $scope.sendMessage = function() {
@@ -184,26 +204,32 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     if (msg != "" || file != "") {
       $scope.status = "M"; // contains message
       var fd = new FormData();
-      fd.append('message' , msg);
-      fd.append('attachment' , file);
-      fd.append('read' , false);
-      fd.append('user' , $scope.personInView.pk);
+      fd.append('message', msg);
+      fd.append('attachment', file);
+      fd.append('read', false);
+      fd.append('user', $scope.personInView.pk);
       $http({
         method: 'POST',
         data: fd,
         url: '/api/PIM/chatMessage/',
-        transformRequest: angular.identity, headers: {'Content-Type': undefined}
+        transformRequest: angular.identity,
+        headers: {
+          'Content-Type': undefined
+        }
       }).
       then(function(response) {
         response.data.message = $sce.getTrustedHtml(response.data.message);
         $scope.ims.push(response.data)
         $scope.senderIsMe.push(true);
-        console.log('heree...',response.data);
+        console.log('heree...', response.data);
         console.log($scope.friend.username);
-        $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , response.data.message , $scope.me.username , response.data.pk], {}, {acknowledge: true}).
-        then(function (publication) {});
+        $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
+          acknowledge: true
+        }).
+        then(function(publication) {});
         $scope.commenEdit.txt = "";
         $scope.commenEdit.file = emptyFile;
+        $scope.scroll(500);
       })
     }
   };
@@ -232,16 +258,16 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   // }
 
   $scope.expandImage = function(imageUrl) {
-      $uibModal.open({
-        template: '<div class="modal-body">'+
-           '<img ng-src="{{imageUrl}}" alt="" width="100%;">'+
+    $uibModal.open({
+      template: '<div class="modal-body">' +
+        '<img ng-src="{{imageUrl}}" alt="" width="100%;">' +
         '</div>',
-        size: 'md',
-        backdrop : true,
-        controller : function($scope , $http , Flash) {
-          $scope.imageUrl = imageUrl;
-        }
-      })
+      size: 'md',
+      backdrop: true,
+      controller: function($scope, $http, Flash) {
+        $scope.imageUrl = imageUrl;
+      }
+    })
   }
 
 

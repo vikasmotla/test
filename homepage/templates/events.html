@@ -53,12 +53,12 @@
       <div class="container-fluid" style="{% if forloop.counter|divisibleby:2 %}background:#eeeeee;{% endif %}">
         <section style="padding-top: 20px;padding-bottom: 30px;">
 
-          <div class="row">
+          <div class="row">{{a}}
             <div class="col-md-12 text-left" style="margin-left: 40px;margin-right: 10px">
               <h2 style="font-size:19px;" class="text-primary"> <a href = "{{a.url}}/ ">  {{a.title}} </a></h2>
               Start : {{a.as_on}} <span style="margin-left: 10px;"> | </span> <span style="margin-left: 10px;">End : {{a.ends_on}}</span>
             </div>
-            
+
           </div>
           <div class="container-fluid" style="margin-left:40px;margin-right: 10px;padding:0px;margin-top:15px;">
             {{a.header | safe}}

@@ -15,9 +15,77 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
   $rootScope.$on("$stateChangeError", console.log.bind(console));
 }]);
 
-app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uibModal, $timeout) {
+app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uibModal, $timeout, $interval) {
 
   $scope.me = $users.get('mySelf');
+
+  $scope.index = 0;
+  $scope.incr = true;
+  // $scope.myFollowing = [];
+
+  $scope.fetchFeaturedPage = function() {
+    $scope.featuredPageAll = []
+    $scope.featuredPageFirst;
+    $http({
+      method: 'GET',
+      url: '/api/ERP/featuredPage/?active=true',
+    }).
+    then(function(response) {
+      $scope.featuredPageAll = response.data;
+      console.log('all', $scope.featuredPageAll);
+      $scope.fpInView = $scope.featuredPageAll[$scope.index];
+      if ($scope.fpInView.typ == 'event') {
+        $scope.eventUrl = $scope.fpInView.event.name.replace(/ /g, "_") + '_' + $scope.fpInView.event.pk;
+      }
+      $scope.index = 1;
+      // $http({
+      //   method: 'GET',
+      //   url: '/api/HR/profile/' + $scope.me.profile.pk + '/'
+      // }).
+      // then(function(response) {
+      //   $scope.myFollowing = response.data.following;
+      //   console.log($scope.myFollowing);
+      // })
+    });
+  }
+  $scope.fetchFeaturedPage();
+
+
+  $interval(function() {
+    if ($scope.featuredPageAll.length>1) {
+      console.log($scope.featuredPageAll.length);
+      $scope.fpInView = $scope.featuredPageAll[$scope.index];
+      if ($scope.fpInView.typ == 'event') {
+        $scope.eventUrl = $scope.fpInView.event.name.replace(/ /g, "_") + '_' + $scope.fpInView.event.pk;
+      }
+      // for (var i = 0; i < $scope.myFollowing.length; i++) {
+      //   console.log('insideeeee for loopppp',$scope.fpInView.person.pk , $scope.myFollowing[i] );
+      //   if ($scope.fpInView.person.pk==$scope.myFollowing[i]) {
+      //     $scope.fpInView.following = true;
+      //     console.log('following......',$scope.fpInView.following);
+      //   }else {
+      //     $scope.fpInView.following = false;
+      //   }
+      // }
+      $scope.index += 1;
+      if ($scope.index == $scope.featuredPageAll.length) {
+        $scope.index = 0;
+      }
+    }
+  }, 5000);
+
+
+  $scope.fpFollow = function(pk) {
+    console.log($scope.me.profile.pk, pk);
+    $http({
+      method: 'PATCH',
+      url: '/api/HR/profile/' + $scope.me.profile.pk + '/?following=' + pk + '&mode=follow'
+    }).
+    then(function(response) {
+      console.log(response.data);
+      Flash.create('success', 'Following')
+    })
+  }
 
   $scope.emojiClicked = function(inp, pk) {
     console.log("clicked", inp, pk);
@@ -68,7 +136,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     }).
     then(function(response) {
       $scope.posts = response.data;
-      var imgTypes = ['png' , 'svg' , 'gif' , 'jpg' , 'jpeg']
+      var imgTypes = ['png', 'svg', 'gif', 'jpg', 'jpeg']
       for (var i = 0; i < $scope.posts.length; i++) {
         $scope.posts[i].reacted = false
         $scope.posts[i].timeline = []
@@ -78,32 +146,42 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
         $scope.posts[i].txt = $sce.getTrustedHtml($scope.posts[i].txt);
         for (var j = 0; j < $scope.posts[i].comments.length; j++) {
           $scope.posts[i].comments[j].txt = $sce.getTrustedHtml($scope.posts[i].comments[j].txt);
-          $scope.posts[i].timeline.push({typ:'comment',created:$scope.posts[i].comments[j].created,data:$scope.posts[i].comments[j]})
+          $scope.posts[i].timeline.push({
+            typ: 'comment',
+            created: $scope.posts[i].comments[j].created,
+            data: $scope.posts[i].comments[j]
+          })
         }
         for (var j = 0; j < $scope.posts[i].responses.length; j++) {
           $scope.posts[i].responses[j].txt = $sce.getTrustedHtml($scope.posts[i].responses[j].txt);
           var imgShow = false
           if ($scope.posts[i].responses[j].fil != null) {
             var filtyp = $scope.posts[i].responses[j].fil.split('.').slice(-1)[0]
-            console.log('fileeeeeeeeee',filtyp,imgTypes);
-            console.log(imgTypes.indexOf(filtyp));
+            // console.log('fileeeeeeeeee', filtyp, imgTypes);
+            // console.log(imgTypes.indexOf(filtyp));
             if (imgTypes.indexOf(filtyp) >= 0) {
               var imgShow = true
             }
           }
-          $scope.posts[i].timeline.push({typ:'offer',created:$scope.posts[i].responses[j].created,data:$scope.posts[i].responses[j],imgShow:imgShow})
+          $scope.posts[i].timeline.push({
+            typ: 'offer',
+            created: $scope.posts[i].responses[j].created,
+            data: $scope.posts[i].responses[j],
+            imgShow: imgShow
+          })
         }
         $scope.posts[i].podtEditComments = {
           txt: '',
           file: emptyFile,
           parent: $scope.posts[i].pk
         }
-        $scope.posts[i].timeline.sort(function(a, b){
-          var dateA=new Date(a.created), dateB=new Date(b.created)
-          return dateA-dateB //sort by date ascending
+        $scope.posts[i].timeline.sort(function(a, b) {
+          var dateA = new Date(a.created),
+            dateB = new Date(b.created)
+          return dateA - dateB //sort by date ascending
         })
       }
-      console.log('possssss',$scope.posts);
+      console.log('possssss', $scope.posts);
     });
   };
   $scope.fetchAllPosts();
@@ -117,20 +195,20 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     then(function(response) {
       console.log('resssssssssssss', response.data);
       $scope.totalPostRes = response.data;
-      console.log($scope.totalPostRes );
-      if ($scope.totalPostRes.length>2) {
+      console.log($scope.totalPostRes);
+      if ($scope.totalPostRes.length > 2) {
         $scope.showMoreBtn = true;
       }
-      $scope.postRes = $scope.totalPostRes.slice(0,2);
-      console.log( 'osdfsdfdsf', $scope.postRes);
+      $scope.postRes = $scope.totalPostRes.slice(0, 2);
+      console.log('osdfsdfdsf', $scope.postRes);
       for (var i = 0; i < $scope.postRes.length; i++) {
         $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0, 40);
-        console.log($scope.postRes[i].txt);
+        // console.log($scope.postRes[i].txt);
         $scope.postRes[i].responseValue = $scope.postRes[i].responses[0];
         $scope.postRes[i].showPrev = false;
         $scope.postRes[i].showNext = false;
         $scope.postRes[i].intrestTxt = '';
-        if ($scope.postRes[i].responses.length>1) {
+        if ($scope.postRes[i].responses.length > 1) {
           $scope.postRes[i].showNext = true;
         }
 
@@ -145,101 +223,113 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
 
     });
 
-};
-$scope.fetchAllOffers();
-$scope.countForResp = 0;
+  };
+  $scope.fetchAllOffers();
+  $scope.countForResp = 0;
 
-$scope.expandLeads = function (expandPostpk) {
-  console.log('expand post pk',expandPostpk);
-  $uibModal.open({
-    templateUrl: '/static/ngTemplates/app.social.expandLeads.html',
-    size: 'lg',
-    backdrop: true,
-    controller: function($scope, $http, Flash) {
-      $http({
-        method: 'GET',
-        url: '/api/social/post/' + expandPostpk + '/',
-      }).
-      then(function(response) {
-        console.log(response.data);
-        $scope.expandPostData = response.data;
-        $scope.expandPostData.timeline = []
-        var imgTypes = ['png' , 'svg' , 'gif' , 'jpg' , 'jpeg']
-        if ($scope.expandPostData.user_reaction.length > 0) {
-          $scope.expandPostData.reacted = true
-        }
-        $scope.expandPostData.txt = $sce.getTrustedHtml($scope.expandPostData.txt);
-        for (var j = 0; j < $scope.expandPostData.comments.length; j++) {
-          $scope.expandPostData.comments[j].txt = $sce.getTrustedHtml($scope.expandPostData.comments[j].txt);
-          $scope.expandPostData.timeline.push({typ:'comment',created:$scope.expandPostData.comments[j].created,data:$scope.expandPostData.comments[j]})
-        }
-        for (var j = 0; j < $scope.expandPostData.responses.length; j++) {
-          $scope.expandPostData.responses[j].txt = $sce.getTrustedHtml($scope.expandPostData.responses[j].txt);
-          var imgShow = false
-          if ($scope.expandPostData.responses[j].fil != null) {
-            var filtyp = $scope.expandPostData.responses[j].fil.split('.').slice(-1)[0]
-            console.log('fileeeeeeeeee',filtyp, imgTypes);
-            console.log(imgTypes.indexOf(filtyp));
-            if (imgTypes.indexOf(filtyp) >= 0) {
-              var imgShow = true
-            }
+  $scope.expandLeads = function(expandPostpk) {
+    console.log('expand post pk', expandPostpk);
+    $uibModal.open({
+      templateUrl: '/static/ngTemplates/app.social.expandLeads.html',
+      size: 'lg',
+      backdrop: true,
+      controller: function($scope, $http, Flash) {
+        $http({
+          method: 'GET',
+          url: '/api/social/post/' + expandPostpk + '/',
+        }).
+        then(function(response) {
+          console.log(response.data);
+          $scope.expandPostData = response.data;
+          $scope.expandPostData.timeline = []
+          var imgTypes = ['png', 'svg', 'gif', 'jpg', 'jpeg']
+          if ($scope.expandPostData.user_reaction.length > 0) {
+            $scope.expandPostData.reacted = true
           }
-          $scope.expandPostData.timeline.push({typ:'offer',created:$scope.expandPostData.responses[j].created,data:$scope.expandPostData.responses[j],imgShow:imgShow})
-        }
+          $scope.expandPostData.txt = $sce.getTrustedHtml($scope.expandPostData.txt);
+          for (var j = 0; j < $scope.expandPostData.comments.length; j++) {
+            $scope.expandPostData.comments[j].txt = $sce.getTrustedHtml($scope.expandPostData.comments[j].txt);
+            $scope.expandPostData.timeline.push({
+              typ: 'comment',
+              created: $scope.expandPostData.comments[j].created,
+              data: $scope.expandPostData.comments[j]
+            })
+          }
+          for (var j = 0; j < $scope.expandPostData.responses.length; j++) {
+            $scope.expandPostData.responses[j].txt = $sce.getTrustedHtml($scope.expandPostData.responses[j].txt);
+            var imgShow = false
+            if ($scope.expandPostData.responses[j].fil != null) {
+              var filtyp = $scope.expandPostData.responses[j].fil.split('.').slice(-1)[0]
+              console.log('fileeeeeeeeee', filtyp, imgTypes);
+              console.log(imgTypes.indexOf(filtyp));
+              if (imgTypes.indexOf(filtyp) >= 0) {
+                var imgShow = true
+              }
+            }
+            $scope.expandPostData.timeline.push({
+              typ: 'offer',
+              created: $scope.expandPostData.responses[j].created,
+              data: $scope.expandPostData.responses[j],
+              imgShow: imgShow
+            })
+          }
 
-        console.log('timeline', $scope.expandPostData.timeline);
+          console.log('timeline', $scope.expandPostData.timeline);
 
-        $scope.expandPostData.timeline.sort(function(a, b){
-          var dateA=new Date(a.created), dateB=new Date(b.created)
-          return dateA-dateB //sort by date ascending
+          $scope.expandPostData.timeline.sort(function(a, b) {
+            var dateA = new Date(a.created),
+              dateB = new Date(b.created)
+            return dateA - dateB //sort by date ascending
+          })
         })
-      })
 
-      // $scope.showComments = false;
-      // $scope.allComments = function() {
-      //   $scope.expandPostData.showComments = !$scope.expandPostData.showComments
-      // }
+        // $scope.showComments = false;
+        // $scope.allComments = function() {
+        //   $scope.expandPostData.showComments = !$scope.expandPostData.showComments
+        // }
 
-    }
-  })
-}
+      }
+    })
+  }
 
-  $scope.sendOffer = function (resVal,idx) {
+  $scope.sendOffer = function(resVal, idx) {
     console.log($scope.postRes[idx]);
-    console.log('resval', resVal );
+    console.log('resval', resVal);
 
     $http({
       method: 'PATCH',
       url: '/api/social/postResponse/' + resVal.pk + '/',
-      data: {reply: $scope.postRes[idx].intrestTxt}
+      data: {
+        reply: $scope.postRes[idx].intrestTxt
+      }
     }).
     then(function(idx) {
-      return function(response){
-      console.log('res', response.data,$scope.posts);
-      $scope.postRes[idx].intrestTxt = ''
-      Flash.create('success', 'Successfully Send Your Response')
-      for (var i = 0; i < $scope.posts.length; i++) {
-        if ($scope.posts[i].pk == response.data.parent) {
-          for (var j = 0; j < $scope.posts[i].timeline.length; j++) {
-            if ($scope.posts[i].timeline[j].typ == 'offer' && $scope.posts[i].timeline[j].data.pk == response.data.pk) {
-              $scope.posts[i].timeline[j].data = response.data
+      return function(response) {
+        console.log('res', response.data, $scope.posts);
+        $scope.postRes[idx].intrestTxt = ''
+        Flash.create('success', 'Successfully Send Your Response')
+        for (var i = 0; i < $scope.posts.length; i++) {
+          if ($scope.posts[i].pk == response.data.parent) {
+            for (var j = 0; j < $scope.posts[i].timeline.length; j++) {
+              if ($scope.posts[i].timeline[j].typ == 'offer' && $scope.posts[i].timeline[j].data.pk == response.data.pk) {
+                $scope.posts[i].timeline[j].data = response.data
+              }
             }
           }
         }
       }
-    }
-  }(idx))
+    }(idx))
 
   }
 
   $scope.prevOfferRes = function(indx) {
     $scope.countForResp--;
     console.log($scope.postRes[indx].responses[$scope.countForResp]);
-    if ( $scope.postRes[indx].responses[$scope.countForResp] != undefined) {
-      if ($scope.countForResp==0) {
+    if ($scope.postRes[indx].responses[$scope.countForResp] != undefined) {
+      if ($scope.countForResp == 0) {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = false;
-      }else {
+      } else {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = true;
       }
@@ -251,11 +341,11 @@ $scope.expandLeads = function (expandPostpk) {
   $scope.nextOfferRes = function(indx) {
     $scope.countForResp++;
     console.log($scope.postRes[indx].responses[$scope.countForResp]);
-    if ( $scope.postRes[indx].responses[$scope.countForResp] != undefined) {
-      if ($scope.countForResp+1==$scope.postRes[indx].responses.length) {
+    if ($scope.postRes[indx].responses[$scope.countForResp] != undefined) {
+      if ($scope.countForResp + 1 == $scope.postRes[indx].responses.length) {
         $scope.postRes[indx].showNext = false;
         $scope.postRes[indx].showPrev = true;
-      }else {
+      } else {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = true;
       }

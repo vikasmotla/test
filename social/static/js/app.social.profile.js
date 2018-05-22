@@ -180,6 +180,7 @@ app.controller("main", function($scope, $state, $http, $rootScope, $uibModal, $u
   }
 
   $scope.sendFollow = function(obj, mod) {
+    console.log(obj , mod);
     $scope.following = !$scope.following
     if (mod == 'follow') {
       $scope.followersCount = $scope.followersCount + 1
@@ -196,8 +197,8 @@ app.controller("main", function($scope, $state, $http, $rootScope, $uibModal, $u
       console.log(response.data);
       // $scope.me = response.data
     })
-
   }
+
   $scope.msgRequest = function(obj) {
     console.log(obj, typeof obj);
     $rootScope.$broadcast('msgRequestData', {

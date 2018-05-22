@@ -76,29 +76,127 @@
       <div class="row" style="padding:5px; padding-left:30px;">
         <strong>Contacts</strong>
       </div> -->
+
       <div class="row">
-        <div class="container-fluid text-center" style="position:absolute; bottom:10px;">
+        {% verbatim %}
+        <div class="container-fluid text-center" style="position:absolute; bottom:0px;">
           <strong>Suggestions</strong>
-          <div class="row" style="margin-top:20px;" ng-repeat="group in [1]">
-            <div class="col-xs-12">
-              <img src="/static/images/group.jpg" width="100%" alt="">
+
+          <div class="row" style="margin-top:20px;">
+
+            <div class="col-xs-12" style="border-bottom:1px solid #e0e0e0;">
+              <span ng-if="fpInView.typ=='person'" ><img ng-src="{{fpInView.person.profile.displayPicture}}" style="width:350px; height:200px;" alt=""></span>
+              <span ng-if="fpInView.typ=='event'" ><img ng-src="/static/images/event.jpg" style="width:350px; height:200px;" alt=""></span>
+              <span ng-if="fpInView.typ=='blog'" ><img ng-src="/static/images/startup-blog.jpg" style="width:350px; height:200px;" alt=""></span>
             </div>
-            <div class="row" style="margin:15px;">
+
+
+            <div ng-if="fpInView.typ=='person'" class="row" style="margin:15px;">
               <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
-                <span style="cursor:pointer">abcd pvt ltd</span>
+                <span style="cursor:pointer">
+                  <a target="_blank" href="/social/profile/{{fpInView.person.username}}" style="text-decoration:none; color:black;"> {{fpInView.person.first_name}} {{fpInView.person.last_name}} </a>
+                </span>
               </div>
               <div class="col-xs-4" style="padding:0px; height:30px;">
-                <div class="col-xs-12" style="cursor:pointer;background:#0f2d53;padding:5px;color:white;">
-                  Follow
+                <div class="col-xs-12" style="cursor:pointer;background:#0f2d53;padding:5px;color:white;" ng-click="fpFollow(fpInView.person.pk )">
+                  <span>Follow</span>
                 </div>
               </div>
             </div>
-            <div class="row">
 
+            <div ng-if="fpInView.typ=='event'" class="row" style="margin:15px;">
+              <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
+                <span style="cursor:pointer">
+                    <a target="_blank" href="/events/{{eventUrl}}/" style="text-decoration:none; color:black;"> Register </a>
+                </span>
+              </div>
+              <div class="col-xs-4" style="padding:0px; height:30px;">
+                <div class="col-xs-12" style="cursor:pointer;background:#0f2d53;padding:5px;color:white;">
+                  <a target="_blank" href="/events/{{eventUrl}}/" style="text-decoration:none; color:white;"> View </a>
+                </div>
+              </div>
+            </div>
+
+            <div ng-if="fpInView.typ=='blog'" class="row" style="margin:15px;">
+              <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
+                <span style="cursor:pointer">{{fpInView.blog.title}}</span>
+              </div>
+              <div class="col-xs-4" style="padding:0px; height:30px;">
+                <div class="col-xs-12" style="cursor:pointer;background:#0f2d53;padding:5px;color:white;">
+                  <a target="_blank" href="/{{fpInView.blog.shortUrl}}" style="text-decoration:none; color:white; "> See More </a>
+                </div>
+              </div>
             </div>
 
           </div>
+
+
+
+            <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel" >
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li ng-repeat="a in featuredPage" data-target="#myCarousel" data-slide-to="$index+1"></li>
+              </ol>
+
+              <div class="carousel-inner">
+
+                <div class="item active" ng-if="featuredPageFirst.typ=='person'">
+                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.person.first_name}} {{featuredPageFirst.person.last_name}}</span>
+                  <span class="pull-right" ng-click="follow()" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">Follow</span>
+                </div>
+                <div class="item active" ng-if="featuredPageFirst.typ=='event'">
+                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.event.name}}</span>
+                  <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">Event</span>
+                </div>
+                <div class="item active" ng-if="featuredPageFirst.typ=='blog'">
+                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.blog.title}}</span>
+                  <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">blog</span>
+                </div>
+
+
+
+                <div class="item" ng-repeat = "a in featuredPage">
+                  <div ng-if="a.typ=='person'" >
+                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.person.username}}</span>
+                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">person</span>
+                  </div>
+                  <div ng-if="a.typ=='event'" >
+                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.event.name}}</span>
+                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">event</span>
+                  </div>
+                  <div ng-if="a.typ=='blog'" >
+                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
+                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.blog.title}}</span>
+                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">blog</span>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <a ng-non-bindable class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a ng-non-bindable class="right carousel-control"  href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div> -->
+          </div>
+
+
+
+
+
+
         </div>
+        {% endverbatim %}
       </div>
 
 

@@ -36,10 +36,11 @@
         <span style="font-size:20px;">{{personInView.first_name}} {{personInView.last_name}}</span>
         {{isOnline}} <span ng-if="isOnline"> green dot   </span>
       </div>
-      <div style="height:75vh; overflow-y:auto; overflow-x:hidden;">
-        <div class="row" ng-repeat="msg in ims">
-          <div class="container-fluid {{msg.originator == me.pk ? 'pull-right' : 'pull-left'}} " >
-            <div class="container-fluid {{msg.originator == me.pk ? 'text-right' : 'text-left'}} " style="border:solid 1px #e0e0e0;padding:10px;">
+      <div style="height:75vh; overflow-y:auto; overflow-x:hidden;" id="scrollArea{{personInView.pk}}">
+        <div class="row" ng-repeat="msg in ims" style="padding-right:10px;">
+
+          <div class="container-fluid pull-left" ng-if="msg.originator!=me.pk" >
+            <div class="container-fluid text-left " style="border:solid 1px #e0e0e0;padding:10px;">
               <span ng-if="msg.attachment==null" ng-bind-html="msg.message" ></span>
               <span ng-if="msg.attachment"> <img ng-click="expandImage(msg.attachment)" src="{{msg.attachment}}" alt="message attachment" width="240px;"> <p ng-if="msg.message" class="text-center" ng-bind-html="msg.message" ></p> </span>
             </div>
@@ -47,6 +48,18 @@
               {{msg.created |date:'hh:mm a'}}
             </div>
           </div>
+
+          <div class="container-fluid pull-right" ng-if="msg.originator==me.pk">
+            <div class="container-fluid text-right " style="border:solid 1px #e0e0e0;padding:10px;">
+              <span ng-if="msg.attachment==null" ng-bind-html="msg.message" ></span>
+              <span ng-if="msg.attachment"> <img ng-click="expandImage(msg.attachment)" src="{{msg.attachment}}" alt="message attachment" width="240px;"> <p ng-if="msg.message" class="text-center" ng-bind-html="msg.message" ></p> </span>
+            </div>
+            <div class="container-fluid text-right" style="color:#c7c7c7;font-size:10px;">
+              {{msg.created |date:'hh:mm a'}}
+            </div>
+          </div>
+
+
 
           <!-- <div  class="container-fluid {{msg.originator == me.pk ? 'pull-right' : 'pull-left'}} " ng-if="msg.attachment">
             <div class="container-fluid text-right" style="border:solid 1px #e0e0e0;padding:10px;">

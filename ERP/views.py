@@ -171,3 +171,5 @@ class FeaturedPageViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated ,)
     serializer_class = FeaturedPageSerializer
     queryset = FeaturedPage.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['active',]

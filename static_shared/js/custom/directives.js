@@ -53,7 +53,7 @@ app.directive('socialPost', function() {
 
       // console.log($scope.data);
       $scope.p = $scope.data;
-      console.log('Mypk', $scope.me);
+      // console.log('Mypk', $scope.me);
 
       $scope.showComments = false;
       $scope.allComments = function(indx) {
@@ -429,7 +429,9 @@ app.directive('chatWindow', function() {
           var $id= $("#scrollArea"+$scope.friend.pk);
 
           console.log($id);
+          console.log($id[0].scrollTop ,$id[0].scrollHeight );
           $id.scrollTop($id[0].scrollHeight);
+          console.log($id[0].scrollTop ,$id[0].scrollHeight );
         },delay)
       }
 
@@ -481,6 +483,8 @@ app.directive('chatWindow', function() {
 
       $scope.send = function() {
         console.log('sending');
+
+
         // var msg = angular.copy($scope.messageToSend)
         var msg = $scope.chat.messageToSend;
         var file = $scope.chat.fileToSend;
@@ -506,6 +510,7 @@ app.directive('chatWindow', function() {
           }
           $scope.status = "M"; // contains message
           console.log('patch');
+          $scope.isTyping = false;
           $http({
             method: 'POST',
             data: fd,
@@ -519,6 +524,7 @@ app.directive('chatWindow', function() {
             response.data.message = $sce.getTrustedHtml(response.data.message)
             $scope.ims.push(response.data)
             $scope.senderIsMe.push(true);
+            $scope.scroll(50);
             $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
               acknowledge: true
             }).
@@ -544,7 +550,7 @@ app.directive('chatWindow', function() {
           $timeout(function() {
             $scope.isTyping = false;
             console.log($scope.isTyping);
-          }, 4000);
+          }, 3000);
           // $scope.isTyping = true;
           console.log('typinmgg', args[1], $scope.isTyping);
         } else if (args[0] == 'M') {
@@ -558,7 +564,7 @@ app.directive('chatWindow', function() {
             response.data.message = $sce.getTrustedHtml(response.data.message)
             $scope.ims.push(response.data);
             $scope.senderIsMe.push(false);
-            $scope.scroll();
+            $scope.scroll(50);
           });
         }
 
