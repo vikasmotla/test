@@ -200,7 +200,7 @@ app.controller("main", function($scope, $state, $http, $rootScope, $uibModal, $u
   }
 
   $scope.msgRequest = function(obj) {
-    console.log(obj, typeof obj);
+    console.log('open chat....',obj, typeof obj);
     $rootScope.$broadcast('msgRequestData', {
       data: parseInt(obj)
     });

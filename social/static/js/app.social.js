@@ -74,6 +74,26 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
     }
   }, 5000);
 
+  $scope.nextFp = function () {
+    if ($scope.featuredPageAll.length>1) {
+      $scope.index += 1;
+      $scope.fpInView = $scope.featuredPageAll[$scope.index];
+      if ($scope.index == $scope.featuredPageAll.length) {
+        $scope.index = 0;
+      }
+    }
+  }
+
+  $scope.prevFp = function () {
+    if ($scope.featuredPageAll.length>1) {
+      $scope.index -= 1;
+      $scope.fpInView = $scope.featuredPageAll[$scope.index];
+      if ($scope.index == 0) {
+        $scope.index = $scope.featuredPageAll.length;
+      }
+    }
+  }
+
 
   $scope.fpFollow = function(pk) {
     console.log($scope.me.profile.pk, pk);
@@ -200,7 +220,8 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
         $scope.showMoreBtn = true;
       }
       $scope.postRes = $scope.totalPostRes.slice(0, 2);
-      console.log('osdfsdfdsf', $scope.postRes);
+      // $scope.postRes.countForResp = 0;
+      console.log('post respppppppp',$scope.postRes);
       for (var i = 0; i < $scope.postRes.length; i++) {
         $scope.postRes[i].txt = $sce.getTrustedHtml($scope.postRes[i].txt).slice(0, 40);
         // console.log($scope.postRes[i].txt);
@@ -208,6 +229,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
         $scope.postRes[i].showPrev = false;
         $scope.postRes[i].showNext = false;
         $scope.postRes[i].intrestTxt = '';
+        $scope.postRes[i].countForResp = 0;
         if ($scope.postRes[i].responses.length > 1) {
           $scope.postRes[i].showNext = true;
         }
@@ -225,7 +247,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
 
   };
   $scope.fetchAllOffers();
-  $scope.countForResp = 0;
+  // $scope.countForResp = 0;
 
   $scope.expandLeads = function(expandPostpk) {
     console.log('expand post pk', expandPostpk);
@@ -323,34 +345,34 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
   }
 
   $scope.prevOfferRes = function(indx) {
-    $scope.countForResp--;
-    console.log($scope.postRes[indx].responses[$scope.countForResp]);
-    if ($scope.postRes[indx].responses[$scope.countForResp] != undefined) {
-      if ($scope.countForResp == 0) {
+    $scope.postRes[indx].countForResp --;
+    console.log($scope.postRes[indx].responses[$scope.postRes[indx].countForResp]);
+    if ($scope.postRes[indx].responses[$scope.postRes[indx].countForResp] != undefined) {
+      if ($scope.postRes[indx].countForResp == 0) {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = false;
       } else {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = true;
       }
-      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
-      console.log($scope.countForResp);
+      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.postRes[indx].countForResp];
+      console.log($scope.postRes[indx].countForResp);
     }
   }
 
   $scope.nextOfferRes = function(indx) {
-    $scope.countForResp++;
-    console.log($scope.postRes[indx].responses[$scope.countForResp]);
-    if ($scope.postRes[indx].responses[$scope.countForResp] != undefined) {
-      if ($scope.countForResp + 1 == $scope.postRes[indx].responses.length) {
+    $scope.postRes[indx].countForResp++;
+    console.log($scope.postRes[indx].responses[$scope.postRes[indx].countForResp]);
+    if ($scope.postRes[indx].responses[$scope.postRes[indx].countForResp] != undefined) {
+      if ($scope.postRes[indx].countForResp + 1 == $scope.postRes[indx].responses.length) {
         $scope.postRes[indx].showNext = false;
         $scope.postRes[indx].showPrev = true;
       } else {
         $scope.postRes[indx].showNext = true;
         $scope.postRes[indx].showPrev = true;
       }
-      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.countForResp];
-      console.log($scope.countForResp);
+      $scope.postRes[indx].responseValue = $scope.postRes[indx].responses[$scope.postRes[indx].countForResp];
+      console.log($scope.postRes[indx].countForResp);
     }
   }
 

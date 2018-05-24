@@ -41,6 +41,11 @@ def socialMessage(request):
     return render(request, 'app.social.messages.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 @login_required
+def socialLeads(request):
+    profileObj = profile.objects.get(user = request.user.pk)
+    return render(request, 'app.social.leads.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+@login_required
 def socialAccount(request):
     profileObj = profile.objects.get(user = request.user.pk)
     return render(request, 'app.social.account.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})

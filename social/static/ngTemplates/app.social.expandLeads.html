@@ -1,87 +1,74 @@
 <div class="container-fluid" style="padding: 10px 15px">
-<div class="row" style="border:solid 2px #eeeeee;">
-  <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
-    <div class="col-xs-1" style="padding:0px;">
-      <img ng-src="{{expandPostData.user | getDP}}" width="50" height="50" alt="">
+  <div class="row" style="border:solid 2px #eeeeee;">
+    <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
+      <div class="col-xs-1" style="padding:0px;">
+        <img ng-src="{{expandPostData.user | getDP}}" width="50" height="50" alt="">
+      </div>
+      <div class="col-xs-11" style="padding-top:5px">
+        <span class="text-primary" style="cursor:pointer;font-size:17px;">{{expandPostData.user | getName}}</span> <br>
+        <span class="text-muted" style="font-size:11px;">{{expandPostData.updated | timeAgo}} ago</span>
+      </div>
     </div>
-    <div class="col-xs-11" style="padding-top:5px">
-      <span class="text-primary" style="cursor:pointer;font-size:17px;">{{expandPostData.user | getName}}</span> <br>
-      <span class="text-muted" style="font-size:11px;">{{expandPostData.updated | timeAgo}} ago</span>
-    </div>
-  </div>
-  <div class="row">
-    <div class="container-fluid" style="padding:20px;">
-      <span style="font-size:15px;" ng-bind-html="expandPostData.txt">
+    <div class="row">
+      <div class="container-fluid" style="padding:20px;">
+        <span style="font-size:15px;" ng-bind-html="expandPostData.txt">
       </span>
 
+      </div>
     </div>
-  </div>
-  <div class="row" ng-if="expandPostData.mediaPost[0].fil != null">
-    <div class="container-fluid">
-      <img ng-src="{{expandPostData.mediaPost[0].fil}}" class="img" style="width:30%" alt="" ng-click="">
+    <div class="row" ng-if="expandPostData.mediaPost[0].fil != null">
+      <div class="container-fluid">
+        <img ng-src="{{expandPostData.mediaPost[0].fil}}" class="img" style="width:30%" alt="" ng-click="">
+      </div>
     </div>
-  </div>
-  <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
+    <div class="row" style="padding:15px; padding-bottom:0px;margin:0px;background:#eeeeee;">
 
-    <!-- <div class="col-md-4" style="padding-right:0px;">
-      <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="expandPostData.typ == 'Selling' || expandPostData.typ == 'Barter'" ng-click="">
-        Buy
-      </div>
-      <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="expandPostData.typ == 'Buying'" ng-click="">
-        Sell
-      </div>
-      <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-click="">
-        Barter
-      </div>
-    </div> -->
-  </div>
-  <div class="row" style="padding:15px; padding-bottom:0px;margin:0px;background:#eeeeee;">
-
-    <div class="media" ng-repeat="comment in expandPostData.timeline">
-      <div class="row" ng-if="comment.typ == 'comment'" style="padding:0px 15px">
-        <div class="media-left">
-          <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.data.user | getDP}}"> </a>
-        </div>
-        <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-          <div class="row" style="padding:0px 25px">
-            <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
-            <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+      <div class="media" ng-repeat="comment in expandPostData.timeline">
+        <div class="row" ng-if="comment.typ == 'comment'" style="padding:0px 15px">
+          <div class="media-left">
+            <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.data.user | getDP}}"> </a>
           </div>
-          <div class="row" style="padding:0px 25px">
-            <span style="font-size:15px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
-            <img ng-if="comment.data.fil != null" ng-click="" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
-          </div>
-        </div>
-      </div>
-      <div class="row" ng-if="comment.typ == 'offer'" style="padding:0px 15px">
-        <div class="media-left">
-          <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/offer_icon.png" ng-if="comment.data.typ == 'Buying'"> </a>
-          <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/sell_icon.png" ng-if="comment.data.typ == 'Selling'"> </a>
-          <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/barter_icon.png" ng-if="comment.data.typ == 'Barter'"> </a>
-        </div>
-        <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-          <div class="row" style="padding:0px 25px">
-            <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
-            <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
-          </div>
-          <div class="row" style="padding:0px 25px">
-            <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
-            <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
-            <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
-            <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
-          </div>
-          <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
-            <hr>
-            <div class="media-left">
-              <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{expandPostData.user | getDP}}"> </a>
+          <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+            <div class="row" style="padding:0px 25px">
+              <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+              <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
             </div>
-            <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-              <div class="row" style="padding:0px 25px">
-                <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{expandPostData.user | getName}}</strong></span>
-                <!-- <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span> -->
+            <div class="row" style="padding:0px 25px">
+              <span style="font-size:15px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+              <img ng-if="comment.data.fil != null" ng-click="" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+            </div>
+          </div>
+        </div>
+        <div class="row" ng-if="comment.typ == 'offer'" style="padding:0px 15px">
+          <div class="media-left">
+            <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/offer_icon.png" ng-if="comment.data.typ == 'Buying'"> </a>
+            <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/sell_icon.png" ng-if="comment.data.typ == 'Selling'"> </a>
+            <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/barter_icon.png" ng-if="comment.data.typ == 'Barter'"> </a>
+          </div>
+          <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+            <div class="row" style="padding:0px 25px">
+              <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+              <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+            </div>
+            <div class="row" style="padding:0px 25px">
+              <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
+              <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+              <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+              <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
+            </div>
+            <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
+              <hr>
+              <div class="media-left">
+                <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{expandPostData.user | getDP}}"> </a>
               </div>
-              <div class="row" style="padding:0px 25px">
-                <span style="font-size:17px;"> {{comment.data.reply}}</span>
+              <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                <div class="row" style="padding:0px 25px">
+                  <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{expandPostData.user | getName}}</strong></span>
+                  <!-- <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span> -->
+                </div>
+                <div class="row" style="padding:0px 25px">
+                  <span style="font-size:17px;"> {{comment.data.reply}}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -89,5 +76,4 @@
       </div>
     </div>
   </div>
-</div>
 </div>

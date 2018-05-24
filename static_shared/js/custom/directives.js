@@ -372,6 +372,7 @@ app.directive('chatWindow', function() {
 
       $scope.toggler = function() {
         $scope.toggle = !$scope.toggle;
+        $scope.scroll();
       }
       $scope.cancel = function() {
         $scope.close($scope.pos);
@@ -395,7 +396,11 @@ app.directive('chatWindow', function() {
       $scope.fetchMessages = function() {
         $scope.method = 'GET';
         $scope.url = '/api/PIM/chatMessageBetween/?other=' + $scope.friend.username;
-        $scope.ims = [];
+
+        $scope['abc'+ $scope.friend.pk] = [1,2,3];
+        console.log($scope['abc'+ $scope.friend.pk]);
+
+        $scope.ims  = [];
         $scope.imsCount = 0;
         $scope.senderIsMe = [];
         $http({
@@ -525,7 +530,7 @@ app.directive('chatWindow', function() {
             $scope.ims.push(response.data)
             $scope.senderIsMe.push(true);
             $scope.scroll(50);
-            $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, response.data.message, $scope.me.username, response.data.pk], {}, {
+            $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status,$scope.me.username, response.data.message, response.data.pk], {}, {
               acknowledge: true
             }).
             then(function(publication) {});
@@ -542,17 +547,22 @@ app.directive('chatWindow', function() {
 
       $scope.isTyping = false;
       $scope.chatResponse = function(args) {
-        console.log('ddddd', args);
+
+        console.log(args[0]);
+        if (args[1]!=$scope.friend.username) {
+          return;
+        }
+
         if (args[0] == 'T') {
           $timeout(function() {
-            $scope.isTyping = true;;
+            $scope.isTyping = true;
           }, 300);
           $timeout(function() {
             $scope.isTyping = false;
             console.log($scope.isTyping);
           }, 3000);
           // $scope.isTyping = true;
-          console.log('typinmgg', args[1], $scope.isTyping);
+          // console.log('typinmgg', args[1], $scope.isTyping);
         } else if (args[0] == 'M') {
           console.log('message came', args[1]);
           $http({
@@ -1156,8 +1166,8 @@ app.directive('messageStrip', function() {
         $scope.friend = $scope.data.originator;
       }
       $scope.clicked = function() {
+        $scope.openChat($scope.friend , $scope.data.count)
         $scope.data.count = 0;
-        $scope.openChat($scope.friend)
       }
     }
   };
@@ -1329,7 +1339,6 @@ app.directive('notificationStrip', function() {
   };
 });
 
-//
 // app.directive('chatWindow', function ($users) {
 //   return {
 //     templateUrl: '/static/ngTemplates/chatWindow.html',
@@ -1407,14 +1416,14 @@ app.directive('notificationStrip', function() {
 //     },
 //     // attrs is the attrs passed from the main scope
 //     link: function postLink(scope, element, attrs) {
-// scope.$watch('messageToSend', function(newValue , oldValue ){
-//   // console.log("changing");
-//   scope.status = "T"; // the sender is typing a message
-//   if (newValue!="") {
-//     connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
-//   }
-//   scope.status = "N";
-// }); // watch for the messageTosend
+//       scope.$watch('messageToSend', function(newValue , oldValue ){
+//         // console.log("changing");
+//         scope.status = "T"; // the sender is typing a message
+//         if (newValue!="") {
+//           connection.session.publish('service.chat.'+ scope.friend.username, [scope.status , scope.messageToSend , scope.me.username]);
+//         }
+//         scope.status = "N";
+//       }); // watch for the messageTosend
 //       scope.$watch('ims.length', function( ){
 //         setTimeout( function(){
 //           scope.scroll();

@@ -1,5 +1,10 @@
 app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, $users) {
 
+  $scope.me = $users.get('mySelf');
+
+  // console.log($scope.me);
+
+
   if ($.cookie("chatDetails") == undefined || $.cookie("chatDetails") == null || $.cookie("chatDetails").length == 0) {
     $scope.chatWindows = [];
     $scope.maximaStatus = [];
@@ -42,7 +47,7 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
         chatDetails += arr[i] + ','
       }
     }
-    console.log('chart details',chatDetails);
+    console.log('chart details', chatDetails);
     $.cookie("chatDetails", chatDetails);
   }
   $scope.updateToggleCookie = function() {
@@ -74,8 +79,9 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
   // $scope.maximaStatus = [true , true , true , true]
   $scope.updateCookie();
   $scope.updateToggleCookie();
+
   $scope.$on('msgRequestData', function(event, input) {
-    console.log("recieved" , input);
+    console.log("recievedddddddddddddddddddd", input);
     for (var i = 0; i < $scope.chatWindows.length; i++) {
       if ($scope.chatWindows[i] == input.data) {
         return
@@ -102,4 +108,85 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
   })
   // $.removeCookie('toggleDetails');
   // $.removeCookie('chatDetails');
+
+  $scope.totalUnread = 0;
+
+  $scope.refreshMessages = function() {
+    $scope.ims = [];
+    $scope.instantMessagesCount = 0;
+    peopleInvolved = [];
+    for (var i = 0; i < $scope.rawMessages.length; i++) {
+      var im = $scope.rawMessages[i];
+      if (im.originator == $scope.me.pk) {
+        if (peopleInvolved.indexOf(im.user) == -1) {
+          peopleInvolved.push(im.user)
+        }
+      } else {
+        if (peopleInvolved.indexOf(im.originator) == -1) {
+          peopleInvolved.push(im.originator)
+        }
+      }
+    }
+    for (var i = 0; i < peopleInvolved.length; i++) {
+      for (var j = 0; j < $scope.rawMessages.length; j++) {
+        var im = $scope.rawMessages[j];
+        var friend = peopleInvolved[i];
+        if (friend == im.originator || friend == im.user) {
+          count = 0;
+          for (var k = 0; k < $scope.rawMessages.length; k++) {
+            im2 = $scope.rawMessages[k]
+            if ((im2.originator == friend || im2.user == friend) && im2.read == false) {
+              count += 1;
+            }
+          }
+          if (count != 0) {
+            $scope.instantMessagesCount += 1;
+          }
+          im.count = count;
+          $scope.totalUnread += count;
+          $scope.ims.push(im);
+          break;
+        }
+      }
+    }
+  }
+
+  $scope.fetchMessages = function() {
+    // This is because the chat system is build along with the notification system. Since this is the part whcih is common accros all the modules
+    $scope.method = 'GET';
+    $scope.url = '/api/PIM/chatMessage/';
+    $scope.ims = [];
+    var senders = [];
+
+    $http({
+      method: $scope.method,
+      url: $scope.url
+    }).
+    then(function(response) {
+      $scope.rawMessages = response.data;
+      console.log();
+      $scope.refreshMessages();
+      console.log($scope.totalUnread);
+    });
+  };
+
+  $scope.fetchMessages();
+
+  $scope.imWindows = []
+
+  $scope.addIMWindow = function(pk , count) {
+    $scope.totalUnread-=count;
+    console.log('adding windowwwwwww',pk);
+    // console.log("recievedddddddddddddddddddd", input);
+    for (var i = 0; i < $scope.chatWindows.length; i++) {
+      if ($scope.chatWindows[i] == pk) {
+        return
+      }
+    }
+    console.log('enddddd');
+    $scope.chatWindows.push(pk);
+    $scope.maximaStatus.push(true);
+  }
+
+
 });

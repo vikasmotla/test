@@ -117,6 +117,18 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostLiteSerializer(serializers.ModelSerializer):
     responses = PostResponseSerializer(many = True , read_only = True)
+    mediaPost = PostMediaSerializer(many= True ,read_only = True)
+    likes_count = serializers.SerializerMethodField()
+    user_reaction = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ('pk' , 'user','typ','txt' , 'responses')
+        fields = ('pk' , 'user','typ','txt' , 'responses' , 'mediaPost' , 'likes_count' , 'user_reaction' )
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+    def get_user_reaction(self, obj):
+        pl=obj.likes.filter(user= self.context['request'].user)
+        if len(pl) > 0:
+            typ = pl[0].typ
+        else:
+            typ = ''
+        return typ

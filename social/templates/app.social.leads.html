@@ -1,0 +1,122 @@
+{% extends 'app.socialBase.html' %} {% load staticfiles %} {% block contentBody %} {% verbatim %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 " style="height:100vh;padding-top:8vh;">
+      <div class="row bg-red" style="height:12vh;padding-left:40px;">
+        <h2>Yo-CRM</h2>
+      </div>
+      <div class="row">
+        <div style="overflow:auto; border-right:2px solid #e0e0e0;height:80vh;padding-top:20px;">
+          <div class="container-fluid" ng-repeat="lead in offers" style="padding-bottom:10px;">
+            <div class="container-fluid card" style="margin-bottom:10px; cursor:pointer;padding-bottom:0px; {{activeCard==$index ? 'background:#eeeeee': ''}}" ng-click="setInView($index)">
+              <div class="row">
+                <div class="col-md-8">
+                  <span ng-bind-html="lead.txt"></span>
+                </div>
+                <div class="col-md-4" style="padding:0px; padding-top:25px;">
+                  <span class="FB_reactions" style="{{lead.postData.reacted ? 'background-image: url(/static/emojis/':''}}{{lead.postData.user_reaction == 'like' ? 'like.png)' :''}}{{lead.postData.user_reaction == 'love' ? 'love.png)' :''}}{{lead.postData.user_reaction == 'haha' ? 'haha.png)' :''}}{{lead.postData.user_reaction == 'wow' ? 'wow.png)' :''}}{{lead.postData.user_reaction == 'sad' ? 'sad.png)' :''}}{{lead.postData.user_reaction == 'angry' ? 'angry.png)' :''}}  !important;"> <span>{{lead.postData.likes_count}}</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="row" style="background-image: url({{lead.mediaPost[0].fil}}); background-size:100% 100%;  height:20vh;">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8" style="height:100vh;padding-top:8vh;">
+
+      <div class="row" style="height:92vh; overflow-y:auto; overflow-x:hidden; border-right:2px solid #e0e0e0; background:#eeeeee;">
+        <div class="container-fluid" style="padding:0px 15px">
+          <div class="row" style="border:solid 2px #eeeeee;">
+            <div class="row" style="padding:15px; padding-bottom:0px;margin:0px;">
+
+              <div class="media" ng-repeat="comment in postDataInit.timeline">
+                <div class="row" ng-if="comment.typ == 'comment'" style="padding:0px 15px">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.data.user | getDP}}"> </a>
+                  </div>
+                  <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                    <div class="row" style="padding:0px 25px">
+                      <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+                      <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+                    </div>
+                    <div class="row" style="padding:0px 25px">
+                      <span style="font-size:15px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                      <img ng-if="comment.data.fil != null" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ng-if="comment.typ == 'offer'" style="padding:0px 15px">
+                  <div class="media-left">
+                    <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/offer_icon.png" ng-if="comment.data.typ == 'Buying'"> </a>
+                    <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/sell_icon.png" ng-if="comment.data.typ == 'Selling'"> </a>
+                    <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/barter_icon.png" ng-if="comment.data.typ == 'Barter'"> </a>
+                  </div>
+                  <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                    <div class="row" style="padding:0px 25px">
+                      <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
+                      <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
+                    </div>
+                    <div class="row" style="padding:0px 25px">
+                      <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
+                      <div class="col-md-9" style="padding-left:0px;">
+                        <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                        <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+                        <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="btn-group pull-right">
+                          <button class="btn btn-default btn-sm" type="button" name="button">Accept</button>
+                          <button class="btn btn-default btn-sm" type="button" name="button" ng-click="reply(comment.data.pk)">Reply</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
+                      <hr>
+                      <div class="media-left">
+                        <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{postDataInit.user | getDP}}"> </a>
+                      </div>
+                      <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
+                        <div class="row" style="padding:0px 25px">
+                          <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{postDataInit.user | getName}}</strong></span>
+                        </div>
+                        <div class="row" style="padding:0px 25px">
+                          <span style="font-size:17px;"> {{comment.data.reply}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-md-1" style="padding-top:100px;">
+      <div class="row text-center" style="padding-bottom:15px;" >
+          <a class="btn btn-xl2">
+            Archive
+          </a>
+      </div>
+      <div class="row text-center" >
+          <a class="btn btn-xl3">
+            Repost
+          </a>
+      </div>
+    </div>
+
+
+  </div>
+
+  {% endverbatim %} {% endblock %} {% block specific_js %}
+  <script src="{% static 'js/app.social.leads.js' %}"></script>
+  {% endblock %}

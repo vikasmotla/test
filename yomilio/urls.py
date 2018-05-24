@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^$', index , name ='root'),
     url(r'social$', socialIndex , name ='social'),
     url(r'social/messages', socialMessage , name ='message'),
+    url(r'social/leads', socialLeads , name ='leads'),
     url(r'social/account', socialAccount , name ='account'),
     url(r'social/profile/(?P<profName>[\w|\W]+)', profileDetails , name ='profileDetails'),
     url(r'^ERP/', home , name ='ERP'),

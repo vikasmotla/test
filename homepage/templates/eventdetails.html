@@ -61,18 +61,25 @@
               <h2 style="font-size:19px;" class="text-primary">{{eventobj.name}}</h2>
               Start : {{eventobj.event_On}} <span style="margin-left: 10px;"> | </span> <span style="margin-left: 10px;">End : {{eventobj.event_ends_On}}</span>
             </div>
-            
             {% if messages %}
             {% for message in messages %}
-            {% if message.tags == 'danger' %}
+            {% if message.tags == 'danger'%}
+
               <div class="collapse in well" id="regData" style="margin:20px -15px">
             {% else %}
               <h4 style="color:green;padding-top:20px;padding-bottom:20px" class="text-center">{{ message }}</h4>
               <div class="collapse well" id="regData" style="margin:20px -15px">
+
+
+
             {% endif %}
             {% endfor %}
             {% else %}
+              {% if preOpen %}
+              <div class="collapse in well" id="regData" style="margin:20px -15px">
+              {% else %}
               <div class="collapse well" id="regData" style="margin:20px -15px">
+              {% endif %}
             {% endif %}
               <hr>
               <div class="row text-center">

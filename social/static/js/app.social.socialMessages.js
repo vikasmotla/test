@@ -21,6 +21,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   $scope.users;
   $scope.friend;
   $scope.isTyping = false;
+  $scope.activeCard = 0;
 
 
   $http({
@@ -106,6 +107,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   // $scope.personInView = 0;
   $scope.showCommentBox = false
   $scope.setInView = function(index) {
+    $scope.activeCard = index;
     $scope.showCommentBox = true
     $scope.commenEdit = {
       txt: '',

@@ -187,7 +187,12 @@ def eventDetails(request, eventName):
         messages.success(request, "You have successfully Registered")
         return render(request, 'eventdetails.html', {"home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
     else:
-        return render(request, 'eventdetails.html', {"home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+        if 'register' in request.GET:
+            preOpen = True
+        else:
+            preOpen = False
+
+        return render(request, 'eventdetails.html', {"preOpen" : preOpen ,  "home": False,'eventobj' : eventobj , 'eventItemData' : eventItemData, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 def news(request):
     return render(request,"newssection.html" , {"home" : False , "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})

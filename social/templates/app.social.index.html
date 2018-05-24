@@ -64,7 +64,6 @@
             </div>
           </div>
 
-          <!-- </div> -->
         </div>
       </div>
       <!-- <div class="row" style="padding:5px; padding-left:30px;">
@@ -77,19 +76,18 @@
         <strong>Contacts</strong>
       </div> -->
 
+      {% verbatim %}
       <div class="row">
-        {% verbatim %}
         <div class="container-fluid text-center" style="position:absolute; bottom:0px;">
           <strong>Suggestions</strong>
 
-          <div class="row" style="margin-top:20px;">
+          <div class="row text-center" style="margin-top:20px;">
 
-            <div class="col-xs-12" style="border-bottom:1px solid #e0e0e0;">
-              <span ng-if="fpInView.typ=='person'" ><img ng-src="{{fpInView.person.profile.displayPicture}}" style="width:350px; height:200px;" alt=""></span>
-              <span ng-if="fpInView.typ=='event'" ><img ng-src="/static/images/event.jpg" style="width:350px; height:200px;" alt=""></span>
-              <span ng-if="fpInView.typ=='blog'" ><img ng-src="/static/images/startup-blog.jpg" style="width:350px; height:200px;" alt=""></span>
+            <div class="col-xs-12 " style="border-bottom:1px solid #e0e0e0; position:relative;">
+              <span ng-if="fpInView.typ=='person'"><img ng-src="{{fpInView.person.profile.displayPicture}}" style="width:350px; height:200px;" alt=""></span>
+              <span ng-if="fpInView.typ=='event'"><img ng-src="/static/images/event.jpg" style="width:350px; height:200px;" alt=""></span>
+              <span ng-if="fpInView.typ=='blog'"><img ng-src="/static/images/startup-blog.jpg" style="width:350px; height:200px;" alt=""></span>
             </div>
-
 
             <div ng-if="fpInView.typ=='person'" class="row" style="margin:15px;">
               <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
@@ -107,7 +105,7 @@
             <div ng-if="fpInView.typ=='event'" class="row" style="margin:15px;">
               <div class="col-xs-8" style="background:#ffffff; padding:5px; height:30px;">
                 <span style="cursor:pointer">
-                    <a target="_blank" href="/events/{{eventUrl}}/" style="text-decoration:none; color:black;"> Register </a>
+                    <a target="_blank" href="/events/{{eventUrl}}/?register=1" style="text-decoration:none; color:black;"> Register </a>
                 </span>
               </div>
               <div class="col-xs-4" style="padding:0px; height:30px;">
@@ -130,215 +128,25 @@
 
           </div>
 
-
-
-            <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel" >
-              <ol class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li ng-repeat="a in featuredPage" data-target="#myCarousel" data-slide-to="$index+1"></li>
-              </ol>
-
-              <div class="carousel-inner">
-
-                <div class="item active" ng-if="featuredPageFirst.typ=='person'">
-                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.person.first_name}} {{featuredPageFirst.person.last_name}}</span>
-                  <span class="pull-right" ng-click="follow()" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">Follow</span>
-                </div>
-                <div class="item active" ng-if="featuredPageFirst.typ=='event'">
-                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.event.name}}</span>
-                  <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">Event</span>
-                </div>
-                <div class="item active" ng-if="featuredPageFirst.typ=='blog'">
-                  <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                  <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{featuredPageFirst.blog.title}}</span>
-                  <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">blog</span>
-                </div>
-
-
-
-                <div class="item" ng-repeat = "a in featuredPage">
-                  <div ng-if="a.typ=='person'" >
-                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.person.username}}</span>
-                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">person</span>
-                  </div>
-                  <div ng-if="a.typ=='event'" >
-                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.event.name}}</span>
-                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">event</span>
-                  </div>
-                  <div ng-if="a.typ=='blog'" >
-                    <img src="/static/images/group.jpg" alt="" style="width:100%;">
-                    <span class="pull-left" style="cursor:pointer; padding-left:10px;">{{a.blog.title}}</span>
-                    <span class="pull-right" style="cursor:pointer;background:#0f2d53;padding:5px 15px;color:white;">blog</span>
-                  </div>
-                </div>
-
-
-              </div>
-
-              <a ng-non-bindable class="left carousel-control" href="#myCarousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a ng-non-bindable class="right carousel-control"  href="#myCarousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div> -->
-          </div>
-
-
-
-
-
-
         </div>
-        {% endverbatim %}
       </div>
 
+  </div>
 
-
+  <div class="col-md-6 col-md-offset-3 newsFeed" style="background-color:#ffffff;border-right:#e0dfdf solid 2px;border-left:#e0dfdf solid 2px">
+    <div class="row">
+      <comment-Edit comment="postData" send="sendPost" config="postConfig" style="border: 2px solid #eeeeee;"></comment-Edit>
     </div>
-
-    {% verbatim %}
-    <div class="col-md-6 col-md-offset-3 newsFeed" style="background-color:#ffffff;border-right:#e0dfdf solid 2px;border-left:#e0dfdf solid 2px">
-      <div class="row">
-        <comment-Edit comment="postData" send="sendPost" config="postConfig" style="border: 2px solid #eeeeee;"></comment-Edit>
-      </div>
-      <div style="padding:20px;">
-        <!-- <div class="row" style="border:solid 2px #eeeeee; margin-top:20px; " ng-repeat="p in posts" ng-init="p.showComments=false">
-          <div class="row" style=" border-bottom:solid 2px #eeeeee; margin:0px;">
-            <div class="col-xs-1" style="padding:0px;">
-              <img ng-src="{{p.user | getDP}}" width="50" height="50" alt="">
-            </div>
-            <div class="col-xs-9" style="padding-top:5px">
-              <span class="text-primary" style="cursor:pointer;font-size:17px;">{{p.user | getName}}</span> <br>
-              <span class="text-muted" style="font-size:11px;">{{p.updated | timeAgo}} ago</span>
-            </div>
-            <div class="col-xs-2 text-right" style="padding:20px;padding-bottom:0px;">
-              <div class="dropdown">
-                <i data-toggle="dropdown" class="dropdown-toggle fa fa-2x fa-ellipsis-h text-muted" style="transform: rotate(90deg);cursor:pointer;margin-top:-10px;"></b></i>
-                <ul class="dropdown-menu">
-                  <li ng-click="changeType($index)"><a href="#">Change Type</a></li>
-                  <li><a href="#">Delete</a></li>
-                  <li ng-click=editPost($index)><a href="#">Edit</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="container-fluid" style="padding:20px;">
-              <span style="font-size:15px;" ng-bind-html="p.txt">
-            </span>
-
-            </div>
-          </div>
-          <div class="row" ng-if="p.mediaPost[0].fil != null">
-            <div class="container-fluid">
-              <img ng-src="{{p.mediaPost[0].fil}}" class="img" style="width:30%" alt="" ng-click="expandImage(p.mediaPost[0].fil)">
-            </div>
-          </div>
-          <div class="row text-center" style="margin:0px;border-top:solid 2px #eeeeee; border-bottom: 2px solid #eee;">
-            <div class="col-xs-8" style="">
-              <div class="col-xs-2" style="padding-top:10px;">
-                <span style="color:#43627d; cursor:pointer;" ng-click="allComments($index);" title="Comment"><i class="fa fa-commenting-o fa-lg" aria-hidden="true"></i> </span>
-              </div>
-              <div class="col-xs-2" style="padding-top:10px;">
-                <span style="color:#43627d; cursor:pointer;" ng-click="sharePost($index)" title="Share"><i class="fa fa-share fa-lg" aria-hidden="true" style="margin-left:5px;"></i> </span>
-              </div>
-              <div class="col-xs-6" style="padding-top:3px;">
-                <span reactions class="FB_reactions" pk="{{p.pk}}" style="{{p.reacted ? 'background-image: url(/static/emojis/':''}}{{p.user_reaction == 'like' ? 'like.png)' :''}}{{p.user_reaction == 'love' ? 'love.png)' :''}}{{p.user_reaction == 'haha' ? 'haha.png)' :''}}{{p.user_reaction == 'wow' ? 'wow.png)' :''}}{{p.user_reaction == 'sad' ? 'sad.png)' :''}}{{p.user_reaction == 'angry' ? 'angry.png)' :''}} !important;"><span>{{p.likes_count}} {{p.likes_count >1 ? 'Reactions' : 'Reaction'}}</span>                </span>
-              </div>
-            </div>
-            <div class="col-md-4" style="padding-right:0px;">
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Selling' || p.typ == 'Barter'" ng-click="postResponse($index,'Buying')">
-                Buy
-              </div>
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#fc5900;padding:10px;color:white;" ng-if="p.typ == 'Buying'" ng-click="postResponse($index,'Selling')">
-                Sell
-              </div>
-              <div class="col-xs-6 pull-right" style="cursor:pointer;background:#0f2d53;padding:10px;color:white;" ng-click="postResponse($index,'Barter')">
-                Barter
-              </div>
-            </div>
-          </div>
-          <div ng-if="p.showComments" class="row" style="padding:15px; padding-bottom:0px;margin:0px;background:#eeeeee;">
-
-            <div class="text-center text-muted" style="padding:40px;font-size:25px;" ng-if="p.timeline.length == 0">
-              Be the first one to comment / Make an offer
-            </div>
-
-
-            <div class="media" ng-repeat="comment in p.timeline">
-              <div class="row" ng-if="comment.typ == 'comment'" style="padding:0px 15px">
-                <div class="media-left">
-                  <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{comment.data.user | getDP}}"> </a>
-                </div>
-                <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-                  <div class="row" style="padding:0px 25px">
-                    <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
-                    <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
-                  </div>
-                  <div class="row" style="padding:0px 25px">
-                    <span style="font-size:15px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
-                    <img ng-if="comment.data.fil != null" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
-                  </div>
-                </div>
-              </div>
-              <div class="row" ng-if="comment.typ == 'offer'" style="padding:0px 15px">
-                <div class="media-left">
-                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/offer_icon.png" ng-if="comment.data.typ == 'Buying'"> </a>
-                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/sell_icon.png" ng-if="comment.data.typ == 'Selling'"> </a>
-                  <a href="#"> <img alt="" class="media-object"  style="width: 100px; height: 100px;" ng-src="/static/images/barter_icon.png" ng-if="comment.data.typ == 'Barter'"> </a>
-                </div>
-                <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-                  <div class="row" style="padding:0px 25px">
-                    <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{comment.data.user | getName}}</strong></span>
-                    <span class="pull-right text-muted">{{comment.data.created | timeAgo}} ago</span>
-                  </div>
-                  <div class="row" style="padding:0px 25px">
-                    <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
-                    <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
-                    <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
-                    <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
-                  </div>
-
-                  <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
-                    <hr>
-                    <div class="media-left">
-                      <a href="#"> <img alt="" class="media-object"  style="width: 40px; height: 40px;" ng-src="{{p.user | getDP}}"> </a>
-                    </div>
-                    <div class="media-body" style="padding:10px;background:white;border-radius:20px;">
-                      <div class="row" style="padding:0px 25px">
-                        <span class="media-heading text-primary" style="cursor:pointer;"><strong>{{p.user | getName}}</strong></span>
-                      </div>
-                      <div class="row" style="padding:0px 25px">
-                        <span style="font-size:17px;"> {{comment.data.reply}}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-            <div class="row" style="margin-top:20px;">
-              <comment-Edit comment="p.podtEditComments" send="postComment" config="postCommentConfig"></comment-Edit>
-            </div>
-          </div>
-        </div> -->
-        <social-Post data="p" ng-repeat="p in posts" index="$index" me="me.pk"> </social-Post>
-      </div>
+    <div style="padding:20px;">
+      <social-Post data="p" ng-repeat="p in posts" index="$index" me="me.pk"> </social-Post>
     </div>
+  </div>
 
-    <div class="col-xs-3 col-xs-offset-9 " style="background:#eeeeee;height:100vh;position:fixed;">
-      <div class="row" style="padding:30px;padding-top:70px;">
-        <strong>Leads / Offers</strong>
-        <div class="card" style="padding-bottom:0px; margin-top:20px; background:#ffffff " ng-repeat="lead in postRes">
-          <!-- <div class="row" style=" margin:0px; border-bottom:1px solid #e0e0e0">
+  <div class="col-xs-3 col-xs-offset-9 " style="background:#eeeeee;height:100vh;position:fixed;">
+    <div class="row" style="padding:30px;padding-top:70px;">
+      <strong>Leads / Offers</strong>
+      <div class="card" style="padding-bottom:0px; margin-top:20px; background:#ffffff " ng-repeat="lead in postRes">
+        <!-- <div class="row" style=" margin:0px; border-bottom:1px solid #e0e0e0">
             <div class="col-xs-2" style="padding:0px;">
               <img src="/static/images/img_avatar.png" width="40" height="40" alt="">
             </div>
@@ -347,50 +155,50 @@
               <span class="text-muted" style="font-size:11px;">Head of Digital Marketing </span>
             </div>
           </div> -->
-          <div class="row" style="padding:10px; margin:0 1px 0 1px; border-bottom: 1px solid #e0e0e0">
-            <!-- <span style="font-size:15px;" ng-bind-html="lead.txt"></span> -->
-            <div class="col-md-11" style="padding-left:0px; padding-right:0px; ">
-              <span style="font-size:15px;" ng-bind-html="lead.txt"></span>
-            </div>
-            <div class="col-md-1" style="padding-left:0px; padding-right:0px; ">
-              <i class="fa fa-expand" aria-hidden="true" style="cursor:pointer;" ng-click="expandLeads(lead.pk)"></i>
-            </div>
+        <div class="row" style="padding:10px; margin:0 1px 0 1px; border-bottom: 1px solid #e0e0e0">
+          <!-- <span style="font-size:15px;" ng-bind-html="lead.txt"></span> -->
+          <div class="col-md-11" style="padding-left:0px; padding-right:0px; ">
+            <span style="font-size:15px;" ng-bind-html="lead.txt"></span>
           </div>
-          <div class="row" style="padding-left:10px; padding-right:10px; ">
-            <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
-              <a ng-if="lead.showPrev" href="#" ng-click="prevOfferRes($index);" style="font-size:20px; text-decoration: none; "> &#10094;</a>
-            </div>
-            <div class="col-md-10" style="padding:10px;">
-              <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
-              <span>{{lead.responseValue.user | getName }}</span> <br>
-              <span> {{lead.responseValue.txt}} </span>
-            </div>
-            <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
-              <a ng-if="lead.showNext" href="#" ng-click="nextOfferRes($index);" style="font-size:20px; text-decoration: none;">&#10095;</a>
-            </div>
-          </div>
-          <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
-            <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="lead.intrestTxt"></textarea>
-            <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue,$index)"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+          <div class="col-md-1" style="padding-left:0px; padding-right:0px; ">
+            <i class="fa fa-expand" aria-hidden="true" style="cursor:pointer;" ng-click="expandLeads(lead.pk)"></i>
           </div>
         </div>
-        <div ng-if="showMoreBtn" class="row text-center" style="padding: 20px;">
-          <div class="btn btn-primary" ng-click="">
-            Show More
+        <div class="row" style="padding-left:10px; padding-right:10px; ">
+          <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
+            <a ng-if="lead.showPrev" href="#" ng-click="prevOfferRes($index);" style="font-size:20px; text-decoration: none; "> &#10094;</a>
+          </div>
+          <div class="col-md-10" style="padding:10px;">
+            <strong class="text-muted">Value : </strong>{{lead.responseValue.value}} <i class="fa fa-inr"></i> <br>
+            <span>{{lead.responseValue.user | getName }}</span> <br>
+            <span> {{lead.responseValue.txt}} </span>
+          </div>
+          <div class="col-md-1 text-center" style="padding:0px;  padding-top:20px;">
+            <a ng-if="lead.showNext" href="#" ng-click="nextOfferRes($index);" style="font-size:20px; text-decoration: none;">&#10095;</a>
           </div>
         </div>
-
+        <div class="input-group" style="border-top: 1px solid #e0e0e0; ">
+          <textarea name="name" rows="2" cols="80" class="form-control" style="resize:none; border:none;box-shadow: none; " placeholder="Intrested?" ng-model="lead.intrestTxt"></textarea>
+          <span class="input-group-addon btn btn-default" style="border:none; border-radius: 0px;" ng-click="sendOffer(lead.responseValue,$index)"><i class="fa fa-paper-plane" aria-hidden="true" ></i></span>
+        </div>
+      </div>
+      <div ng-if="showMoreBtn" class="row text-center" style="padding: 20px;">
+        <div class="btn btn-primary" ng-click="">
+          <a target="_blank" href="social/leads" style="text-decoration:none; color:white;"> Show More </a>
+        </div>
       </div>
 
-
     </div>
-    {% endverbatim %}
-
-
-
 
 
   </div>
+  {% endverbatim %}
+
+
+
+
+
+</div>
 
 
 
