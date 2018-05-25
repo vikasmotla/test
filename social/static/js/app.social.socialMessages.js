@@ -18,32 +18,80 @@ app.run(['$rootScope', '$state', '$stateParams', '$permissions', function($rootS
 app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $http, $sce, $timeout) {
   $scope.me = $users.get('mySelf');
   $scope.people = [];
-  $scope.users;
+  $scope.users = [];
   $scope.friend;
   $scope.isTyping = false;
   $scope.activeCard = 0;
 
 
-  $http({
-    method: 'GET',
-    url: '/api/HR/users/'
-  }).
-  then(function(response) {
-    $scope.users = response.data;
-    for (var i = 0; i < response.data.length; i++) {
-      if ($scope.me.pk == $scope.users[i].pk) {
-        $scope.users.splice(i, 1)
+  // $http({
+  //   method: 'GET',
+  //   url: '/api/HR/users/'
+  // }).
+  // then(function(response) {
+  //   $scope.users = response.data;
+  //   for (var i = 0; i < response.data.length; i++) {
+  //     if ($scope.me.pk == $scope.users[i].pk) {
+  //       $scope.users.splice(i, 1)
+  //     }
+  //   }
+  // })
+
+  $scope.refreshMessages = function() {
+    $scope.lastMsg = [];
+    peopleInvolved = [];
+    for (var i = 0; i < $scope.rawMessages.length; i++) {
+      var im = $scope.rawMessages[i];
+      if (im.originator == $scope.me.pk) {
+        if (peopleInvolved.indexOf(im.user) == -1) {
+          peopleInvolved.push(im.user)
+        }
+      } else {
+        if (peopleInvolved.indexOf(im.originator) == -1) {
+          peopleInvolved.push(im.originator)
+        }
       }
     }
-  })
-
-
-
-
-  // $scope.roomID = '123';
-  $scope.handleRemoteContent = function(args) {
-    console.log('arrgs', args);
+    for (var i = 0; i < peopleInvolved.length; i++) {
+      for (var j = 0; j < $scope.rawMessages.length; j++) {
+        var im = $scope.rawMessages[j];
+        var friend = peopleInvolved[i];
+        if (friend == im.originator || friend == im.user) {
+          count = 0;
+          for (var k = 0; k < $scope.rawMessages.length; k++) {
+            im2 = $scope.rawMessages[k]
+            if ((im2.originator == friend || im2.user == friend) && im2.read == false) {
+              count += 1;
+            }
+          }
+          if (count != 0) {
+            $scope.instantMessagesCount += 1;
+          }
+          im.count = count;
+          $scope.lastMsg.push(im);
+          break;
+        }
+      }
+    }
   }
+
+  $scope.fetchLastMessages = function() {
+    $scope.method = 'GET';
+    $scope.url = '/api/PIM/chatMessage/';
+    $scope.ims = [];
+    var senders = [];
+
+    $http({
+      method: $scope.method,
+      url: $scope.url
+    }).
+    then(function(response) {
+      $scope.rawMessages = response.data;
+      $scope.refreshMessages();
+    });
+  };
+
+  $scope.fetchLastMessages();
 
 
   $scope.connection = new autobahn.Connection({
@@ -63,6 +111,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         $scope.isTyping = false;
         console.log($scope.isTyping);
       }, 4000);
+      $scope.scroll();
     } else if (args[0] == 'M') {
       console.log('message came', args[1]);
       $http({
@@ -87,7 +136,6 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     console.log(wampBindName);
 
 
-
     $scope.session.subscribe('service.chat.' + wampBindName, $scope.chatResponse).then(
       function(sub) {
         console.log("subscribed to topic 'chatResonse'");
@@ -97,16 +145,15 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       }
     );
 
-
   }
 
   $scope.connection.open();
 
-  console.log('coming in ctrl');
   $scope.mode = 'list';
   // $scope.personInView = 0;
   $scope.showCommentBox = false
   $scope.setInView = function(index) {
+    console.log(index);
     $scope.activeCard = index;
     $scope.showCommentBox = true
     $scope.commenEdit = {
@@ -114,9 +161,14 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       file: emptyFile,
       parent: 0
     }
-    $scope.personInView = $scope.users[index];
+    $scope.personInView = $scope.lastMsg[index].originator;
     console.log($scope.personInView);
   }
+
+  $timeout(function () {
+    $scope.setInView(0);
+  }, 1000);
+
 
   $scope.search = function() {
     $scope.mode = 'search';
@@ -133,9 +185,9 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
   }
 
   $scope.fetchMessages = function() {
-    $scope.friend = $scope.personInView;
+    $scope.friendPk = $scope.personInView;
     $scope.method = 'GET';
-    $scope.url = '/api/PIM/chatMessageBetween/?other=' + $scope.friend.username;
+    $scope.url = '/api/PIM/chatMessageBetween/?other=' + $scope.friendPk;
     $scope.ims = [];
     $scope.imsCount = 0;
     $scope.senderIsMe = [];
@@ -145,17 +197,18 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
     }).
     then(function(response) {
       $scope.imsCount = response.data.length;
-      for (var i = 0; i < response.data.length; i++) {
-        var im = response.data[i];
-        var sender = $users.get(im.originator)
-        if (sender.username == $scope.me.username) {
-          $scope.senderIsMe.push(true);
-        } else {
-          $scope.senderIsMe.push(false);
-        }
-        im.message = $sce.getTrustedHtml(im.message);
-        $scope.ims.push(im);
-      }
+      // for (var i = 0; i < response.data.length; i++) {
+      //   var im = response.data[i];
+      //   var sender = $users.get(im.originator)
+      //   if (sender.username == $scope.me.username) {
+      //     $scope.senderIsMe.push(true);
+      //   } else {
+      //     $scope.senderIsMe.push(false);
+      //   }
+      //   im.message = $sce.getTrustedHtml(im.message);
+      //   $scope.ims.push(im);
+      // }
+      $scope.ims = response.data;
       $scope.scroll(1000);
     });
     console.log($scope.ims);
@@ -166,7 +219,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
       delay = 100;
     }
     $timeout(function() {
-      var $id = $("#scrollArea" + $scope.friend.pk);
+      var $id = $("#scrollArea" + $scope.friendPk);
 
       console.log($id);
       $id.scrollTop($id[0].scrollHeight);

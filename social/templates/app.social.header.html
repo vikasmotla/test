@@ -82,7 +82,7 @@
                 <li>
                   <!-- inner menu: contains the actual data -->
                   <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
+                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="notification in [1,2,3,4]">
                       <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
                         <img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
                         <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
@@ -93,7 +93,7 @@
                     </li>
                   </ul>
                 </li>
-                <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i> See All Notifications</a>
+                <a href="" ng-click="openAllNotifications()"><i class = "fa fa-external-link"></i> See All Notifications</a>
               </ul>
 
             </div>

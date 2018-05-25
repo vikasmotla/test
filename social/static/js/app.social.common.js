@@ -151,7 +151,7 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
     }
   }
 
-  $scope.fetchMessages = function() {
+  $scope.fetchMessages = function() { //fetching only last messages
     // This is because the chat system is build along with the notification system. Since this is the part whcih is common accros all the modules
     $scope.method = 'GET';
     $scope.url = '/api/PIM/chatMessage/';
@@ -174,8 +174,8 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
 
   $scope.imWindows = []
 
-  $scope.addIMWindow = function(pk , count) {
-    $scope.totalUnread-=count;
+  $scope.addIMWindow = function(pk , readCount) {
+    $scope.totalUnread-=readCount;
     console.log('adding windowwwwwww',pk);
     // console.log("recievedddddddddddddddddddd", input);
     for (var i = 0; i < $scope.chatWindows.length; i++) {
@@ -187,6 +187,27 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
     $scope.chatWindows.push(pk);
     $scope.maximaStatus.push(true);
   }
+
+  $scope.fetchNotifications = function() {
+    $scope.method = 'GET';
+    $scope.url = '/api/PIM/notification/';
+    $http({
+      method: $scope.method,
+      url: $scope.url
+    }).
+    then(function(response) {
+      $scope.notif = [];
+      console.log(response.data.length);
+      for (var i = 0; i < response.data.length; i++) {
+        if (response.data[i].user!=$scope.me.pk) {
+          $scope.notif.push(response.data[i]);
+        }
+      }
+      console.log('nnnnnnnnnnnnnnnnn',$scope.notif);
+    });
+  };
+
+  $scope.fetchNotifications();
 
 
 });

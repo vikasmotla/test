@@ -247,9 +247,9 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
 
   };
   $scope.fetchAllOffers();
-  // $scope.countForResp = 0;
 
   $scope.expandLeads = function(expandPostpk) {
+    console.log('expand',$scope.$parent);
     console.log('expand post pk', expandPostpk);
     $uibModal.open({
       templateUrl: '/static/ngTemplates/app.social.expandLeads.html',
@@ -265,9 +265,7 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
           $scope.expandPostData = response.data;
           $scope.expandPostData.timeline = []
           var imgTypes = ['png', 'svg', 'gif', 'jpg', 'jpeg']
-          if ($scope.expandPostData.user_reaction.length > 0) {
-            $scope.expandPostData.reacted = true
-          }
+
           $scope.expandPostData.txt = $sce.getTrustedHtml($scope.expandPostData.txt);
           for (var j = 0; j < $scope.expandPostData.comments.length; j++) {
             $scope.expandPostData.comments[j].txt = $sce.getTrustedHtml($scope.expandPostData.comments[j].txt);
@@ -305,10 +303,49 @@ app.controller("main", function($scope, $state, $http, $sce, Flash, $users, $uib
           })
         })
 
-        // $scope.showComments = false;
-        // $scope.allComments = function() {
-        //   $scope.expandPostData.showComments = !$scope.expandPostData.showComments
-        // }
+        $scope.reply = function(responsePk, cmt) {
+          console.log('reply ',$scope.$parent);
+          console.log('resval', responsePk);
+          $uibModal.open({
+            templateUrl: '/static/ngTemplates/app.social.leads.reply.html',
+            size: 'md',
+            backdrop: true,
+            resolve: {
+              timeline: function() {
+                return $scope.expandPostData.timeline
+              }
+            },
+            controller: function($scope, timeline, $http, Flash, $uibModalInstance) {
+              $scope.replyText = '';
+              console.log(timeline);
+              $scope.sendOffer = function() {
+                console.log('send offer', $scope.replyText);
+                $http({
+                  method: 'PATCH',
+                  url: '/api/social/postResponse/' + responsePk + '/',
+                  data: {
+                    reply: $scope.replyText
+                  }
+                }).
+                then(function(response) {
+                  console.log('ressssssssssssssssssssss', response.data);
+                  Flash.create('success', 'Replied')
+                  for (var i = 0; i < timeline.length; i++) {
+                    if (timeline[i].data.pk == response.data.pk) {
+                      timeline[i].data.reply = response.data.reply;
+                    }
+                  }
+                  console.log($scope.$parent);
+                });
+
+                $uibModalInstance.dismiss();
+                $scope.replyText = '';
+              }
+
+            }
+
+          })
+        }
 
       }
     })

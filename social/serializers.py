@@ -5,6 +5,7 @@ from rest_framework.exceptions import *
 from .models import *
 import re
 from HR.models import *
+from PIM.models import notification
 
 
 class ProductTagSerializer(serializers.ModelSerializer):
@@ -44,6 +45,10 @@ class PostCommentSerializer(serializers.ModelSerializer):
         p.user = self.context['request'].user
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
+        print p.parent.user.pk , p.parent.typ
+        n = notification(user = p.parent.user , originator = 'comment||' + str(p.parent.pk))
+        n.save()
+
         return p
 
 class PostLikeSerializer(serializers.ModelSerializer):
@@ -55,6 +60,9 @@ class PostLikeSerializer(serializers.ModelSerializer):
         p.user = self.context['request'].user
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
+        print p.parent.user.pk
+        n = notification(user = p.parent.user , originator = 'like||' + str(p.parent.pk))
+        n.save()
         return p
 
 
@@ -67,6 +75,9 @@ class PostResponseSerializer(serializers.ModelSerializer):
         p.user = self.context['request'].user
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
+        print p.parent.user.pk
+        n = notification(user = p.parent.user , originator = 'response||' + str(p.parent.pk))
+        n.save()
         return p
 
 

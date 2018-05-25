@@ -52,9 +52,17 @@
             </div>
             <div class="row" style="padding:0px 25px">
               <span ng-if="comment.data.typ != 'Barter'"><strong class="text-muted">Value : </strong><span style="font-size:15px;"><i class="fa fa-inr"></i> {{comment.data.value}} </span> <br></span>
-              <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
-              <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
-              <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
+              <div class="col-md-9" style="padding-left:0px;">
+                <span style="font-size:17px;" ng-bind-html="comment.data.txt"> </span> <br ng-if="comment.data.fil != null && comment.data.txt != null">
+                <img ng-if="comment.data.fil != null && comment.imgShow" ng-click="expandImage(comment.data.fil)" class="img img-rounded" ng-src="{{comment.data.fil}}" alt="" width="300px;">
+                <a ng-if="comment.data.fil != null && !comment.imgShow" target="_blank" href="{{comment.data.fil}}">{{comment.data.fil}}</a>
+              </div>
+              <div class="col-md-3">
+                <div class="btn-group pull-right">
+                  <button class="btn btn-default btn-sm" type="button" name="button">Accept</button>
+                  <button class="btn btn-default btn-sm" type="button" name="button" ng-click="reply(comment.data.pk)">Reply</button>
+                </div>
+              </div>
             </div>
             <div class="row" style="padding-left:10px" ng-if="comment.data.reply!=null">
               <hr>

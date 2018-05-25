@@ -5,6 +5,7 @@ from .serializers import *
 from API.permissions import *
 from models import *
 import json
+import re
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -60,6 +61,7 @@ class notificationViewSet(viewsets.ModelViewSet):
     serializer_class = notificationSerializer
     def get_queryset(self):
         return notification.objects.filter(user = self.request.user , read = False).order_by('-created')
+        # return notification.objects.all().order_by('-created')
 
 class chatMessageViewSet(viewsets.ModelViewSet):
     permission_classes = (isOwner, )
@@ -90,7 +92,11 @@ class chatMessageBetweenViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if "other" in self.request.GET:
-            reciepient = User.objects.get(username = self.request.GET['other'])
+            if re.search(r'[a-zA-Z]', self.request.GET['other'], re.IGNORECASE |re.MULTILINE):
+                reciepient = User.objects.get(username = self.request.GET['other'])
+            else:
+                reciepient = User.objects.get(pk = self.request.GET['other'])
+            print type(self.request.GET['other'])
             if "pk" in self.request.GET:
                 pk = int(self.request.GET['pk'])
                 qs1 = chatMessage.objects.filter(originator = self.request.user , user= reciepient).filter(id__gt=pk)
