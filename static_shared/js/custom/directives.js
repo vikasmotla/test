@@ -47,13 +47,77 @@ app.directive('socialPost', function() {
     scope: {
       data: '=',
       index: '=',
-      me: '='
+      me: '=',
+      particularpost: '='
     },
     controller: function($scope, $state, $stateParams, $http, Flash, $timeout, $sce, $users, $uibModal) {
 
       // console.log($scope.data);
       $scope.p = $scope.data;
       // console.log('Mypk', $scope.me);
+
+      $scope.showIntrestedButtons = false;
+
+      if ($scope.particularpost != undefined) {
+        $scope.showIntrestedButtons = true;
+        $scope.p.showComments = true;
+
+        $scope.reply = function(responsePk, cmt) {
+          console.log('resval', responsePk);
+          $uibModal.open({
+            templateUrl: '/static/ngTemplates/app.social.leads.reply.html',
+            size: 'md',
+            backdrop: true,
+            resolve: {
+              timeline: function() {
+                return $scope.p.timeline
+              }
+            },
+            controller: function($scope, timeline, $http, Flash, $uibModalInstance) {
+              $scope.replyText = '';
+              // console.log(data);
+              // console.log(cmt);
+              console.log(timeline);
+              $scope.sendOffer = function() {
+                console.log('send offer', $scope.replyText);
+
+
+                $http({
+                  method: 'PATCH',
+                  url: '/api/social/postResponse/' + responsePk + '/',
+                  data: {
+                    reply: $scope.replyText
+                  }
+                }).
+                then(function(response) {
+                  console.log('ressssssssssssssssssssss', response.data);
+                  Flash.create('success', 'Replied')
+                  for (var i = 0; i < timeline.length; i++) {
+                    if (timeline[i].data.pk == response.data.pk) {
+                      timeline[i].data.reply = response.data.reply;
+                    }
+                  }
+                  // timeline.data = response.data.reply;
+
+                  // $scope.postDataInit.timeline
+                  // console.log($scope.postDataInit);
+                });
+
+                $uibModalInstance.dismiss();
+                $scope.replyText = '';
+              }
+
+            }
+
+
+
+
+
+
+          })
+        }
+
+      }
 
       $scope.showComments = false;
       $scope.allComments = function(indx) {
@@ -363,7 +427,7 @@ app.directive('chatWindow', function() {
       close: '=',
       toggle: '='
     },
-    controller: function($scope, $state,$uibModal, $stateParams, $users, $timeout, $http, $sce, Flash) {
+    controller: function($scope, $state, $uibModal, $stateParams, $users, $timeout, $http, $sce, Flash) {
 
       //fetch the messages with $scope.pk
       console.log('in chat dirrrrrrrrrrrrrr', $scope.user, $scope.pos);
@@ -397,10 +461,10 @@ app.directive('chatWindow', function() {
         $scope.method = 'GET';
         $scope.url = '/api/PIM/chatMessageBetween/?other=' + $scope.friend.username;
 
-        $scope['abc'+ $scope.friend.pk] = [1,2,3];
-        console.log($scope['abc'+ $scope.friend.pk]);
+        $scope['abc' + $scope.friend.pk] = [1, 2, 3];
+        console.log($scope['abc' + $scope.friend.pk]);
 
-        $scope.ims  = [];
+        $scope.ims = [];
         $scope.imsCount = 0;
         $scope.senderIsMe = [];
         $http({
@@ -426,18 +490,17 @@ app.directive('chatWindow', function() {
       };
       $scope.fetchMessages();
 
-      $scope.scroll = function(delay){
+      $scope.scroll = function(delay) {
         if (delay == undefined) {
           delay = 100;
         }
         $timeout(function() {
-          var $id= $("#scrollArea"+$scope.friend.pk);
-
+          var $id = $("#scrollArea" + $scope.friend.pk);
           console.log($id);
-          console.log($id[0].scrollTop ,$id[0].scrollHeight );
+          console.log($id[0].scrollTop, $id[0].scrollHeight);
           $id.scrollTop($id[0].scrollHeight);
-          console.log($id[0].scrollTop ,$id[0].scrollHeight );
-        },delay)
+          console.log($id[0].scrollTop, $id[0].scrollHeight);
+        }, delay)
       }
 
 
@@ -530,15 +593,17 @@ app.directive('chatWindow', function() {
             $scope.ims.push(response.data)
             $scope.senderIsMe.push(true);
             $scope.scroll(50);
-            $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status,$scope.me.username, response.data.message, response.data.pk], {}, {
-              acknowledge: true
-            }).
-            then(function(publication) {});
+
             $scope.chat = {
               messageToSend: '',
               fileToSend: emptyFile
             }
             $scope.fileSize = 0;
+
+            $scope.connection.session.publish('service.chat.' + $scope.friend.username, [$scope.status, $scope.me.username, response.data.message, response.data.pk], {}, {
+              acknowledge: true
+            }).
+            then(function(publication) {});
 
           })
         }
@@ -547,9 +612,8 @@ app.directive('chatWindow', function() {
 
       $scope.isTyping = false;
       $scope.chatResponse = function(args) {
-
         console.log(args[0]);
-        if (args[1]!=$scope.friend.username) {
+        if (args[1] != $scope.friend.username) {
           return;
         }
 
@@ -642,8 +706,6 @@ app.directive('commentEdit', function() {
           // document.getElementById("filePreview"  + $scope.comment.parent ).src = $scope.comment.file;
         }
       }, 1000);
-
-
 
 
 
@@ -741,7 +803,6 @@ app.directive('commentEdit', function() {
       $scope.attachInComments = function() {
         console.log('#filePicker' + $scope.comment.parent);
         $('#filePicker' + $scope.comment.parent).click();
-
       }
 
       $scope.$watch('comment.file', function(newValue, oldValue) {
@@ -1166,7 +1227,7 @@ app.directive('messageStrip', function() {
         $scope.friend = $scope.data.originator;
       }
       $scope.clicked = function() {
-        $scope.openChat($scope.friend , $scope.data.count)
+        $scope.openChat($scope.friend, $scope.data.count)
         $scope.data.count = 0;
       }
     }
@@ -1181,160 +1242,63 @@ app.directive('notificationStrip', function() {
     replace: true,
     scope: {
       data: '=',
+      type: '='
     },
-    controller: function($scope, $http, $users, $aside) {
-      var parts = $scope.data.shortInfo.split(':');
-      // console.log(parts);
-      if (typeof parts[1] == 'undefined') {
-        $scope.notificationType = 'default';
+    controller: function($scope, $http, $users, $aside, $window) {
+
+      console.log($scope.type);
+
+      if ($scope.type == 'follow') {
+        console.log('folllllllllllloooooowwwww');
+        $scope.notificationType = $scope.type;
+        // $scope.notificationPost =
+        var friendPk = $scope.data.shortInfo.split(':');
+        $scope.friend = parseInt(friendPk[0]);
+        $scope.openFollower = function(friendPk, notifPk) {
+
+
+          $http({
+            method: 'PATCH',
+            url: '/api/PIM/notification/' + notifPk + '/',
+            data: {
+              read: true
+            }
+          }).
+          then(function(response) {
+            console.log('reaaaaaaaaaad', response.data);
+            $window.location.href = ('/social/profile/' + friendPk);
+            // console.log($scope.data.read);
+          });
+
+
+        }
       } else {
-        $scope.notificationType = parts[0];
-      }
-      // console.log($scope.data);
-      // console.log($scope.notificationType);
-      var nodeUrl = '/api/social/' + $scope.notificationType + '/'
-      if (typeof parts[1] != 'undefined' && $scope.data.originator == 'social') {
-        // console.log(nodeUrl + parts[1]);
-        $http({
-          method: 'GET',
-          url: nodeUrl + parts[1] + '/'
-        }).
-        then(function(response) {
-          $scope.friend = response.data.user;
-          if ($scope.notificationType == 'postComment') {
-            var url = '/api/social/post/' + response.data.parent + '/';
-          } else if ($scope.notificationType == 'pictureComment') {
-            var url = '/api/social/picture/' + response.data.parent + '/';
-          }
+        console.log($scope.data.originator);
+        var type = $scope.data.originator.split('||');
+
+        $scope.notificationType = type[0];
+        $scope.notificationPost = parseInt(type[1]);
+
+        var friendPk = $scope.data.shortInfo.split(':');
+
+        $scope.friend = parseInt(friendPk[0]);
+        $scope.openNotification = function(postPk, notifPk) {
+          console.log('pos', postPk);
           $http({
-            method: 'GET',
-            url: url
-          }).then(function(response) {
-            $scope.notificationData = response.data;
-            if ($scope.notificationType == 'pictureComment') {
-              $http({
-                method: 'GET',
-                url: '/api/social/album/' + $scope.data.shortInfo.split(':')[3] + '/?user=' + $users.get($scope.notificationData.user).username
-              }).
-              then(function(response) {
-                $scope.objParent = response.data;
-              });
-            };
-          });
-        });
-      } else if (typeof parts[1] != 'undefined' && $scope.data.originator == 'git') {
-        if (parts[0] == 'codeComment') {
-          var url = '/api/git/commitNotification/?sha=' + parts[2];
-          $http({
-            method: 'GET',
-            url: url
+            method: 'PATCH',
+            url: '/api/PIM/notification/' + notifPk + '/',
+            data: {
+              read: true
+            }
           }).
           then(function(response) {
-            $scope.commit = response.data[0];
-          });
-          var url = '/api/git/codeComment/' + parts[1] + '/';
-          $http({
-            method: 'GET',
-            url: url
-          }).
-          then(function(response) {
-            $scope.codeComment = response.data;
+            console.log('reaaaaaaaaaad', response.data);
+            $window.location.href = ('/social/posts/' + postPk);
+            // console.log($scope.data.read);
           });
         }
-      };
-
-      $scope.openAlbum = function(position, backdrop, input) {
-        $scope.asideState = {
-          open: true,
-          position: position
-        };
-
-        function postClose() {
-          $scope.asideState.open = false;
-        }
-
-        $aside.open({
-          templateUrl: '/static/ngTemplates/app.social.aside.album.html',
-          placement: position,
-          size: 'lg',
-          backdrop: backdrop,
-          controller: 'controller.social.aside.picture',
-          resolve: {
-            input: function() {
-              return input;
-            }
-          }
-        }).result.then(postClose, postClose);
       }
 
-      $scope.openPost = function(position, backdrop, input) {
-        $scope.asideState = {
-          open: true,
-          position: position
-        };
-
-        function postClose() {
-          $scope.asideState.open = false;
-        }
-
-        $aside.open({
-          templateUrl: '/static/ngTemplates/app.social.aside.post.html',
-          placement: position,
-          size: 'md',
-          backdrop: backdrop,
-          controller: 'controller.social.aside.post',
-          resolve: {
-            input: function() {
-              return input;
-            }
-          }
-        }).result.then(postClose, postClose);
-      }
-
-      $scope.openCommit = function() {
-        $aside.open({
-          templateUrl: '/static/ngTemplates/app.GIT.aside.exploreNotification.html',
-          position: 'left',
-          size: 'xxl',
-          backdrop: true,
-          resolve: {
-            input: function() {
-              return $scope.commit;
-            }
-          },
-          controller: 'projectManagement.GIT.exploreNotification',
-        })
-      }
-
-      $scope.openNotification = function() {
-        $http({
-          method: 'PATCH',
-          url: '/api/PIM/notification/' + $scope.data.pk + '/',
-          data: {
-            read: true
-          }
-        }).
-        then(function(response) {
-          $scope.$parent.notificationClicked($scope.data.pk);
-          $scope.data.read = true;
-        });
-        if ($scope.notificationType == 'postLike' || $scope.notificationType == 'postComment') {
-          $scope.openPost('right', true, {
-            data: $scope.notificationData,
-            onDelete: function() {
-              return;
-            }
-          })
-        } else if ($scope.notificationType == 'pictureLike' || $scope.notificationType == 'pictureComment') {
-          $scope.openAlbum('right', true, {
-            data: $scope.notificationData,
-            parent: $scope.objParent,
-            onDelete: ""
-          })
-        } else if ($scope.notificationType == 'codeComment') {
-          $scope.openCommit()
-        }
-      }
     },
   };
 });

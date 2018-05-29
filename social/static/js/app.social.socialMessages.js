@@ -73,6 +73,7 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         }
       }
     }
+    console.log('llllllllllllllll',$scope.lastMsg);
   }
 
   $scope.fetchLastMessages = function() {
@@ -249,7 +250,6 @@ app.controller("main", function($scope, $state, $rootScope, $uibModal, $users, $
         acknowledge: true
       }).
       then(function(publication) {});
-      // $scope.connection.session.publish('service.chat.'+ $scope.friend.username, [$scope.status , $scope.me.username]);
     }
   }, true)
 

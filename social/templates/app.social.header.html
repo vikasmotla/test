@@ -27,29 +27,22 @@
           <div class="col-xs-2">
             <div class="dropdown hidden-xs hidden-sm">
               <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="2 > 0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
+              <span ng-if="unreadFollNotif!=0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">{{unreadFollNotif}}</span>
               <ul class="dropdown-menu navDropDownList" style="left:-150px">
                 <li>
                   <!-- inner menu: contains the actual data -->
-                  <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="message in [1,2,3]">
-                      <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                        <!-- ngIf: !checkable --><img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                        <!-- end ngIf: !checkable -->
-                        <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                          <span class="text-muted ng-binding">Admin CIOC</span><small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                          <br><span class="text-muted" style="font-size:11px;">Marketing Manager</span>
-                        </div>
-                      </a>
-                    </li>
+                  <ul class="nav" style="position:relative; top:-5px;">
+                    <div ng-repeat="notice in followNotif">
+                      <notification-strip data="notice" type="'follow'" ></notification-strip>
+                    </div>
                   </ul>
                 </li>
-                <a href="" ng-click="openAllMessages()"><i class = "fa fa-external-link"></i>See All Requests</a>
+                <a href="" ng-click="openAllNotifications()"><i class = "fa fa-external-link"></i> See All Followers</a>
               </ul>
             </div>
             <div class="visible-sm visible-xs" style="padding-top:10px;">
               <i class="fa fa-user-plus fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="2 > 0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">2</span>
+              <span ng-if="unreadFollNotif!=0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">{{unreadFollNotif}}</span>
             </div>
           </div>
 
@@ -71,26 +64,20 @@
             </div>
             <div class="visible-sm visible-xs" style="padding-top:10px;">
               <i class="fa fa-comments-o fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="3 > 0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">3</span>
+              <span ng-if="totalUnread!=0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">{{totalUnread}}</span>
             </div>
           </div>
           <div class="col-xs-2">
             <div class="dropdown hidden-xs hidden-sm">
               <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="1 > 0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
+              <span ng-if="unreadNotif!=0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">{{unreadNotif}}</span>
               <ul class="dropdown-menu navDropDownList" style="left:-150px">
                 <li>
                   <!-- inner menu: contains the actual data -->
-                  <ul style="position:relative; top:-5px; padding:0px !important;">
-                    <li class="container-fluid navBarInfoList ng-isolate-scope" data="message" open-chat="addIMWindow" ng-repeat="notification in [1,2,3,4]">
-                      <a class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-                        <img ng-if="!checkable" class="img-circle ng-scope" src="/static/images/img_avatar.png" alt="My image" style="width:50px;height:50px;position: relative; top:-8px;">
-                        <div class="col-md-10 pull-right ng-binding" style="position: relative; top:-10px" ng-click="clicked()">
-                          <span class="text-muted ng-binding">Admin CIOC</span> (1)<small style="position:absolute;right:0px;" class="pull-right text-muted ng-binding">1 Mins <i class="fa fa-clock-o "></i></small>
-                          <br>asdbjkk
-                        </div>
-                      </a>
-                    </li>
+                  <ul class="nav" style="position:relative; top:-5px;">
+                    <div ng-repeat="notice in notif">
+                      <notification-strip data="notice" type="'default'" ></notification-strip>
+                    </div>
                   </ul>
                 </li>
                 <a href="" ng-click="openAllNotifications()"><i class = "fa fa-external-link"></i> See All Notifications</a>
@@ -100,7 +87,7 @@
 
             <div class="visible-sm visible-xs" style="padding-top:10px;">
               <i class="fa fa-globe fa-2x dropdown-toggle" data-toggle="dropdown" style="color:white; cursor:pointer;"></i>
-              <span ng-if="1 > 0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">1</span>
+              <span ng-if="unreadNotif!=0" class="label label-danger ng-binding ng-scope" style="position: absolute;top: 5px;">{{unreadNotif}}</span>
             </div>
 
           </div>

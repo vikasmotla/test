@@ -36,6 +36,12 @@ def socialIndex(request):
     return render(request, 'app.social.index.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
 
 @login_required
+def notifPost(request,postPk):
+    print postPk , type(postPk)
+    profileObj = profile.objects.get(user = request.user.pk)
+    return render(request, 'app.social.notificationPost.html', { "openCom": 1 ,"postPk": postPk ,"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
+
+@login_required
 def socialMessage(request):
     profileObj = profile.objects.get(user = request.user.pk)
     return render(request, 'app.social.messages.html', {"home": True ,'userObj':request.user,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})
@@ -52,7 +58,12 @@ def socialAccount(request):
 
 def profileDetails(request,profName):
     print 'proffffffffffffffffffffff',profName
-    obj = User.objects.get(username=profName)
+    if re.search(r'[a-zA-Z]', profName, re.IGNORECASE |re.MULTILINE):
+        obj = User.objects.get(username=profName)
+    else:
+        obj = User.objects.get(pk=int(profName))
+    print type(profName)
+    # obj = User.objects.get(username=profName)
     profileObj = profile.objects.get(user = obj.pk)
     print profileObj,profileObj.mobile
     return render(request, 'app.social.profile.html', {"home": True ,'userObj':request.user,'obj':obj,'profileObj':profileObj, "brandLogo" : globalSettings.BRAND_LOGO , "brandLogoInverted": globalSettings.BRAND_LOGO_INVERT})

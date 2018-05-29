@@ -10,6 +10,7 @@ import datetime
 import random
 from API.permissions import add_application_access
 from social.serializers import ProductTagSerializer
+from PIM.models import notification
 
 
 
@@ -86,6 +87,10 @@ class userProfileSerializer(serializers.ModelSerializer):
         if 'following' in self.context['request'].GET:
             print 'innnnnnnnnnn'
             if self.context['request'].GET['mode'] == 'follow':
+                print "follow"
+                print User.objects.get(pk = self.context['request'].GET['following'])
+                n = notification( user = User.objects.get(pk = self.context['request'].GET['following']), originator = 'follow' , shortInfo = str(self.context['request'].user.pk) + ':followed' )
+                n.save()
                 instance.following.add( User.objects.get(pk = self.context['request'].GET['following']))
             elif self.context['request'].GET['mode'] == 'unfollow':
                 instance.following.remove( User.objects.get(pk = self.context['request'].GET['following']))

@@ -1,0 +1,20 @@
+{% extends 'app.socialBase.html' %} {% load staticfiles %} {% block contentBody %}
+<script type="text/javascript">
+  postPk = {{postPk}}
+  openCom = {{openCom}}
+</script>
+{% verbatim %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 newsFeed" style="background-color:#ffffff;">
+      <div style="padding:20px;">
+        <social-Post data="p" ng-repeat="p in posts" index="$index" particularpost="true" me="me.pk"> </social-Post>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endverbatim %}
+{% endblock %} {% block specific_js %}
+<script src="{% static 'js/app.social.particularPost.js' %}"></script>
+{% endblock %}

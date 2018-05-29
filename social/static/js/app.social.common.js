@@ -188,7 +188,12 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
     $scope.maximaStatus.push(true);
   }
 
+
   $scope.fetchNotifications = function() {
+    $scope.unreadNotif = 0;
+    $scope.unreadFollNotif = 0;
+    $scope.notif = [];
+    $scope.followNotif = [];
     $scope.method = 'GET';
     $scope.url = '/api/PIM/notification/';
     $http({
@@ -196,14 +201,28 @@ app.controller("header", function($scope, $http, $state, $rootScope, $uibModal, 
       url: $scope.url
     }).
     then(function(response) {
-      $scope.notif = [];
-      console.log(response.data.length);
+      // $scope.notif = response.data;
+      console.log('nnnnnnnnnnnnnnn',response.data , response.data.length);
+      // $scope.refreshNotifications();
       for (var i = 0; i < response.data.length; i++) {
-        if (response.data[i].user!=$scope.me.pk) {
+        console.log('ddd',response.data[i].originator);
+        if (response.data[i].originator!="follow") {
+          console.log('sddddddddddddddddddd');
           $scope.notif.push(response.data[i]);
+          if (response.data[i].read==false) {
+            console.log('nottttttt',response.data[i].read);
+            $scope.unreadNotif+=1;
+          }
+        }
+        else {
+          $scope.followNotif.push(response.data[i]);
+          if (response.data[i].read==false) {
+            console.log('follllllll',response.data[i].read);
+            $scope.unreadFollNotif+=1;
+          }
         }
       }
-      console.log('nnnnnnnnnnnnnnnnn',$scope.notif);
+
     });
   };
 

@@ -10,6 +10,7 @@ from social.views import *
 urlpatterns = [
     url(r'^$', index , name ='root'),
     url(r'social$', socialIndex , name ='social'),
+    url(r'social/posts/(?P<postPk>[\d]+)', notifPost , name ='notifPost'),
     url(r'social/messages', socialMessage , name ='message'),
     url(r'social/leads', socialLeads , name ='leads'),
     url(r'social/account', socialAccount , name ='account'),

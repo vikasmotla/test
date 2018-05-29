@@ -46,7 +46,7 @@ class PostCommentSerializer(serializers.ModelSerializer):
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
         print p.parent.user.pk , p.parent.typ
-        n = notification(user = p.parent.user , originator = 'comment||' + str(p.parent.pk))
+        n = notification(user = p.parent.user , originator = 'comment||' + str(p.parent.pk), shortInfo = str(self.context['request'].user.pk) + ':commented' )
         n.save()
 
         return p
@@ -61,7 +61,7 @@ class PostLikeSerializer(serializers.ModelSerializer):
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
         print p.parent.user.pk
-        n = notification(user = p.parent.user , originator = 'like||' + str(p.parent.pk))
+        n = notification(user = p.parent.user , originator = 'like||' + str(p.parent.pk), shortInfo = str(self.context['request'].user.pk) + ':liked' )
         n.save()
         return p
 
@@ -76,7 +76,7 @@ class PostResponseSerializer(serializers.ModelSerializer):
         p.parent = Post.objects.get(pk = self.context['request'].data['parent'])
         p.save()
         print p.parent.user.pk
-        n = notification(user = p.parent.user , originator = 'response||' + str(p.parent.pk))
+        n = notification(user = p.parent.user , originator = 'response||' + str(p.parent.pk) , shortInfo = str(self.context['request'].user.pk) + ':responded' )
         n.save()
         return p
 

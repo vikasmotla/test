@@ -1,18 +1,23 @@
-<li class="container-fluid navBarInfoList" ng-click="openNotification()">
-  <a href="" class="row" style="position: relative; top:-7px; text-decoration:none !important;">
-    <i class="fa {{data.originator | getIcon:this}} fa-2x"></i>
+<li  class="container-fluid navBarInfoList">
+  <a ng-if="type!='follow'" class="row" style="position: relative; top:-7px; text-decoration:none !important;"  ng-click="openNotification(notificationPost , data.pk)" >
+    <i class="fa fa-bell-o fa-2x "></i>
     <div class="col-md-11 pull-right" style="position: relative; top:-10px">
-      <span ng-if="data.originator == 'social'" class="text-muted">{{data.originator | humanize}}</span>
-      <span ng-if="data.originator == 'git'" class="text-muted">{{commit.repo.name}}</span>
+      <span class="text-muted" style="font-size:15px;">{{friend | getName}}</span>
       <small style="position:absolute;right:0px;"class="pull-right text-muted">{{data.created | timeAgo}} <i class="fa fa-clock-o "></i></small>
       <br>
-      <div ng-if="notificationType == 'postLike'"> {{friend | getName}} <span style="color:#676767;"> {{data.multi ? 'also' :''}} Liked your post </span> {{notificationData.text | limitTo:8}}</div>
-      <div ng-if="notificationType == 'postComment'"> {{friend | getName}} <span style="color:#676767;"> {{data.multi ? 'also' :''}} commented on your post </span> </div>
-      <div ng-if="notificationType == 'pictureLike'"> {{friend | getName}} <span style="color:#676767;">  {{data.multi ? 'also' :''}} Liked your photo </span></div>
-      <div ng-if="notificationType == 'pictureComment'"> {{friend | getName}} <span style="color:#676767;">  {{data.multi ? 'also' :''}} commented on your photo </span> </div>
-      <div ng-if="notificationType == 'commentLike'"> {{friend | getName}} <span style="color:#676767;">  {{data.multi ? 'also' :''}} Liked your comment </span> </div>
-      <div ng-if="notificationType == 'codeComment'"> {{codeComment.user | getName}} <span style="color:#676767;">  {{data.multi ? 'also' :''}} Made a new comment </span> </div>
-      <div ng-if="notificationType == 'default'"> {{data.shortInfo | limitTo:60 }}</div>
+      <div ng-if="notificationType == 'like'"> <span style="color: {{data.read? '#676767':''}};">  Liked your post </span></div>
+      <div ng-if="notificationType == 'comment'"> <span style="color: {{data.read? '#676767':''}};">  commented on your post </span> </div>
+      <div ng-if="notificationType == 'response'"> <span style="color: {{data.read? '#676767':''}};">  responded on your post </span> </div>
+    </div>
+  </a>
+
+  <a ng-if="type=='follow'" class="row" style="position: relative; top:-7px; text-decoration:none !important;">
+    <img   class="img-circle" ng-src="{{friend | getDP}}"  alt="My image" style="width:40px;height:40px;position: relative; top:-8px;"/ ng-click="openFollower(friend , data.pk)">
+    <div class="col-md-10 pull-right" style="position: relative; top:-10px">
+      <span class="text-muted" style="font-size:15px;" >{{friend | getName}}</span>
+      <small style="position:absolute;right:0px;"class="pull-right text-muted">{{data.created | timeAgo}} <i class="fa fa-clock-o "></i></small>
+      <br>
+      <div ng-if="notificationType == 'follow'"> <span style="color: {{data.read? '#676767':''}};">  started following you </span></div>
     </div>
   </a>
 </li>
